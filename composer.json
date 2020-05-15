@@ -1,13 +1,12 @@
 {
-  "name": "yonna/start-quick",
-  "description": "Yonna快速业务实现",
+  "name": "yonna/yonna",
+  "description": "Yonna start quick",
   "license": "MIT",
   "type": "library",
   "keywords": [
     "php",
     "yonna",
-    "framework",
-    "business"
+    "framework"
   ],
   "require": {
     "guzzlehttp/guzzle": "^6.5",
@@ -16,7 +15,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Yonna\\StartQuick\\": ""
+      "Yonna\\": ""
     }
   },
   "authors": [
