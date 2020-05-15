@@ -12,7 +12,7 @@ use Whoops\Run as WhoopsRun;
 
 class Env
 {
-    const MINIMUM_PHP_VERSION = '7.3';
+    const MINIMUM_PHP_VERSION = '7.4';
 
     /**
      * @param Cargo $Cargo
