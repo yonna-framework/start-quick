@@ -21,18 +21,18 @@
   "name": "yonna/yonna",
   "require": {
     "php": "~7.4",
-    "yonna/core": "@dev",
-    "yonna/database": "@dev",
-    "yonna/event": "@dev",
-    "yonna/foundation": "@dev",
-    "yonna/i18n": "@dev",
-    "yonna/log": "@dev",
-    "yonna/mapping": "@dev",
-    "yonna/queue": "@dev",
-    "yonna/response": "@dev",
-    "yonna/throwable": "@dev",
-    "yonna/validator": "@dev",
-    "yonna/var-dumper": "@dev"
+    "yonna/core": "~0.1",
+    "yonna/database": "~0.1",
+    "yonna/event": "~0.1",
+    "yonna/foundation": "~1.0",
+    "yonna/i18n": "~0.1",
+    "yonna/log": "~1.0",
+    "yonna/mapping": "~1.0",
+    "yonna/queue": "~0.1",
+    "yonna/response": "~1.0",
+    "yonna/throwable": "~1.0",
+    "yonna/validator": "~1.0",
+    "yonna/var-dumper": "~1.0"
   },
   "type": "library"
 }
