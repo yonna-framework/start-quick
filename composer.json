@@ -20,10 +20,19 @@
   "license": "MIT",
   "name": "yonna/yonna",
   "require": {
-    "guzzlehttp/guzzle": "^6.5",
     "php": "~7.4",
+    "yonna/core": "@dev",
     "yonna/database": "@dev",
-    "yonna/foundation": "@dev"
+    "yonna/event": "@dev",
+    "yonna/foundation": "@dev",
+    "yonna/i18n": "@dev",
+    "yonna/log": "@dev",
+    "yonna/mapping": "@dev",
+    "yonna/queue": "@dev",
+    "yonna/response": "@dev",
+    "yonna/throwable": "@dev",
+    "yonna/validator": "@dev",
+    "yonna/var-dumper": "@dev"
   },
   "type": "library"
 }
