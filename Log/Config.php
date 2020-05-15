@@ -6,12 +6,6 @@ class Config
 {
 
     /**
-     * 日志文件目录
-     * @var string
-     */
-    private static string $dir = '';
-
-    /**
      * 日志文件目录名
      * @var string
      */
@@ -22,22 +16,6 @@ class Config
      * @var int
      */
     private static int $file_expire_day = 0;
-
-    /**
-     * @return string
-     */
-    public static function getDir(): string
-    {
-        return self::$dir;
-    }
-
-    /**
-     * @param string $dir
-     */
-    public static function setDir(string $dir): void
-    {
-        self::$dir = $dir;
-    }
 
     /**
      * @return string

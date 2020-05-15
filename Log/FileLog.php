@@ -2,21 +2,16 @@
 
 namespace Yonna\Log;
 
-
 use Throwable;
 
 class FileLog
 {
 
-    private $root = null;
+    private string $root = '';
 
     public function __construct()
     {
-        if (Config::getDir() === null) {
-            trigger_error('Set Dir for FileLog.');
-            return;
-        }
-        $this->root = realpath(Config::getDir());
+        $this->root = realpath($_SERVER['DOCUMENT_ROOT'] . '/../');
     }
 
     /**
