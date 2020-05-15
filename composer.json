@@ -8,15 +8,18 @@
   ],
   "autoload": {
     "exclude-from-classmap": [
-      "/Tests/"
+      "/VarDumper/Tests/"
     ],
     "files": [
-      "Resources/functions/dump.php"
+      "VarDumper/Resources/functions/dump.php"
     ],
     "psr-4": {
       "Yonna\\": ""
     }
   },
+  "bin": [
+    "VarDumper/Resources/bin/var-dump-server"
+  ],
   "conflict": {
     "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",
     "symfony/console": "<3.4"
