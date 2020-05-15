@@ -1,28 +1,29 @@
 {
-  "name": "yonna/yonna",
-  "description": "Yonna start quick",
-  "license": "MIT",
-  "type": "library",
-  "keywords": [
-    "php",
-    "yonna",
-    "framework"
+  "authors": [
+    {
+      "email": "mzyhaohaoren@qq.com",
+      "homepage": "https://www.hunzsig.org",
+      "name": "hunzsig"
+    }
   ],
-  "require": {
-    "guzzlehttp/guzzle": "^6.5",
-    "yonna/foundation": "@dev",
-    "yonna/database": "@dev"
-  },
   "autoload": {
     "psr-4": {
       "Yonna\\": ""
     }
   },
-  "authors": [
-    {
-      "name": "hunzsig",
-      "email": "mzyhaohaoren@qq.com",
-      "homepage": "https://www.hunzsig.org"
-    }
-  ]
+  "description": "Yonna start quick",
+  "keywords": [
+    "php",
+    "yonna",
+    "framework"
+  ],
+  "license": "MIT",
+  "name": "yonna/yonna",
+  "require": {
+    "guzzlehttp/guzzle": "^6.5",
+    "php": "~7.4",
+    "yonna/database": "@dev",
+    "yonna/foundation": "@dev"
+  },
+  "type": "library"
 }
