@@ -19,6 +19,7 @@ class Foundation
                 } elseif (strpos($file, '.php') === false) {
                     continue;
                 } else {
+                    /** @noinspection PhpIncludeInspection */
                     require_once($realFile);
                     $qty++;
                 }
