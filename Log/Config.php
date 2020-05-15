@@ -9,19 +9,19 @@ class Config
      * 日志文件目录
      * @var string
      */
-    private static $dir = null;
+    private static string $dir = '';
 
     /**
      * 日志文件目录名
      * @var string
      */
-    private static $file = 'yonna_log';
+    private static string $file = 'yonna_log';
 
     /**
      * 文件日志的过期天数
      * @var int
      */
-    private static $file_expire_day = 0;
+    private static int $file_expire_day = 0;
 
     /**
      * @return string

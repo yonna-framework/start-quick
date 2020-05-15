@@ -35,7 +35,8 @@ class Foundation
      */
     public static function install(Cargo $Cargo): Cargo
     {
-        $path = realpath($Cargo->getYonnaCorePath() . DIRECTORY_SEPARATOR . '../foundation');
+        $path = realpath($Cargo->getYonnaCorePath() . DIRECTORY_SEPARATOR . 'Foundation') ?:
+            realpath($Cargo->getYonnaCorePath() . DIRECTORY_SEPARATOR . '../foundation');
         if (!$path) {
             throw new Exception('Foundation Module Not Found');
         }

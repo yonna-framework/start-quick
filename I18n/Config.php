@@ -9,7 +9,7 @@ class Config
 
     private static $database = null;
     private static $auto = null;
-    private static $baidu = [];
+    private static array $baidu = [];
 
     /**
      * @param $key
