@@ -17,9 +17,9 @@ class SwooleWebsocket extends Console
 {
 
     private $server = null;
-    private $root_path = null;
-    private $options = null;
-    private $clients = array();
+    private string $root_path = "";
+    private array $options = [];
+    private array $clients = [];
 
     /**
      * SwooleHttp constructor.
@@ -27,7 +27,7 @@ class SwooleWebsocket extends Console
      * @param $options
      * @throws Exception
      */
-    public function __construct($root_path, $options)
+    public function __construct(string $root_path, array $options)
     {
         if (!class_exists('swoole_websocket_server')) {
             throw new Exception('class swoole_websocket_server not exists');

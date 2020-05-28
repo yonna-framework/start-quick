@@ -2,9 +2,34 @@
 
 namespace Yonna\Console;
 
-class Package
+use Exception;
+
+class Package extends Console
 {
 
+    private string $root_path = "";
+    private array $options = [];
+
+    /**
+     * Package constructor.
+     * @param $root_path
+     * @param $options
+     * @throws Exception
+     */
+    public function __construct(string $root_path, array $options)
+    {
+        $this->root_path = $root_path;
+        $this->options = $options;
+        $this->checkParams($this->options, ['e']);
+        print_r($this->root_path);
+        print_r($this->options);
+        return $this;
+    }
+
+    public function run()
+    {
+        echo "x";
+    }
 }
 
 if (!defined('____')) {

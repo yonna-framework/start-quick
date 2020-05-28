@@ -17,8 +17,8 @@ class SwooleUdp extends Console
 {
 
     private $server = null;
-    private $root_path = null;
-    private $options = null;
+    private string $root_path = "";
+    private array $options = [];
 
     /**
      * SwooleHttp constructor.
@@ -26,7 +26,7 @@ class SwooleUdp extends Console
      * @param $options
      * @throws Exception
      */
-    public function __construct($root_path, $options)
+    public function __construct(string $root_path, array $options)
     {
         if (!class_exists('swoole_server')) {
             throw new Exception('class swoole_server not exists');

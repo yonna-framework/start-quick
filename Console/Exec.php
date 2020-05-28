@@ -15,12 +15,12 @@ class Exec
     const HEAD = '>Yonna<: ';
     const CLS = "\e[H\e[J";
 
-    private static $commands = [
+    private static array $commands = [
         array('key' => ['cls', 'clear'], 'options' => '', 'desc' => 'clean screen'),
         array('key' => ['ls', 'dir'], 'options' => '', 'desc' => 'explore dir'),
         array('key' => ['die', 'exit'], 'options' => '', 'desc' => 'exit exec'),
         array('key' => ['-h', 'help'], 'options' => '', 'desc' => 'get command list'),
-        array('key' => ['pkg'], 'options' => '-c [CONFIG PATH]', 'desc' => 'package project'),
+        array('key' => ['pkg'], 'options' => ' -e [ENV]', 'desc' => 'package project'),
         array('key' => ['swh'], 'options' => '-p [PORT] -e [ENV]', 'desc' => 'start a swoole http server'),
         array('key' => ['swws'], 'options' => '-p [PORT] -e [ENV]', 'desc' => 'start a swoole websocket server'),
         array('key' => ['swt'], 'options' => '-p [PORT] -e [ENV]', 'desc' => 'start a swoole tcp server'),
@@ -31,7 +31,7 @@ class Exec
         array('key' => ['wmu'], 'options' => '-p [PORT] -e [ENV]', 'desc' => 'start a workerman udp server'),
     ];
     private static $commandKeys = [];
-    private static $help = '';
+    private static string $help = '';
     private static $firstOpts = null;
 
     private static function c($msg)
@@ -66,7 +66,7 @@ class Exec
             exit('not root path');
         }
         while (true) {
-            $options = array();
+            $options = [];
             $opts = self::$firstOpts;
             if (!empty($opts['o'])) {
                 self::$firstOpts = null;

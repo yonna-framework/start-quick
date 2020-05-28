@@ -17,8 +17,8 @@ class SwooleHttp extends Console
 {
 
     private $server = null;
-    private $root_path = null;
-    private $options = null;
+    private string $root_path = "";
+    private array $options = [];
 
     /**
      * SwooleHttp constructor.
@@ -26,7 +26,7 @@ class SwooleHttp extends Console
      * @param $options
      * @throws Exception
      */
-    public function __construct($root_path, $options)
+    public function __construct(string $root_path, array $options)
     {
         if (!class_exists('swoole_http_server')) {
             throw new Exception('class swoole_http_server not exists');

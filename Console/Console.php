@@ -13,12 +13,12 @@ class Console
 {
 
     /**
-     * @param $opts
+     * @param array $opts
      * @param $field
      * @return array|bool
      * @throws Exception
      */
-    protected function checkParams($opts, $field)
+    protected function checkParams(array $opts, $field)
     {
         if (empty($field)) {
             return [];

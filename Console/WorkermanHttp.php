@@ -17,8 +17,8 @@ class WorkermanHttp extends Console
 {
 
     private $worker = null;
-    private $root_path = null;
-    private $options = null;
+    private string $root_path = "";
+    private array $options = [];
 
     /**
      * \Workerman\Worker constructor.
@@ -26,7 +26,7 @@ class WorkermanHttp extends Console
      * @param $options
      * @throws Exception
      */
-    public function __construct($root_path, $options)
+    public function __construct(string $root_path, array $options)
     {
         if (!class_exists('\Workerman\Worker')) {
             throw new Exception('class  Workerman\Worker not exists');
