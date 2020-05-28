@@ -15,16 +15,13 @@ class Console
     /**
      * @param array $opts
      * @param $field
-     * @return array|bool
+     * @return bool
      * @throws Exception
      */
-    protected function checkParams(array $opts, $field)
+    protected function checkParams(array $opts, array $field)
     {
         if (empty($field)) {
-            return [];
-        }
-        if (!is_array($field)) {
-            $field = [$field];
+            return true;
         }
         $err = null;
         foreach ($field as $f) {
