@@ -17,8 +17,8 @@ class SwooleHttp extends Console
 {
 
     private $server = null;
-    private string $root_path = "";
-    private array $options = [];
+    private string $root_path;
+    private array $options;
 
     /**
      * SwooleHttp constructor.

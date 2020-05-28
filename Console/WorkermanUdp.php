@@ -17,8 +17,8 @@ class WorkermanUdp extends Console
 {
 
     private $worker = null;
-    private string $root_path = "";
-    private array $options = [];
+    private string $root_path;
+    private array $options;
 
     /**
      * \Workerman\Worker constructor.
