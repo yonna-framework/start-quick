@@ -11,8 +11,8 @@ use Yonna\IO\Request;
 class After extends Middleware
 {
 
-    protected static $type = MiddlewareType::AFTER;
-    private static $after = [];
+    protected static string $type = MiddlewareType::AFTER;
+    private static array $after;
 
     /**
      * @var Request

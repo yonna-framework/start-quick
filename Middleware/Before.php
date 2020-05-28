@@ -10,13 +10,13 @@ use Yonna\IO\Request;
 class Before extends Middleware
 {
 
-    protected static $type = MiddlewareType::BEFORE;
-    private static $before = [];
+    protected static string $type = MiddlewareType::BEFORE;
+    private static array $before;
 
     /**
      * @var Request
      */
-    private $request = null;
+    private Request $request;
 
     /**
      * After constructor.

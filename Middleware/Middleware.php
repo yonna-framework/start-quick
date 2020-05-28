@@ -14,7 +14,7 @@ use Yonna\Throwable\Exception;
 abstract class Middleware implements Interfaces\Middleware
 {
 
-    protected static $type = MiddlewareType::MIDDLEWARE;
+    protected static string $type = MiddlewareType::MIDDLEWARE;
 
     /**
      * get middleware

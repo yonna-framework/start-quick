@@ -25,28 +25,66 @@ class Package extends Console
         return $this;
     }
 
+
+    /**
+     * @param $source
+     * @param $dest
+     * @return string
+     */
+    private function simplify($source, $dest): string
+    {
+        if (is_file($source)) {
+            // 文件后缀名
+            $extArr = explode('.', $source);
+            $ext = array_pop($extArr);
+            var_dump($ext);
+            unset($extArr);
+            // 读文件
+            switch ($ext) {
+                case 'php':
+                    $content = php_strip_whitespace($source);
+                    break;
+                default:
+                    $content = file_get_contents($source);
+                    // 如果是env文件
+                    if (strpos($source, '.env') !== false) {
+                        $content = preg_replace('/IS_DEBUG(.*?)=(.*?)true/i', 'IS_DEBUG=false', $content);
+                    }
+                    // 去除空行
+                    $content = str_replace(["\r\n", "\r", "\n"], PHP_EOL, $content);
+                    $contents = explode(PHP_EOL, $content);
+                    $contents = array_filter($contents);
+                    $content = implode(PHP_EOL, $contents);
+                    break;
+            }
+            file_put_contents($dest, $content);
+        }
+        return '';
+    }
+
     public function run()
     {
-        $distDir = $this->root_path . DIRECTORY_SEPARATOR . 'dist';
+        $rootDir = $this->root_path . DIRECTORY_SEPARATOR;
+        $distDir = $rootDir . 'dist';
         if (is_dir($distDir)) {
             System::dirDel($distDir);
         }
-        $rootDir = $this->root_path . DIRECTORY_SEPARATOR;
-        $publicDir = $this->root_path . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
-        $distDir = realpath($distDir) . DIRECTORY_SEPARATOR;
         // 构建必要的 dist 目录
         mkdir($distDir, 0644);
-        mkdir($publicDir, 0644);
-        var_dump($distDir);
+        $distDir = realpath($distDir) . DIRECTORY_SEPARATOR;
+        mkdir($distDir . '/public', 0644);
         // 复制 env配置
-        copy(
+        $this->simplify(
             $rootDir . '.env.' . $this->options['e'],
             $distDir . '.env.' . $this->options['e']
         );
-        copy(
-            $this->root_path . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'index.php',
-            $distDir . '.env.' . $this->options['e']
+        // 复制 index
+        $this->simplify(
+            $rootDir . 'public/index.php',
+            $distDir . 'public/index.php'
         );
+        // 复制 vendor
+
         exit();
     }
 }
