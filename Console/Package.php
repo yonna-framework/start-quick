@@ -27,11 +27,12 @@ class Package extends Console
 
 
     /**
-     * @param $source
-     * @param $dest
+     * @param string $source
+     * @param string $dest
+     * @param bool $encrypt
      * @return string
      */
-    private function simplify($source, $dest): string
+    private function simplify(string $source, string $dest, bool $encrypt = false): string
     {
         if (is_file($source)) {
             // 文件后缀名
@@ -43,6 +44,17 @@ class Package extends Console
             switch ($ext) {
                 case 'php':
                     $content = php_strip_whitespace($source);
+                    if ($encrypt) {
+                        $content = base64_encode($content);
+                        $content = bin2hex($content);
+                        $content = str_split($content, 2);
+                        $c1 = $content;
+                        foreach ($content as &$v) {
+                            $v = $v . rand(10, 99);
+                        }
+                        $content = implode('', $content);
+                        $content = hex2bin($content);
+                    }
                     break;
                 default:
                     $content = file_get_contents($source);
