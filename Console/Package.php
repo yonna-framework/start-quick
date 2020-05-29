@@ -93,7 +93,7 @@ class Package extends Console
         // 复制 index
         $this->simplify(
             $rootDir . 'public/index.php',
-            $distDir . 'public/index.php'
+            $distDir . 'public/index.jar',
         );
         // 复制 vendor
 
