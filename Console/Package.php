@@ -30,9 +30,9 @@ class Package extends Console
      * @param string $source
      * @param string $dest
      * @param bool $encrypt
-     * @return string
+     * @return void
      */
-    private function simplify(string $source, string $dest, bool $encrypt = false): string
+    private function simplify(string $source, string $dest, bool $encrypt = false): void
     {
         if (is_file($source)) {
             // 文件后缀名
@@ -41,37 +41,35 @@ class Package extends Console
             var_dump($ext);
             unset($extArr);
             // 读文件
-            switch ($ext) {
-                case 'php':
-                    $content = php_strip_whitespace($source);
-                    if ($encrypt) {
-                        $content = base64_encode($content);
-                        $content = bin2hex($content);
-                        $content = str_split($content, 2);
-                        $c1 = $content;
-                        foreach ($content as &$v) {
-                            $v = $v . rand(10, 99);
-                        }
-                        $content = implode('', $content);
-                        $content = hex2bin($content);
-                    }
-                    break;
-                default:
-                    $content = file_get_contents($source);
-                    // 如果是env文件
-                    if (strpos($source, '.env') !== false) {
-                        $content = preg_replace('/IS_DEBUG(.*?)=(.*?)true/i', 'IS_DEBUG=false', $content);
-                    }
-                    // 去除空行
-                    $content = str_replace(["\r\n", "\r", "\n"], PHP_EOL, $content);
-                    $contents = explode(PHP_EOL, $content);
-                    $contents = array_filter($contents);
-                    $content = implode(PHP_EOL, $contents);
-                    break;
+            if (strpos($source, '.env')) {
+                $content = file_get_contents($source);
+                // 如果是env文件
+                if (strpos($source, '.env') !== false) {
+                    $content = preg_replace('/IS_DEBUG(.*?)=(.*?)true/i', 'IS_DEBUG=false', $content);
+                }
+                // 去除空行
+                $content = str_replace(["\r\n", "\r", "\n"], PHP_EOL, $content);
+                $contents = explode(PHP_EOL, $content);
+                $contents = array_filter($contents);
+                $content = implode(PHP_EOL, $contents);
+            } elseif (strpos($source, 'index.php')) {
+                $content = php_strip_whitespace($source);
+            } elseif ($ext == 'php') {
+                $content = php_strip_whitespace($source);
+                $content = base64_encode($content);
+                $content = bin2hex($content);
+                $content = str_split($content, 2);
+                foreach ($content as &$v) {
+                    $v = $v . rand(10, 99);
+                }
+                $content = implode('', $content);
+                $content = hex2bin($content);
+            } else {
+                return;
             }
             file_put_contents($dest, $content);
         }
-        return '';
+        return;
     }
 
     public function run()
@@ -88,7 +86,7 @@ class Package extends Console
         // 复制 env配置
         $this->simplify(
             $rootDir . '.env.' . $this->options['e'],
-            $distDir . '.env.' . $this->options['e']
+            $distDir . '.env.prod'
         );
         // 复制 index
         $this->simplify(

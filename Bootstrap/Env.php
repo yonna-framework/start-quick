@@ -7,8 +7,6 @@ namespace Yonna\Bootstrap;
 
 use Dotenv\Dotenv;
 use Exception;
-use Whoops\Handler\PrettyPageHandler as WhoopsHandlerPrettyPageHandler;
-use Whoops\Run as WhoopsRun;
 
 class Env
 {
@@ -44,32 +42,13 @@ class Env
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
             $Cargo->setDebug(true);
-            //
-            $whoops = new WhoopsRun;
-            $handle = (new WhoopsHandlerPrettyPageHandler());
-            $handle->setPageTitle('Yonna#Whoops');
-            $whoops->pushHandler($handle);
-            $whoops->register();
         } else {
             error_reporting(E_ERROR & E_WARNING & E_NOTICE);
             ini_set('display_errors', 'Off');
             $Cargo->setDebug(false);
         }
-        // define
-        if (!defined('____')) {
-            define('____', '\Yonna\Foundation\YonnaStream');
-        }
-        if (!defined('_____')) {
-            define('_____', 'yonna');
-        }
-        if (!defined('______')) {
-            define('______', null);
-        }
-        if (!defined('_______')) {
-            define('_______', null);
-        }
         // system
-        $isWindows = strstr(PHP_OS, 'WIN') && PHP_OS !== 'CYGWIN' ? true : false;
+        $isWindows = strstr(PHP_OS, 'WIN') && PHP_OS !== 'CYGWIN';
         // cargo
         $Cargo->setCurrentPhpVersion(PHP_VERSION);
         $Cargo->setEnv($_ENV);
