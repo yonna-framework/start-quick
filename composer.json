@@ -33,7 +33,6 @@
   "license": "MIT",
   "name": "yonna/yonna",
   "require": {
-    "elasticsearch/elasticsearch": "^6.7",
     "ext-json": "*",
     "ext-mongodb": "*",
     "ext-pdo": "*",
