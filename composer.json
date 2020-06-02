@@ -38,13 +38,14 @@
     "ext-pdo": "*",
     "ext-redis": "*",
     "ext-iconv": "*",
-    "guzzlehttp/guzzle": "~6.5",
+    "guzzlehttp/guzzle": "~6.5.4",
     "php": "~7.4",
-    "php-amqplib/php-amqplib": "~2.9",
-    "vlucas/phpdotenv": "3.3.3",
-    "workerman/workerman": "^3.5"
+    "php-amqplib/php-amqplib": "~2.11.3",
+    "vlucas/phpdotenv": "~4.1.6",
+    "workerman/workerman": "~4.0.5"
   },
   "require-dev": {
+    "swoole/ide-helper": "~4.5.2"
   },
   "type": "library"
 }
