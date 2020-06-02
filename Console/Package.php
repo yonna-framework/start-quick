@@ -56,11 +56,11 @@ class Package extends Console
                     if (is_dir($filePath)) {
                         $this->codesPHP($filePath, $removeDir, $exclude);
                     } elseif ($fileExt == 'php') {
-                        $newDir = $this->root_path . '/dist/library/' . str_replace($removeDir, '', $dir) . '/';
+                        $newDir = $this->root_path . '/dist/library/' . str_replace(realpath($removeDir), '', $dir) . '/';
                         System::dirCheck($newDir, true);
                         $newDir = realpath($newDir);
                         echo("PKG => {$newDir}/{$fileName}.jar\n");
-                        file_put_contents("{$newDir}/{$fileName}.jar", php_strip_whitespace($filePath));
+                        file_put_contents("{$newDir}/{$fileName}.jar", $this->shift(php_strip_whitespace($filePath)));
                     } elseif ($fileExt == 'json') {
                         //$codes .= str_replace('<?php', '', php_strip_whitespace($filePath)) . PHP_EOL;
                     }
@@ -99,7 +99,7 @@ class Package extends Console
             } elseif (strpos($source, 'index.php')) {
                 $steam = php_strip_whitespace(__DIR__ . '/PackageStream.php');
                 $content = php_strip_whitespace($source);
-                $content = $steam . 'require("java://" . file_get_contents(__DIR__ . "/jvm.jar"));' . str_replace('<?php', '', $content);
+                $content = $steam . str_replace('<?php', '', $content);
                 $content = str_replace('.env.' . $this->options['e'], '.env.prod', $content);
                 $content = preg_replace("/require(.*?)vendor(.*?)autoload.php(.*?);/", '', $content);
                 file_put_contents($dest . '.temp', $content);
@@ -167,20 +167,17 @@ class Package extends Console
             $distDir . 'boot/inlet.jar',
         );
         // 打包 composer-vendor-yonna
-        $vendorRoot = (realpath($this->root_path));
-        $codes = $this->codesPHP(
-            realpath($this->root_path . '/vendor/yonna/yonna'),
-            realpath($this->root_path . '/vendor/yonna/yonna'),
+        $this->codesPHP(
+            $this->root_path . '/vendor/yonna/yonna',
+            $this->root_path . '/vendor/yonna/yonna',
             [
                 'Package.php',
                 'PackageStream.php',
                 'Swoole',
             ]
         );
-//        $codes = str_replace(PHP_EOL, '', $codes);
-        file_put_contents($distDir . "boot/jvm.php", $codes);
-        // 复制 app
-
-        exit();
+        // 打包 App
+        $this->codesPHP($this->root_path . '/App', $this->root_path);
+        exit('Package Finish!');
     }
 }

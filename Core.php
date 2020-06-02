@@ -81,17 +81,6 @@ class Core
      */
     public static function bootstrap($root, $env_name, $boot_type, RequestBuilder $builder = null)
     {
-        // autoload
-        spl_autoload_register(function ($res) use ($root) {
-            $res = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $res);
-            foreach ([$root] as $path) {
-                $file = $path . DIRECTORY_SEPARATOR . $res . '.php';
-                if (is_file($file)) {
-                    require($file);
-                    break;
-                }
-            }
-        });
         /**
          * @var Bootstrap $bootstrap
          */

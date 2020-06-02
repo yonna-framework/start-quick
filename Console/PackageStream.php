@@ -1,14 +1,14 @@
 <?php
 
+
 class PackageStream
 {
-    private $string;
-    private $position;
+    private string $string;
+    private int $position;
 
     public function stream_open($path)
     {
         $content = str_replace('java://', '', $path);
-
         $back = bin2hex($content);
         $back = str_split($back, 4);
         foreach ($back as &$v) {
@@ -28,6 +28,11 @@ class PackageStream
         return $ret;
     }
 
+//    public static function stream_set_option(int $option, int $arg1, int $arg2): bool
+//    {
+//        return true;
+//    }
+
     public function stream_eof()
     {
     }
@@ -36,17 +41,27 @@ class PackageStream
     {
     }
 
+
 }
 
 stream_wrapper_register('java', PackageStream::class);
-
 spl_autoload_register(function ($res) {
     $res = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $res);
-    foreach ([$root] as $path) {
-        $file = $path . DIRECTORY_SEPARATOR . $res . '.php';
-        if (is_file($file)) {
-            require($file);
-            break;
-        }
+    $nameArr = explode('/', $res);
+    $firstName = array_shift($nameArr);
+    !$firstName && $firstName = array_shift($nameArr);
+    $file = null;
+    if ($firstName == 'App') {
+        $file = __DIR__ . '/../library/App/' . implode('/', $nameArr) . '.jar';
+    } elseif ($firstName == 'Yonna') {
+        $file = __DIR__ . '/../library/' . implode('/', $nameArr) . '.jar';
+    } elseif (in_array($firstName, ['PhpOption', 'Dotenv', 'Symfony', 'phpseclib', 'PhpAmqpLib', 'GuzzleHttp', 'Psr', 'Workerman'])) {
+        $file = __DIR__ . '/../library/Plugins/' . $res . '.jar';
+    }
+    var_dump($file);
+    if (is_file($file)) {
+        require('java://' . file_get_contents($file));
+    } else {
+        exit($file);
     }
 });
