@@ -56,10 +56,8 @@ class Bootstrap
 
             // 环境
             $Cargo = Env::install($Cargo);
-            // 配置
+            // 自定义配置，自动加载目录
             $Cargo = Config::install($Cargo);
-            // 自定义函数
-            $Cargo = Functions::install($Cargo);
 
             /**
              * @var Request $request

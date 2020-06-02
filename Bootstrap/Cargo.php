@@ -8,22 +8,21 @@ namespace Yonna\Bootstrap;
 class Cargo
 {
 
-    public $root = '';
-    public $app_root = '';
-    public $project_name = '';
-    public $yonna_core_path = '';
-    public $timezone = '';
-    public $current_php_version = '';
-    public $minimum_php_version = '';
-    public $boot_type = '';
-    public $env_name = '';
+    public string $root = '';
+    public string $app_root = '';
+    public string $project_name = '';
+    public string $timezone = '';
+    public string $current_php_version = '';
+    public string $minimum_php_version = '';
+    public string $boot_type = '';
+    public string $env_name = '';
 
-    public $windows = false;
-    public $linux = false;
-    public $debug = false;
-    public $memory_limit_on = false;
+    public bool $windows = false;
+    public bool $linux = false;
+    public bool $debug = false;
+    public bool $memory_limit_on = false;
 
-    public $env =[];
+    public array $env = [];
 
 
     /**
@@ -37,7 +36,6 @@ class Cargo
         }
         $this->root = realpath($this->root);
         $this->app_root = realpath($this->root . '/app') ?? '';
-        $this->yonna_core_path = realpath(__DIR__ . '/..');
     }
 
     /**
@@ -71,18 +69,6 @@ class Cargo
     {
         return $this->env_name;
     }
-
-    /**
-     * @return string
-     */
-    public function getYonnaCorePath(): string
-    {
-        return $this->yonna_core_path;
-    }
-
-
-    // -------------------------------------------------------
-
 
     /**
      * @return string

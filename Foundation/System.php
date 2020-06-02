@@ -81,10 +81,9 @@ class System
     /**
      * 载入目录
      * @param $dir
-     * @param int $qty
      * @return int|void
      */
-    public static function requireDir($dir, $qty = 0)
+    public static function requireDir($dir)
     {
         if (!is_dir($dir)) return;
         $files = opendir($dir);
@@ -92,17 +91,15 @@ class System
             if ($file != '.' && $file != '..') {
                 $realFile = $dir . '/' . $file;
                 if (is_dir($realFile)) {
-                    $qty = static::requireDir($realFile, $qty);
+                    static::requireDir($realFile);
                 } elseif (strpos($file, '.php') === false) {
                     continue;
                 } else {
                     static::requireCache($realFile);
-                    $qty++;
                 }
             }
         }
         closedir($files);
-        return $qty;
     }
 
     /**
