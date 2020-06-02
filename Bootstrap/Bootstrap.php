@@ -36,10 +36,14 @@ class Bootstrap
     public function boot($root, $env_name, $boot_type, RequestBuilder $builder = null)
     {
         /**
+         * clear env name
+         */
+        $env_name = str_replace('.env.', '', $env_name);
+        /**
          * @var $Cargo Cargo
          */
         $Cargo = Core::get(Cargo::class, [
-            'root' => $root ?? __DIR__ . '/../../../../',
+            'root' => $root,
             'env_name' => $env_name ?? 'example',
             'boot_type' => $boot_type ?? BootType::AJAX_HTTP,
         ]);
