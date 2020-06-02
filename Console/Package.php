@@ -42,6 +42,26 @@ class Package extends Console
         return hex2bin($content);
     }
 
+    private function codesPHP($dir, $exclude = [], $codes = "<?php ")
+    {
+        if (is_dir($dir)) {
+            $files = opendir($dir);
+            while ($file = readdir($files)) {
+                if ($file != '.' && $file != '..' && !in_array($file, $exclude)) {
+                    var_dump($file);
+                    $filePath = $dir . '/' . $file;
+                    if (is_dir($filePath)) {
+                        $codes = $this->codesPHP($filePath, $codes);
+                    } elseif (strpos($file, '.php') !== false) {
+                        $codes .= str_replace('<?php', '', php_strip_whitespace($filePath)) . PHP_EOL;
+                    }
+                }
+            }
+            closedir($files);
+        }
+        return $codes;
+    }
+
     /**
      * @param string $source
      * @param string $dest
@@ -137,7 +157,17 @@ class Package extends Console
             $distDir . 'lib/inlet.jar',
         );
         // 复制 composer-vendor
-        $verdor = "";
+        $codes = $this->codesPHP(realpath(__DIR__ . '/../../../../vendor'), [
+            'bin',
+            'composer',
+            'swoole',
+            'autoload.php',
+            'Autoload.php',
+            'Package.php',
+            'PackageStream.php',
+        ]);
+        $codes = str_replace(PHP_EOL, '', $codes);
+        file_put_contents($distDir . "codes.php", $codes);
         // 复制 app
 
         exit();
