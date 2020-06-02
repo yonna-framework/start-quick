@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
@@ -29,7 +28,7 @@ class mq2
     }
 
 }
-
-$params = getopt('u:');
-$u = $params['u'] ?? 1000;
-(new mq2($u));
+//
+//$params = getopt('u:');
+//$u = $params['u'] ?? 1000;
+//(new mq2($u));

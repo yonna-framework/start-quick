@@ -8,8 +8,14 @@
   ],
   "autoload": {
     "psr-4": {
-      "Yonna\\": ""
-    }
+      "Yonna\\": "",
+      "PhpOption\\": "Plugins/PhpOption/",
+      "Dotenv\\": "Plugins/Dotenv/",
+      "Symfony\\Polyfill\\Ctype\\": "Plugins/Symfony/Polyfill/Ctype/"
+    },
+    "files": [
+      "Plugins/Symfony/Polyfill/Ctype/bootstrap.php"
+    ]
   },
   "conflict": {
     "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",

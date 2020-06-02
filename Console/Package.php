@@ -42,18 +42,22 @@ class Package extends Console
         return hex2bin($content);
     }
 
-    private function codesPHP($dir, $exclude = [], $codes = "<?php ")
+    private function codesPHP($dir, $replaceDir, $exclude = [], $codes = "<?php ")
     {
         if (is_dir($dir)) {
+            $dir = realpath($dir);
             $files = opendir($dir);
             while ($file = readdir($files)) {
                 if ($file != '.' && $file != '..' && !in_array($file, $exclude)) {
-                    var_dump($file);
+                    $fileExt = explode('.', $file);
+                    $fileExt = array_pop($fileExt);
                     $filePath = $dir . '/' . $file;
                     if (is_dir($filePath)) {
-                        $codes = $this->codesPHP($filePath, $codes);
-                    } elseif (strpos($file, '.php') !== false) {
+                        $codes = $this->codesPHP($filePath, $replaceDir, $exclude, $codes);
+                    } elseif ($fileExt == 'php') {
                         $codes .= str_replace('<?php', '', php_strip_whitespace($filePath)) . PHP_EOL;
+                    } elseif ($fileExt == 'json') {
+                        //$codes .= str_replace('<?php', '', php_strip_whitespace($filePath)) . PHP_EOL;
                     }
                 }
             }
@@ -67,7 +71,8 @@ class Package extends Console
      * @param string $dest
      * @return void
      */
-    private function simplify(string $source, string $dest): void
+    private
+    function simplify(string $source, string $dest): void
     {
         $content = null;
         if (is_file($source)) {
@@ -117,7 +122,8 @@ class Package extends Console
         return;
     }
 
-    public function run()
+    public
+    function run()
     {
         $rootDir = $this->root_path . DIRECTORY_SEPARATOR;
         $distDir = $rootDir . 'dist';
@@ -157,17 +163,22 @@ class Package extends Console
             $distDir . 'lib/inlet.jar',
         );
         // 复制 composer-vendor
-        $codes = $this->codesPHP(realpath(__DIR__ . '/../../../../vendor'), [
-            'bin',
-            'composer',
-            'swoole',
-            'autoload.php',
-            'Autoload.php',
-            'Package.php',
-            'PackageStream.php',
-        ]);
+        $vendorRoot = (realpath($this->root_path));
+        $codes = $this->codesPHP(
+            realpath(__DIR__ . '/../../../../vendor'),
+            $vendorRoot,
+            [
+                'bin',
+                'composer',
+                'swoole',
+                'autoload.php',
+                'Autoload.php',
+                'Package.php',
+                'PackageStream.php',
+            ]
+        );
         $codes = str_replace(PHP_EOL, '', $codes);
-        file_put_contents($distDir . "codes.php", $codes);
+        file_put_contents($distDir . "lib/jvm.txt", $codes);
         // 复制 app
 
         exit();
