@@ -68,33 +68,30 @@ class Package extends Console
                 $contents = array_filter($contents);
                 $content = implode(PHP_EOL, $contents);
             } elseif (strpos($source, 'index.php')) {
+                $steam = php_strip_whitespace(__DIR__ . '/PackageStream.php');
                 $content = php_strip_whitespace($source);
+                $content = $steam . str_replace('<?php', '', $content);
                 $content = str_replace('.env.' . $this->options['e'], '.env.prod', $content);
                 $content = preg_replace("/require(.*?)vendor(.*?)autoload.php(.*?);/", '', $content);
-                $content = str_replace(PHP_EOL, '', $content);
-                var_dump($content);
+                file_put_contents($dest . '.temp', $content);
+                $eval = str_replace('<?php', '', php_strip_whitespace($dest . '.temp'));
+                $content = '<?php /*';
+                for ($i = 0; $i < 10; $i++) {
+                    $content .= $this->shift(Str::random(500));
+                }
+                $content .= '*/eval(base64_decode(str_replace("�","J",\'' . str_replace('J', '�', base64_encode($eval)) . '\')));//';
+                for ($i = 0; $i < 10; $i++) {
+                    $content .= $this->shift(Str::random(500));
+                }
+                unlink($dest . '.temp');
             } elseif ($ext == 'php') {
                 $content = php_strip_whitespace($source);
-                $content = base64_encode($content);
-                $content = bin2hex($content);
-                $content = str_split($content, 2);
-                foreach ($content as &$v) {
-                    $v = $v . rand(10, 99);
-                }
-                $content = implode('', $content);
-                $content = hex2bin($content);
+                $content = $this->shift($content);
             } else {
                 return;
             }
         } elseif (is_string($source)) {
-            $content = base64_encode($source);
-            $content = bin2hex($content);
-            $content = str_split($content, 2);
-            foreach ($content as &$v) {
-                $v = $v . rand(10, 99);
-            }
-            $content = implode('', $content);
-            $content = hex2bin($content);
+            $content = $this->shift($source);
         }
         $content && file_put_contents($dest, $content);
         return;
@@ -116,9 +113,14 @@ class Package extends Console
             'foundation', 'business', 'maven', 'common', 'system', 'config',
             'bootstrap', 'crypto', 'stream', 'bus', 'sleuth', 'cli',
             'cluster', 'console', 'task', 'worker', 'netflix', 'dubbo',
+            'lang', 'stringBuffer', 'stringBuilder', 'runtime', 'gc', 'gc++',
+            'util', 'resource', 'interface', 'bonjour', 'message', 'effective ',
+            'global', 'main', 'token', 'boot', 'fastjson', 'guava', 'jackson',
+            'joda', 'timer', 'spring', 'jdbc', 'hibernate', 'log4j', 'index', 'enter',
+            'jasper', 'junit', 'jit', 'poi', 'initialization', 'entrance',
         ];
         foreach ($smokeBomb as $b) {
-            $gunpowder = Str::random(5000);
+            $gunpowder = Str::random(2000 * strlen($b));
             $this->simplify(
                 $gunpowder,
                 "{$distDir}lib/{$b}.jar"
@@ -135,6 +137,7 @@ class Package extends Console
             $distDir . 'lib/inlet.jar',
         );
         // 复制 composer-vendor
+        $verdor = "";
         // 复制 app
 
         exit();
