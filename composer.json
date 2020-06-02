@@ -44,8 +44,5 @@
     "vlucas/phpdotenv": "~4.1.6",
     "workerman/workerman": "~4.0.5"
   },
-  "require-dev": {
-    "swoole/ide-helper": "~4.5.2"
-  },
   "type": "library"
 }
