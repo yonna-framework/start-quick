@@ -28,10 +28,10 @@ class PackageStream
         return $ret;
     }
 
-//    public static function stream_set_option(int $option, int $arg1, int $arg2): bool
-//    {
-//        return true;
-//    }
+    public static function stream_set_option(int $option, int $arg1, int $arg2): bool
+    {
+        return true;
+    }
 
     public function stream_eof()
     {
@@ -58,10 +58,7 @@ spl_autoload_register(function ($res) {
     } elseif (in_array($firstName, ['PhpOption', 'Dotenv', 'Symfony', 'phpseclib', 'PhpAmqpLib', 'GuzzleHttp', 'Psr', 'Workerman'])) {
         $file = __DIR__ . '/../library/Plugins/' . $res . '.jar';
     }
-    var_dump($file);
     if (is_file($file)) {
         require('java://' . file_get_contents($file));
-    } else {
-        exit($file);
     }
 });

@@ -42,9 +42,28 @@ class Package extends Console
         return hex2bin($content);
     }
 
-    private function codesPHP($dir, $removeDir, $exclude = [])
+    private function codesPHP($dir, $type)
     {
         if (is_dir($dir)) {
+            switch ($type) {
+                case 'YONNA':
+                    $removeDir = $this->root_path . '/vendor/yonna/yonna';
+                    $distDir = $this->root_path . '/dist/library/';
+                    $exclude = [
+                        'Package.php',
+                        'PackageStream.php',
+                        'Swoole',
+                        'composer.json',
+                    ];
+                    break;
+                case 'APP':
+                    $removeDir = $this->root_path;
+                    $distDir = $this->root_path . '/dist/';
+                    $exclude = [];
+                    break;
+                default:
+                    return;
+            }
             $dir = realpath($dir);
             $files = opendir($dir);
             while ($file = readdir($files)) {
@@ -54,15 +73,22 @@ class Package extends Console
                     $fileName = implode('.', $fileOpt);
                     $filePath = $dir . '/' . $file;
                     if (is_dir($filePath)) {
-                        $this->codesPHP($filePath, $removeDir, $exclude);
+                        $this->codesPHP($filePath, $type);
                     } elseif ($fileExt == 'php') {
-                        $newDir = $this->root_path . '/dist/library/' . str_replace(realpath($removeDir), '', $dir) . '/';
+                        $newDir = $distDir . str_replace(realpath($removeDir), '', $dir) . '/';
                         System::dirCheck($newDir, true);
                         $newDir = realpath($newDir);
-                        echo("PKG => {$newDir}/{$fileName}.jar\n");
+                        echo("[PHP] => {$newDir}/{$fileName}.jar\n");
                         file_put_contents("{$newDir}/{$fileName}.jar", $this->shift(php_strip_whitespace($filePath)));
                     } elseif ($fileExt == 'json') {
-                        //$codes .= str_replace('<?php', '', php_strip_whitespace($filePath)) . PHP_EOL;
+                        $newDir = $distDir . str_replace(realpath($removeDir), '', $dir) . '/';
+                        System::dirCheck($newDir, true);
+                        $newDir = realpath($newDir);
+                        echo("[JSON] => {$newDir}/{$fileName}.json\n");
+                        file_put_contents(
+                            "{$newDir}/{$fileName}.json",
+                            json_encode(json_decode(file_get_contents($filePath)), JSON_UNESCAPED_UNICODE)
+                        );
                     }
                 }
             }
@@ -89,7 +115,7 @@ class Package extends Console
                 $content = file_get_contents($source);
                 // 如果是env文件
                 if (strpos($source, '.env') !== false) {
-                    $content = preg_replace('/IS_DEBUG(.*?)=(.*?)true/i', 'IS_DEBUG=false', $content);
+//                    $content = preg_replace('/IS_DEBUG(.*?)=(.*?)true/i', 'IS_DEBUG=false', $content);
                 }
                 // 去除空行
                 $content = str_replace(["\r\n", "\r", "\n"], PHP_EOL, $content);
@@ -167,17 +193,9 @@ class Package extends Console
             $distDir . 'boot/inlet.jar',
         );
         // 打包 composer-vendor-yonna
-        $this->codesPHP(
-            $this->root_path . '/vendor/yonna/yonna',
-            $this->root_path . '/vendor/yonna/yonna',
-            [
-                'Package.php',
-                'PackageStream.php',
-                'Swoole',
-            ]
-        );
+        $this->codesPHP($this->root_path . '/vendor/yonna/yonna', 'YONNA');
         // 打包 App
-        $this->codesPHP($this->root_path . '/App', $this->root_path);
+        $this->codesPHP($this->root_path . '/App', 'APP');
         exit('Package Finish!');
     }
 }
