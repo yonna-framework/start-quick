@@ -18,10 +18,6 @@ class Cargo
     public $boot_type = '';
     public $env_name = '';
 
-    public $config_qty = 0;
-    public $function_qty = 0;
-    public $foundation_qty = 0;
-
     public $windows = false;
     public $linux = false;
     public $debug = false;
@@ -172,38 +168,6 @@ class Cargo
     public function setConfigQty(int $config_qty): void
     {
         $this->config_qty = $config_qty;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFunctionQty(): int
-    {
-        return $this->function_qty;
-    }
-
-    /**
-     * @param int $function_qty
-     */
-    public function setFunctionQty(int $function_qty): void
-    {
-        $this->function_qty = $function_qty;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFoundationQty(): int
-    {
-        return $this->foundation_qty;
-    }
-
-    /**
-     * @param int $foundation_qty
-     */
-    public function setFoundationQty(int $foundation_qty): void
-    {
-        $this->foundation_qty = $foundation_qty;
     }
 
     /**

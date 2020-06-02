@@ -42,20 +42,25 @@ class Package extends Console
         return hex2bin($content);
     }
 
-    private function codesPHP($dir, $replaceDir, $exclude = [], $codes = "<?php ")
+    private function codesPHP($dir, $removeDir, $exclude = [])
     {
         if (is_dir($dir)) {
             $dir = realpath($dir);
             $files = opendir($dir);
             while ($file = readdir($files)) {
                 if ($file != '.' && $file != '..' && !in_array($file, $exclude)) {
-                    $fileExt = explode('.', $file);
-                    $fileExt = array_pop($fileExt);
+                    $fileOpt = explode('.', $file);
+                    $fileExt = array_pop($fileOpt);
+                    $fileName = implode('.', $fileOpt);
                     $filePath = $dir . '/' . $file;
                     if (is_dir($filePath)) {
-                        $codes = $this->codesPHP($filePath, $replaceDir, $exclude, $codes);
+                        $this->codesPHP($filePath, $removeDir, $exclude);
                     } elseif ($fileExt == 'php') {
-                        $codes .= str_replace('<?php', '', php_strip_whitespace($filePath)) . PHP_EOL;
+                        $newDir = $this->root_path . '/dist/library/' . str_replace($removeDir, '', $dir) . '/';
+                        System::dirCheck($newDir, true);
+                        $newDir = realpath($newDir);
+                        echo("PKG => {$newDir}/{$fileName}.jar\n");
+                        file_put_contents("{$newDir}/{$fileName}.jar", php_strip_whitespace($filePath));
                     } elseif ($fileExt == 'json') {
                         //$codes .= str_replace('<?php', '', php_strip_whitespace($filePath)) . PHP_EOL;
                     }
@@ -63,7 +68,6 @@ class Package extends Console
             }
             closedir($files);
         }
-        return $codes;
     }
 
     /**
@@ -133,7 +137,7 @@ class Package extends Console
         // 构建必要的 dist 目录
         mkdir($distDir, 0644);
         $distDir = realpath($distDir) . DIRECTORY_SEPARATOR;
-        mkdir($distDir . '/lib', 0644);
+        mkdir($distDir . '/boot', 0644);
         // 烟幕弹
         $smokeBomb = [
             'foundation', 'business', 'maven', 'common', 'system', 'config',
@@ -149,32 +153,32 @@ class Package extends Console
             $gunpowder = Str::random(2000 * strlen($b));
             $this->simplify(
                 $gunpowder,
-                "{$distDir}lib/{$b}.jar"
+                "{$distDir}boot/{$b}.jar"
             );
         }
-        // 复制 env配置
+        // 打包 env配置
         $this->simplify(
             $rootDir . '.env.' . $this->options['e'],
             $distDir . '.env.prod'
         );
-        // 复制 index
+        // 打包 index
         $this->simplify(
             $rootDir . 'public/index.php',
-            $distDir . 'lib/inlet.jar',
+            $distDir . 'boot/inlet.jar',
         );
-        // 复制 composer-vendor-yonna
+        // 打包 composer-vendor-yonna
         $vendorRoot = (realpath($this->root_path));
         $codes = $this->codesPHP(
-            realpath(__DIR__ . '/../../../../vendor/yonna/yonna'),
-            $vendorRoot,
+            realpath($this->root_path . '/vendor/yonna/yonna'),
+            realpath($this->root_path . '/vendor/yonna/yonna'),
             [
                 'Package.php',
                 'PackageStream.php',
                 'Swoole',
             ]
         );
-        $codes = str_replace(PHP_EOL, '', $codes);
-        file_put_contents($distDir . "lib/jvm.txt", $codes);
+//        $codes = str_replace(PHP_EOL, '', $codes);
+        file_put_contents($distDir . "boot/jvm.php", $codes);
         // 复制 app
 
         exit();

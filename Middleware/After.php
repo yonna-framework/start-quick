@@ -12,17 +12,17 @@ class After extends Middleware
 {
 
     protected static string $type = MiddlewareType::AFTER;
-    private static array $after;
+    private static array $after = [];
 
     /**
      * @var Request
      */
-    private $request = null;
+    private Request $request;
 
     /**
      * @var mixed
      */
-    private $response = null;
+    private $response;
 
     /**
      * After constructor.

@@ -24,8 +24,7 @@ class Env
             if (!is_file($Cargo->getRoot() . DIRECTORY_SEPARATOR . '.env.' . $Cargo->getEnvName())) {
                 exit('Need file .env.' . $Cargo->getEnvName());
             }
-            $Dotenv = Dotenv::create($Cargo->getRoot(), '.env.' . $Cargo->getEnvName());
-            $Dotenv->load();
+            Dotenv::createImmutable($Cargo->getRoot(), '.env.' . $Cargo->getEnvName())->load();
         }
         // check php version
         if (version_compare(PHP_VERSION, self::MINIMUM_PHP_VERSION, '<')) {

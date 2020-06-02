@@ -36,9 +36,9 @@ class Dotenv
     /**
      * Create a new dotenv instance.
      *
-     * @param \Dotenv\Loader\LoaderInterface         $loader
+     * @param \Dotenv\Loader\LoaderInterface $loader
      * @param \Dotenv\Repository\RepositoryInterface $repository
-     * @param \Dotenv\Store\StoreInterface|string[]  $store
+     * @param \Dotenv\Store\StoreInterface|string[] $store
      *
      * @return void
      */
@@ -53,9 +53,9 @@ class Dotenv
      * Create a new dotenv instance.
      *
      * @param \Dotenv\Repository\RepositoryInterface $repository
-     * @param string|string[]                        $paths
-     * @param string|string[]|null                   $names
-     * @param bool                                   $shortCircuit
+     * @param string|string[] $paths
+     * @param string|string[]|null $names
+     * @param bool $shortCircuit
      *
      * @return \Dotenv\Dotenv
      */
@@ -73,9 +73,9 @@ class Dotenv
     /**
      * Create a new mutable dotenv instance with default repository.
      *
-     * @param string|string[]      $paths
+     * @param string|string[] $paths
      * @param string|string[]|null $names
-     * @param bool                 $shortCircuit
+     * @param bool $shortCircuit
      *
      * @return \Dotenv\Dotenv
      */
@@ -89,9 +89,9 @@ class Dotenv
     /**
      * Create a new immutable dotenv instance with default repository.
      *
-     * @param string|string[]      $paths
+     * @param string|string[] $paths
      * @param string|string[]|null $names
-     * @param bool                 $shortCircuit
+     * @param bool $shortCircuit
      *
      * @return \Dotenv\Dotenv
      */
@@ -105,9 +105,9 @@ class Dotenv
     /**
      * Read and load environment file(s).
      *
+     * @return array<string,string|null>
      * @throws \Dotenv\Exception\InvalidPathException|\Dotenv\Exception\InvalidFileException
      *
-     * @return array<string,string|null>
      */
     public function load()
     {
@@ -117,9 +117,9 @@ class Dotenv
     /**
      * Read and load environment file(s), silently failing if no files can be read.
      *
+     * @return array<string,string|null>
      * @throws \Dotenv\Exception\InvalidFileException
      *
-     * @return array<string,string|null>
      */
     public function safeLoad()
     {
@@ -140,7 +140,7 @@ class Dotenv
      */
     public function required($variables)
     {
-        return new Validator($this->repository, (array) $variables);
+        return new Validator($this->repository, (array)$variables);
     }
 
     /**
@@ -152,6 +152,6 @@ class Dotenv
      */
     public function ifPresent($variables)
     {
-        return new Validator($this->repository, (array) $variables, false);
+        return new Validator($this->repository, (array)$variables, false);
     }
 }

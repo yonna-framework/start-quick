@@ -39,3 +39,14 @@ class PackageStream
 }
 
 stream_wrapper_register('java', PackageStream::class);
+
+spl_autoload_register(function ($res) {
+    $res = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $res);
+    foreach ([$root] as $path) {
+        $file = $path . DIRECTORY_SEPARATOR . $res . '.php';
+        if (is_file($file)) {
+            require($file);
+            break;
+        }
+    }
+});

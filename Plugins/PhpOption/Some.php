@@ -106,7 +106,7 @@ final class Some extends Option
     {
         $rs = $callable($this->value);
         if (!$rs instanceof Option) {
-            throw new \RuntimeException('Callables passed to flatMap() must return an Option. Maybe you should use map() instead?');
+            throw new \RuntimeException('Callables passed to flatMap() must return an Option. Maybe you should used map() instead?');
         }
 
         return $rs;

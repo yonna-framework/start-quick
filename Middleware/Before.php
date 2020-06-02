@@ -11,7 +11,7 @@ class Before extends Middleware
 {
 
     protected static string $type = MiddlewareType::BEFORE;
-    private static array $before;
+    private static array $before = [];
 
     /**
      * @var Request
