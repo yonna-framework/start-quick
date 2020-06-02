@@ -162,17 +162,12 @@ class Package extends Console
             $rootDir . 'public/index.php',
             $distDir . 'lib/inlet.jar',
         );
-        // 复制 composer-vendor
+        // 复制 composer-vendor-yonna
         $vendorRoot = (realpath($this->root_path));
         $codes = $this->codesPHP(
-            realpath(__DIR__ . '/../../../../vendor'),
+            realpath(__DIR__ . '/../../../../vendor/yonna/yonna'),
             $vendorRoot,
             [
-                'bin',
-                'composer',
-                'swoole',
-                'autoload.php',
-                'Autoload.php',
                 'Package.php',
                 'PackageStream.php',
             ]

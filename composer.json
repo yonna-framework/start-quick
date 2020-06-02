@@ -18,7 +18,8 @@
       "GuzzleHttp\\": "Plugins/GuzzleHttp/",
       "GuzzleHttp\\Promise\\": "Plugins/GuzzleHttp/Promise/",
       "GuzzleHttp\\Psr7\\": "Plugins/GuzzleHttp/Psr7/",
-      "Psr\\Http\\Message\\": "Plugins/Psr/Http/Message/"
+      "Psr\\Http\\Message\\": "Plugins/Psr/Http/Message/",
+      "Workerman\\": "Plugins/Workerman"
     },
     "files": [
       "Plugins/Symfony/Polyfill/Ctype/bootstrap.php",
@@ -46,9 +47,7 @@
     "ext-iconv": "*",
     "ext-sockets": "*",
     "ext-mbstring": "*",
-    "guzzlehttp/guzzle": "~6.5.4",
-    "php": "~7.4",
-    "workerman/workerman": "~4.0.5"
+    "php": "~7.4"
   },
   "type": "library"
 }
