@@ -12,19 +12,23 @@
       "PhpOption\\": "Plugins/PhpOption/",
       "Dotenv\\": "Plugins/Dotenv/",
       "Symfony\\Polyfill\\Ctype\\": "Plugins/Symfony/Polyfill/Ctype/",
+      "Symfony\\Polyfill\\Intl\\Idn\\": "Plugins/Symfony/Polyfill/Intl/Idn/",
       "phpseclib\\": "Plugins/Phpseclib/",
       "PhpAmqpLib\\": "Plugins/PhpAmqpLib/",
-      "GuzzleHttp\\": "Plugins/GuzzleHttp/"
+      "GuzzleHttp\\": "Plugins/GuzzleHttp/",
+      "GuzzleHttp\\Promise\\": "Plugins/GuzzleHttp/Promise/",
+      "GuzzleHttp\\Psr7\\": "Plugins/GuzzleHttp/Psr7/",
+      "Psr\\Http\\Message\\": "Plugins/Psr/Http/Message/"
     },
     "files": [
       "Plugins/Symfony/Polyfill/Ctype/bootstrap.php",
+      "Plugins/Symfony/Polyfill/Intl/Idn/bootstrap.php",
       "Plugins/Phpseclib/bootstrap.php",
-      "Plugins/GuzzleHttp/functions.php"
+      "Plugins/GuzzleHttp/functions.php",
+      "Plugins/GuzzleHttp/Promise/functions.php",
+      "Plugins/GuzzleHttp/Psr7/functions.php",
+      "Plugins/getallheaders/getallheaders.php"
     ]
-  },
-  "conflict": {
-    "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",
-    "symfony/console": "<3.4"
   },
   "description": "Yonna start quick",
   "keywords": [
