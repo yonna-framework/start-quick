@@ -13,11 +13,13 @@
       "Dotenv\\": "Plugins/Dotenv/",
       "Symfony\\Polyfill\\Ctype\\": "Plugins/Symfony/Polyfill/Ctype/",
       "phpseclib\\": "Plugins/Phpseclib/",
-      "PhpAmqpLib\\": "Plugins/PhpAmqpLib/"
+      "PhpAmqpLib\\": "Plugins/PhpAmqpLib/",
+      "GuzzleHttp\\": "Plugins/GuzzleHttp/"
     },
     "files": [
       "Plugins/Symfony/Polyfill/Ctype/bootstrap.php",
-      "Plugins/Phpseclib/bootstrap.php"
+      "Plugins/Phpseclib/bootstrap.php",
+      "Plugins/GuzzleHttp/functions.php"
     ]
   },
   "conflict": {
@@ -42,7 +44,6 @@
     "ext-mbstring": "*",
     "guzzlehttp/guzzle": "~6.5.4",
     "php": "~7.4",
-    "php-amqplib/php-amqplib": "~2.11.3",
     "workerman/workerman": "~4.0.5"
   },
   "type": "library"
