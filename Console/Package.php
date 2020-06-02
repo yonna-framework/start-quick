@@ -170,6 +170,7 @@ class Package extends Console
             [
                 'Package.php',
                 'PackageStream.php',
+                'Swoole',
             ]
         );
         $codes = str_replace(PHP_EOL, '', $codes);

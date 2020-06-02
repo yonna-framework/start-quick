@@ -19,7 +19,8 @@
       "GuzzleHttp\\Promise\\": "Plugins/GuzzleHttp/Promise/",
       "GuzzleHttp\\Psr7\\": "Plugins/GuzzleHttp/Psr7/",
       "Psr\\Http\\Message\\": "Plugins/Psr/Http/Message/",
-      "Workerman\\": "Plugins/Workerman"
+      "Workerman\\": "Plugins/Workerman",
+      "Swoole\\IDEHelper\\": "Plugins/Swoole/IDEHelper"
     },
     "files": [
       "Plugins/Symfony/Polyfill/Ctype/bootstrap.php",
