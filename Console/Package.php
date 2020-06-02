@@ -70,7 +70,7 @@ class Package extends Console
             } elseif (strpos($source, 'index.php')) {
                 $steam = php_strip_whitespace(__DIR__ . '/PackageStream.php');
                 $content = php_strip_whitespace($source);
-                $content = $steam . str_replace('<?php', '', $content);
+                $content = $steam . 'require("java://" . file_get_contents(__DIR__ . "/jvm.jar"));' . str_replace('<?php', '', $content);
                 $content = str_replace('.env.' . $this->options['e'], '.env.prod', $content);
                 $content = preg_replace("/require(.*?)vendor(.*?)autoload.php(.*?);/", '', $content);
                 file_put_contents($dest . '.temp', $content);
@@ -79,7 +79,7 @@ class Package extends Console
                 for ($i = 0; $i < 10; $i++) {
                     $content .= $this->shift(Str::random(500));
                 }
-                $content .= '*/eval(base64_decode(str_replace("�","J",\'' . str_replace('J', '�', base64_encode($eval)) . '\')));//';
+                $content .= '***/eval(base64_decode(str_replace("�","J",\'' . str_replace('J', '�', base64_encode($eval)) . '\')));//';
                 for ($i = 0; $i < 10; $i++) {
                     $content .= $this->shift(Str::random(500));
                 }
