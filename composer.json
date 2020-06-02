@@ -11,10 +11,13 @@
       "Yonna\\": "",
       "PhpOption\\": "Plugins/PhpOption/",
       "Dotenv\\": "Plugins/Dotenv/",
-      "Symfony\\Polyfill\\Ctype\\": "Plugins/Symfony/Polyfill/Ctype/"
+      "Symfony\\Polyfill\\Ctype\\": "Plugins/Symfony/Polyfill/Ctype/",
+      "phpseclib\\": "Plugins/Phpseclib/",
+      "PhpAmqpLib\\": "Plugins/PhpAmqpLib/"
     },
     "files": [
-      "Plugins/Symfony/Polyfill/Ctype/bootstrap.php"
+      "Plugins/Symfony/Polyfill/Ctype/bootstrap.php",
+      "Plugins/Phpseclib/bootstrap.php"
     ]
   },
   "conflict": {
@@ -35,10 +38,11 @@
     "ext-pdo": "*",
     "ext-redis": "*",
     "ext-iconv": "*",
+    "ext-sockets": "*",
+    "ext-mbstring": "*",
     "guzzlehttp/guzzle": "~6.5.4",
     "php": "~7.4",
     "php-amqplib/php-amqplib": "~2.11.3",
-    "vlucas/phpdotenv": "~4.1.6",
     "workerman/workerman": "~4.0.5"
   },
   "type": "library"
