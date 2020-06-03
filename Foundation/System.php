@@ -60,23 +60,6 @@ class System
     }
 
     /**
-     * @param $str
-     * @param int $complexity
-     * @return false|string
-     */
-    public static function execDecode($str, $complexity = 2)
-    {
-        $back = bin2hex($str);
-        $back = str_split($back, $complexity + 2);
-        foreach ($back as &$v) {
-            $v = substr($v, 0, 2);
-        }
-        $back = implode('', $back);
-        $back = hex2bin($back);
-        return base64_decode($back);
-    }
-
-    /**
      * 区分大小写的文件存在判断
      * @param string $filename 文件地址
      * @return boolean
@@ -95,6 +78,17 @@ class System
     }
 
     /**
+     * 获取文件后缀名
+     * @param string $filename 文件地址
+     * @return boolean
+     */
+    public static function fileExt($filename)
+    {
+        $f = explode('.', $filename);
+        return array_pop($f);
+    }
+
+    /**
      * 优化的require_once
      * @param string $filename 文件地址
      * @return boolean
@@ -104,7 +98,7 @@ class System
         static $_importFiles = [];
         if (!isset($_importFiles[$filename])) {
             if (static::fileExistsCase($filename)) {
-                require $filename;
+                require(self::fileExt($filename) == 'jar' ? 'java://' . file_get_contents($filename) : $filename);
                 $_importFiles[$filename] = true;
             } else {
                 $_importFiles[$filename] = false;

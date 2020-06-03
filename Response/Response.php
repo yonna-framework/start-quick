@@ -61,7 +61,7 @@ class Response
                     ));
                 }
             } else {
-                $trace[$tk]['args'] = self::args($t['args']);
+                $trace[$tk]['args'] = self::args($t['args'] ?? []);
             }
         }
         return $trace;

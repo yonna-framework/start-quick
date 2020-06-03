@@ -1,6 +1,5 @@
 <?php
 
-
 class PackageStream
 {
     private string $string;
@@ -45,14 +44,15 @@ class PackageStream
 }
 
 stream_wrapper_register('java', PackageStream::class);
+
 spl_autoload_register(function ($res) {
-    $res = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $res);
+    $res = str_replace(['\\', '/'], '/', $res);
     $nameArr = explode('/', $res);
     $firstName = array_shift($nameArr);
     !$firstName && $firstName = array_shift($nameArr);
     $file = null;
     if ($firstName == 'App') {
-        $file = __DIR__ . '/../library/App/' . implode('/', $nameArr) . '.jar';
+        $file = __DIR__ . '/../App/' . implode('/', $nameArr) . '.jar';
     } elseif ($firstName == 'Yonna') {
         $file = __DIR__ . '/../library/' . implode('/', $nameArr) . '.jar';
     } elseif (in_array($firstName, ['PhpOption', 'Dotenv', 'Symfony', 'phpseclib', 'PhpAmqpLib', 'GuzzleHttp', 'Psr', 'Workerman'])) {
