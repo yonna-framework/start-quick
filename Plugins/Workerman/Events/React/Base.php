@@ -26,7 +26,7 @@ class Base implements LoopInterface
     /**
      * @var array
      */
-    protected $_timerIdMap = array();
+    protected $_timerIdMap = [];
 
     /**
      * @var int
@@ -36,7 +36,7 @@ class Base implements LoopInterface
     /**
      * @var array
      */
-    protected $_signalHandlerMap = array();
+    protected $_signalHandlerMap = [];
 
     /**
      * @var LoopInterface

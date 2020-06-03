@@ -43,7 +43,7 @@ class Request
      *
      * @var array
      */
-    public $properties = array();
+    public $properties = [];
 
     /**
      * Http buffer.
@@ -64,21 +64,21 @@ class Request
      *
      * @var array
      */
-    protected static $_headerCache = array();
+    protected static $_headerCache = [];
 
     /**
      * Get cache.
      *
      * @var array
      */
-    protected static $_getCache = array();
+    protected static $_getCache = [];
 
     /**
      * Post cache.
      *
      * @var array
      */
-    protected static $_postCache = array();
+    protected static $_postCache = [];
 
     /**
      * Enable cache.
@@ -389,7 +389,7 @@ class Request
      */
     protected function parseHeaders()
     {
-        $this->_data['headers'] = array();
+        $this->_data['headers'] = [];
         $raw_head = $this->rawHead();
         $head_buffer = \substr($raw_head, \strpos($raw_head, "\r\n") + 2);
         $cacheable = static::$_enableCache && !isset($head_buffer[2048]);
@@ -422,7 +422,7 @@ class Request
     protected function parseGet()
     {
         $query_string = $this->queryString();
-        $this->_data['get'] = array();
+        $this->_data['get'] = [];
         if ($query_string === '') {
             return;
         }
@@ -448,7 +448,7 @@ class Request
     protected function parsePost()
     {
         $body_buffer = $this->rawBody();
-        $this->_data['post'] = $this->_data['files'] = array();
+        $this->_data['post'] = $this->_data['files'] = [];
         if ($body_buffer === '') {
             return;
         }
@@ -487,7 +487,7 @@ class Request
             unset($boundary_data_array[0]);
         }
         $key = -1;
-        $files = array();
+        $files = [];
         foreach ($boundary_data_array as $boundary_data_buffer) {
             list($boundary_header_buffer, $boundary_value) = \explode("\r\n\r\n", $boundary_data_buffer, 2);
             // Remove \r\n from the end of buffer.

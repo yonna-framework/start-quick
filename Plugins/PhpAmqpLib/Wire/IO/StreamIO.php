@@ -399,7 +399,7 @@ class StreamIO extends AbstractIO
         } else {
             $pattern = '/\s+errno=(\d+)\s+/';
         }
-        $matches = array();
+        $matches = [];
         $result = preg_match($pattern, $message, $matches);
         if ($result > 0) {
             return (int)$matches[1];

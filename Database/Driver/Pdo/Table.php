@@ -126,7 +126,7 @@ class Table extends AbstractPDO
             $this->options['join_qty']++;
             if ($alia) {
                 if (!isset($this->options['alia'])) {
-                    $this->options['alia'] = array();
+                    $this->options['alia'] = [];
                 }
                 $this->options['alia'][$originJoin[1]] = $originJoin[0];
             }
@@ -273,7 +273,7 @@ class Table extends AbstractPDO
      */
     public function insert($data)
     {
-        $values = $fields = array();
+        $values = $fields = [];
         $table = $this->getTable();
         $ft = $this->getFieldType($table);
         foreach ($data as $key => $val) {
@@ -321,7 +321,7 @@ class Table extends AbstractPDO
         $table = $this->getTable();
         $ft = $this->getFieldType($table);
         foreach ($dataSet as $data) {
-            $value = array();
+            $value = [];
             foreach ($data as $key => $val) {
                 if (!empty($ft[$table . '_' . $key])) { // 根据表字段过滤无效key
                     if (is_array($val) && isset($val[0]) && 'exp' == $val[0]) {

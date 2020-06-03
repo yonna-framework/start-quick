@@ -172,7 +172,7 @@ class Agent
             return array();
         }
 
-        $identities = array();
+        $identities = [];
         $temp = fread($this->fsock, 4);
         if (strlen($temp) != 4) {
             user_error('Connection closed while requesting identities');

@@ -9,7 +9,7 @@ use Yonna\Foundation\System;
 class Config
 {
 
-    protected static $config = array();
+    protected static $config = [];
 
     /**
      * @return array

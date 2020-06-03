@@ -130,7 +130,7 @@ class Parse
      */
     public static function fileData($fileData)
     {
-        $newFileData = array();
+        $newFileData = [];
         if (!$fileData) return $newFileData;
         foreach ($fileData as $fd) {
             if (!$fd || !isset($fd['name'])) continue;

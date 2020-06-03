@@ -63,7 +63,7 @@ class Arr
     public static function multiSortByKey($array, $key, $sort = 1)
     {
         if (is_array($array)) {
-            $_sort_array = array();
+            $_sort_array = [];
             foreach ($array AS $_key => $_value) {
                 $_sort_array[$_key] = (array)$_value[$key];
             }
@@ -83,11 +83,11 @@ class Arr
     public static function sortByVal($array, $sort = 1)
     {
         if (is_array($array)) {
-            $_temp_array = array();
+            $_temp_array = [];
             foreach ($array as $_key => $_value) {
                 $_temp_array[] = array('key' => $_key, 'val' => $_value);
             }
-            $_sort_array = array();
+            $_sort_array = [];
             foreach ($_temp_array as $_key => $_value) {
                 if (!$_sort_array) {
                     $_sort_array[] = array('key' => $_value['key'], 'val' => $_value['val']);
@@ -104,7 +104,7 @@ class Arr
                     }
                 }
             }
-            $newArray = array();
+            $newArray = [];
             foreach ($_sort_array as $v) {
                 $newArray[$v['key']] = $v['val'];
             }
@@ -122,7 +122,7 @@ class Arr
      */
     public static function recursiveFilter($filter, $data)
     {
-        $result = array();
+        $result = [];
         foreach ($data as $key => $val) {
             $result[$key] = is_array($val)
                 ? static::recursiveFilter($filter, $val)
@@ -170,7 +170,7 @@ class Arr
         function array_combs_recursive($arr)
         {
             if (count($arr) >= 2) {
-                $tmpArr = array();
+                $tmpArr = [];
                 $arr1 = array_shift($arr);
                 $arr2 = array_shift($arr);
                 foreach ($arr1 as $k1 => $v1) {

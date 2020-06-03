@@ -21,7 +21,7 @@ class AMQPChannel extends AbstractChannel
      * @var callable[]
      * @internal Use is_consuming() to check if there is active callbacks
      */
-    public $callbacks = array();
+    public $callbacks = [];
 
     /** @var bool Whether or not the channel has been "opened" */
     protected $is_open = false;
@@ -33,7 +33,7 @@ class AMQPChannel extends AbstractChannel
     protected $active = true;
 
     /** @var array */
-    protected $alerts = array();
+    protected $alerts = [];
 
     /** @var bool */
     protected $auto_decode;
@@ -51,7 +51,7 @@ class AMQPChannel extends AbstractChannel
     protected $basic_return_callback;
 
     /** @var array Used to keep track of the messages that are going to be batch published. */
-    protected $batch_messages = array();
+    protected $batch_messages = [];
 
     /**
      * If the channel is in confirm_publish mode this array will store all published messages
@@ -59,7 +59,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @var AMQPMessage[]
      */
-    private $published_messages = array();
+    private $published_messages = [];
 
     /** @var int */
     private $next_delivery_tag = 0;
@@ -78,7 +78,7 @@ class AMQPChannel extends AbstractChannel
      * @see basic_publish()
      * @see publish_batch()
      */
-    private $publish_cache = array();
+    private $publish_cache = [];
 
     /**
      * Maximal size of $publish_cache
@@ -139,7 +139,7 @@ class AMQPChannel extends AbstractChannel
         }
         $this->channel_id = $this->connection = null;
         $this->is_open = false;
-        $this->callbacks = array();
+        $this->callbacks = [];
     }
 
     /**
@@ -172,7 +172,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
-        $this->callbacks = array();
+        $this->callbacks = [];
         if ($this->is_open === false || $this->connection === null) {
             $this->do_close();
 
@@ -1247,7 +1247,7 @@ class AMQPChannel extends AbstractChannel
 
         $this->checkConnection();
         $this->connection->write($pkt->getvalue());
-        $this->batch_messages = array();
+        $this->batch_messages = [];
     }
 
     /**

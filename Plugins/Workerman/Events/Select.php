@@ -23,35 +23,35 @@ class Select implements EventInterface
      *
      * @var array
      */
-    public $_allEvents = array();
+    public $_allEvents = [];
 
     /**
      * Event listeners of signal.
      *
      * @var array
      */
-    public $_signalEvents = array();
+    public $_signalEvents = [];
 
     /**
      * Fds waiting for read event.
      *
      * @var array
      */
-    protected $_readFds = array();
+    protected $_readFds = [];
 
     /**
      * Fds waiting for write event.
      *
      * @var array
      */
-    protected $_writeFds = array();
+    protected $_writeFds = [];
 
     /**
      * Fds waiting for except event.
      *
      * @var array
      */
-    protected $_exceptFds = array();
+    protected $_exceptFds = [];
 
     /**
      * Timer scheduler.
@@ -67,7 +67,7 @@ class Select implements EventInterface
      *
      * @var array
      */
-    protected $_eventTimer = array();
+    protected $_eventTimer = [];
 
     /**
      * Timer id.
@@ -88,7 +88,7 @@ class Select implements EventInterface
      *
      * @var array
      */
-    protected $channel = array();
+    protected $channel = [];
 
     /**
      * Construct.
@@ -247,7 +247,7 @@ class Select implements EventInterface
     {
         $this->_scheduler = new \SplPriorityQueue();
         $this->_scheduler->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
-        $this->_eventTimer = array();
+        $this->_eventTimer = [];
     }
 
     /**

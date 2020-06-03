@@ -19,13 +19,13 @@ use Swoole\Timer;
 class Swoole implements EventInterface
 {
 
-    protected $_timer = array();
+    protected $_timer = [];
 
-    protected $_timerOnceMap = array();
+    protected $_timerOnceMap = [];
 
     protected $mapId = 0;
 
-    protected $_fd = array();
+    protected $_fd = [];
 
     // milisecond
     public static $signalDispatchInterval = 200;
@@ -41,7 +41,7 @@ class Swoole implements EventInterface
     public function add($fd, $flag, $func, $args = null)
     {
         if (! isset($args)) {
-            $args = array();
+            $args = [];
         }
         switch ($flag) {
             case self::EV_SIGNAL:
@@ -182,8 +182,8 @@ class Swoole implements EventInterface
         foreach (array_keys($this->_timer) as $v) {
             Timer::clear($v);
         }
-        $this->_timer = array();
-        $this->_timerOnceMap = array();
+        $this->_timer = [];
+        $this->_timerOnceMap = [];
     }
 
     /**

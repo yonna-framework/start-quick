@@ -32,14 +32,14 @@ class Libevent implements EventInterface
      *
      * @var array
      */
-    protected $_allEvents = array();
+    protected $_allEvents = [];
 
     /**
      * Event listeners of signal.
      *
      * @var array
      */
-    protected $_eventSignal = array();
+    protected $_eventSignal = [];
 
     /**
      * All timer event listeners.
@@ -47,7 +47,7 @@ class Libevent implements EventInterface
      *
      * @var array
      */
-    protected $_eventTimer = array();
+    protected $_eventTimer = [];
 
     /**
      * construct
@@ -191,7 +191,7 @@ class Libevent implements EventInterface
         foreach ($this->_eventTimer as $task_data) {
             \event_del($task_data[2]);
         }
-        $this->_eventTimer = array();
+        $this->_eventTimer = [];
     }
 
     /**

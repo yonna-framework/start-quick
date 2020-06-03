@@ -2627,7 +2627,7 @@ abstract class Base
      */
     function &_getLambdaFunctions()
     {
-        static $functions = array();
+        static $functions = [];
         return $functions;
     }
 

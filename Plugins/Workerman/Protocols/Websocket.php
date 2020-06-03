@@ -400,7 +400,7 @@ class Websocket implements \Workerman\Protocols\ProtocolInterface
                 if (!empty($_SESSION) && \class_exists('\GatewayWorker\Lib\Context')) {
                     $connection->session = \GatewayWorker\Lib\Context::sessionEncode($_SESSION);
                 }
-                $_GET = $_SERVER = $_SESSION = $_COOKIE = array();
+                $_GET = $_SERVER = $_SESSION = $_COOKIE = [];
 
                 if (isset($connection->headers)) {
                     if (\is_array($connection->headers))  {
@@ -459,7 +459,7 @@ class Websocket implements \Workerman\Protocols\ProtocolInterface
         $header_data = \explode("\r\n", $http_header);
 
         if ($_SERVER) {
-            $_SERVER = array();
+            $_SERVER = [];
         }
 
         list($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL']) = \explode(' ',

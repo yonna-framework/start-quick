@@ -33,7 +33,7 @@ class Curl
      */
     public static function post($host, $data = array(), $timeout = 10)
     {
-        if (!$data) $data = array();
+        if (!$data) $data = [];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $host);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

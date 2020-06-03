@@ -25,14 +25,14 @@ class Ev implements EventInterface
      *
      * @var array
      */
-    protected $_allEvents = array();
+    protected $_allEvents = [];
 
     /**
      * Event listeners of signal.
      *
      * @var array
      */
-    protected $_eventSignal = array();
+    protected $_eventSignal = [];
 
     /**
      * All timer event listeners.
@@ -40,7 +40,7 @@ class Ev implements EventInterface
      *
      * @var array
      */
-    protected $_eventTimer = array();
+    protected $_eventTimer = [];
 
     /**
      * Timer id.
@@ -158,7 +158,7 @@ class Ev implements EventInterface
         foreach ($this->_eventTimer as $event) {
             $event->stop();
         }
-        $this->_eventTimer = array();
+        $this->_eventTimer = [];
     }
 
     /**

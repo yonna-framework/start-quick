@@ -10,22 +10,22 @@ abstract class Constants
     /**
      * @var array<int, string>
      */
-    protected static $FRAME_TYPES = array();
+    protected static $FRAME_TYPES = [];
 
     /**
      * @var array<int, string>
      */
-    protected static $CONTENT_METHODS = array();
+    protected static $CONTENT_METHODS = [];
 
     /**
      * @var array<int, string>
      */
-    protected static $CLOSE_METHODS = array();
+    protected static $CLOSE_METHODS = [];
 
     /**
      * @var array<string, string>
      */
-    public static $GLOBAL_METHOD_NAMES = array();
+    public static $GLOBAL_METHOD_NAMES = [];
 
     /**
      * @return string

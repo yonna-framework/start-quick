@@ -103,7 +103,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     /**
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     public function __construct(array $data = null)
     {

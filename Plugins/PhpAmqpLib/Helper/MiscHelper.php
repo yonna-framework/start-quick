@@ -117,7 +117,7 @@ class MiscHelper
      */
     public static function dump_table($table)
     {
-        $tokens = array();
+        $tokens = [];
         foreach ($table as $name => $value) {
             switch ($value[0]) {
                 case 'D':

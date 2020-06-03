@@ -27,22 +27,10 @@ class Package extends Console
     }
 
     /**
-     * @param $str
-     * @return false|string
+     * @param $dir
+     * @param $type
      */
-    private function shift($str)
-    {
-        $content = base64_encode($str);
-        $content = bin2hex($content);
-        $content = str_split($content, 2);
-        foreach ($content as &$v) {
-            $v = $v . rand(10, 99);
-        }
-        $content = implode('', $content);
-        return hex2bin($content);
-    }
-
-    private function codesPHP($dir, $type)
+    private function mutilate($dir, $type)
     {
         if (is_dir($dir)) {
             switch ($type) {
@@ -73,13 +61,13 @@ class Package extends Console
                     $fileName = implode('.', $fileOpt);
                     $filePath = $dir . '/' . $file;
                     if (is_dir($filePath)) {
-                        $this->codesPHP($filePath, $type);
+                        $this->mutilate($filePath, $type);
                     } elseif ($fileExt == 'php') {
                         $newDir = $distDir . str_replace(realpath($removeDir), '', $dir) . '/';
                         System::dirCheck($newDir, true);
                         $newDir = realpath($newDir);
                         echo("[PHP] => {$newDir}/{$fileName}.jar\n");
-                        file_put_contents("{$newDir}/{$fileName}.jar", $this->shift(php_strip_whitespace($filePath)));
+                        file_put_contents("{$newDir}/{$fileName}.jar", System::execEncode(php_strip_whitespace($filePath)));
                     } elseif ($fileExt == 'json') {
                         $newDir = $distDir . str_replace(realpath($removeDir), '', $dir) . '/';
                         System::dirCheck($newDir, true);
@@ -132,21 +120,21 @@ class Package extends Console
                 $eval = str_replace('<?php', '', php_strip_whitespace($dest . '.temp'));
                 $content = '<?php /*';
                 for ($i = 0; $i < 10; $i++) {
-                    $content .= $this->shift(Str::random(500));
+                    $content .= System::execEncode(Str::random(500));
                 }
                 $content .= '***/eval(base64_decode(str_replace("�","J",\'' . str_replace('J', '�', base64_encode($eval)) . '\')));//';
                 for ($i = 0; $i < 10; $i++) {
-                    $content .= $this->shift(Str::random(500));
+                    $content .= System::execEncode(Str::random(500));
                 }
                 unlink($dest . '.temp');
             } elseif ($ext == 'php') {
                 $content = php_strip_whitespace($source);
-                $content = $this->shift($content);
+                $content = System::execEncode($content);
             } else {
                 return;
             }
         } elseif (is_string($source)) {
-            $content = $this->shift($source);
+            $content = System::execEncode($source);
         }
         $content && file_put_contents($dest, $content);
         return;
@@ -193,9 +181,9 @@ class Package extends Console
             $distDir . 'boot/inlet.jar',
         );
         // 打包 composer-vendor-yonna
-        $this->codesPHP($this->root_path . '/vendor/yonna/yonna', 'YONNA');
+        $this->mutilate($this->root_path . '/vendor/yonna/yonna', 'YONNA');
         // 打包 App
-        $this->codesPHP($this->root_path . '/App', 'APP');
+        $this->mutilate($this->root_path . '/App', 'APP');
         exit('Package Finish!');
     }
 }
