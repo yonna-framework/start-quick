@@ -60,6 +60,23 @@ class System
     }
 
     /**
+     * @param $str
+     * @param int $complexity
+     * @return false|string
+     */
+    public static function execDecode($str, $complexity = 2)
+    {
+        $content = bin2hex($str);
+        $content = str_split($content, $complexity * 2);
+        foreach ($content as &$v) {
+            $v = substr($v, 0, 2);
+        }
+        $content = implode('', $content);
+        $content = hex2bin($content);
+        return base64_decode($content);
+    }
+
+    /**
      * 区分大小写的文件存在判断
      * @param string $filename 文件地址
      * @return boolean
@@ -145,9 +162,9 @@ class System
             for ($i = 0; $i < $tempLen; $i++) {
                 $temp .= $p[$i] . DIRECTORY_SEPARATOR;
                 if (!is_dir($temp)) {
-                    mkdir($temp);
-                    @chmod($temp, 0777);
+                    mkdir($temp, 0777);
                 }
+                @chmod($temp, 0777);
             }
         }
         $temp = realpath($temp) . DIRECTORY_SEPARATOR;

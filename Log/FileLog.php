@@ -3,6 +3,7 @@
 namespace Yonna\Log;
 
 use Throwable;
+use Yonna\Foundation\System;
 
 class FileLog
 {
@@ -69,19 +70,8 @@ class FileLog
             . DIRECTORY_SEPARATOR . Config::getFile()
             . DIRECTORY_SEPARATOR . date('Y-m-d')
             . DIRECTORY_SEPARATOR . $key;
-        $temp = str_replace('\\', '/', $path);
-        $p = explode('/', $temp);
-        $tempLen = count($p);
-        $temp = '';
-        for ($i = 0; $i < $tempLen; $i++) {
-            $temp .= $p[$i] . DIRECTORY_SEPARATOR;
-            if (!is_dir($temp)) {
-                @mkdir($temp);
-                @chmod($temp, 0644);
-            }
-        }
-        $temp = realpath($temp) . DIRECTORY_SEPARATOR;
-        return $temp ? $temp : false;
+        System::dirCheck($path, true);
+        return realpath($path) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -110,6 +100,10 @@ class FileLog
             foreach ($data as $k => $v) {
                 if (is_array($v) || is_object($v)) {
                     $v = json_encode($v, JSON_UNESCAPED_UNICODE);
+                } elseif (is_string($v)) {
+                    if (strpos($v, 'java://') === 0) {
+                        $v = 'jar package';
+                    }
                 } else {
                     $v = (string)$v;
                 }

@@ -54,14 +54,21 @@ class Response
                 if (isset($t['object'])) unset($trace[$tk]['object']);
                 if (isset($t['args'])) unset($trace[$tk]['args']);
                 if (!empty($t['file'])) {
-                    $trace[$tk]['file'] = str_replace($path, '#:Yonna', str_replace(
-                        'vendor' . DIRECTORY_SEPARATOR . 'yonna' . DIRECTORY_SEPARATOR,
-                        '',
-                        $t['file']
-                    ));
+                    if (strpos($t['file'], 'java://') === 0) {
+                        $trace[$tk]['file'] = 'jar package';
+                    } else {
+                        $trace[$tk]['file'] = str_replace($path, '#:Yonna', str_replace(
+                            'vendor' . DIRECTORY_SEPARATOR . 'yonna' . DIRECTORY_SEPARATOR,
+                            '',
+                            $t['file']
+                        ));
+                    }
                 }
             } else {
                 $trace[$tk]['args'] = self::args($t['args'] ?? []);
+                if (!empty($t['file']) && strpos($t['file'], 'java://') === 0) {
+                    $trace[$tk]['file'] = 'jar package';
+                }
             }
         }
         return $trace;
