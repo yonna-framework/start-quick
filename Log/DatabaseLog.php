@@ -9,11 +9,12 @@ use Yonna\Database\DB;
 use Yonna\Database\Driver\Mongo;
 use Yonna\Database\Driver\Mysql;
 use Yonna\Database\Driver\Pgsql;
+use Yonna\QuickStart\Sql\Log as LogSql;
 
 class DatabaseLog
 {
 
-    private $store = 'yonna_log';
+    private string $store = 'yonna_log';
     private $config = null;
 
     /**
@@ -40,6 +41,24 @@ class DatabaseLog
     {
         if (Config::getFileExpireDay() <= 0) {
             return;
+        }
+
+    }
+
+    /**
+     * 初始化数据库
+     */
+    public function initDatabase()
+    {
+        $db = DB::connect($this->config);
+        try {
+            if ($db instanceof Mysql) {
+                $db->query(sprintf(LogSql::mysql, $this->store));
+            } elseif ($db instanceof Pgsql) {
+                $db->query(sprintf(LogSql::pgsql, $this->store));
+            }
+        } catch (Throwable $e) {
+            Log::file()->throwable($e);
         }
     }
 
@@ -103,24 +122,8 @@ class DatabaseLog
             if ($db instanceof Mongo) {
                 $db->collection($this->store)->insert($logData);
             } elseif ($db instanceof Mysql) {
-                $db->query("CREATE TABLE IF NOT EXISTS `{$this->store}`(
-                        `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-                        `key` char(255) NOT NULL DEFAULT 'default' COMMENT 'key',
-                        `type` char(255) NOT NULL DEFAULT 'info' COMMENT '类型',
-                        `log_time` int NOT NULL COMMENT '时间戳',
-                        `data` json COMMENT 'data',
-                        PRIMARY KEY (`id`)
-                    ) ENGINE = INNODB COMMENT 'log by yonna';");
                 $db->table($this->store)->insert($logData);
             } elseif ($db instanceof Pgsql) {
-                $db->query("CREATE TABLE IF NOT EXISTS `{$this->store}`(
-                        `id` bigserial NOT NULL,
-                        `key` text NOT NULL DEFAULT 'default',
-                        `type` text NOT NULL DEFAULT 'info',
-                        `log_time` integer NOT NULL,
-                        `data` jsonb,
-                        PRIMARY KEY (`id`)
-                    ) ENGINE = INNODB COMMENT 'log by yonna';");
                 $db->schemas('public')->table($this->store)->insert($logData);
             } else {
                 throw new Exception('Set Database for Support Driver.');

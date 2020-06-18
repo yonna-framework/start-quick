@@ -12,6 +12,7 @@ use Yonna\Database\Driver\Pgsql;
 use Yonna\Database\Driver\Redis;
 use Yonna\Log\Log;
 use Yonna\Throwable\Exception;
+use Yonna\QuickStart\Sql\I18n as I18nSql;
 
 class I18n
 {
@@ -190,11 +191,11 @@ class I18n
     }
 
     /**
-     * 初始化数据
+     * 初始化数据库
      * @return bool
      * @throws Exception\DatabaseException
      */
-    public function init()
+    public function initDatabase()
     {
         $fileData = [];
         foreach (self::ALLOW_LANG as $al) {
@@ -221,29 +222,11 @@ class I18n
             $db->collection("{$this->store}")->drop(true);
             $db->collection("{$this->store}")->insertAll($i18nData);
         } elseif ($db instanceof Mysql) {
-            $db->query("CREATE TABLE IF NOT EXISTS `{$this->store}`(
-                        `unique_key` char(255) NOT NULL DEFAULT '' COMMENT '验证key',
-                        `zh_cn`      char(255) NOT NULL DEFAULT '' COMMENT '简体中文',
-                        `zh_hk`      char(255) NOT NULL DEFAULT '' COMMENT '香港繁体',
-                        `zh_tw`      char(255) NOT NULL DEFAULT '' COMMENT '台湾繁体',
-                        `en_us`      char(255) NOT NULL DEFAULT '' COMMENT '美国英语',
-                        `ja_jp`      char(255) NOT NULL DEFAULT '' COMMENT '日本语',
-                        `ko_kr`      char(255) NOT NULL DEFAULT '' COMMENT '韩国语',
-                        PRIMARY KEY (`unique_key`)
-                    ) ENGINE = INNODB COMMENT 'i18n by yonna';");
+            $db->query(sprintf(I18nSql::mysql, $this->store));
             DB::connect($this->config)->table($this->store)->truncate(true); //截断清空
             DB::connect($this->config)->table($this->store)->insertAll($i18nData);
         } elseif ($db instanceof Pgsql) {
-            $db->query("CREATE TABLE IF NOT EXISTS `{$this->store}`(
-                        `unique_key` text NOT NULL DEFAULT '',
-                        `zh_cn`      text NOT NULL DEFAULT '',
-                        `zh_hk`      text NOT NULL DEFAULT '',
-                        `zh_tw`      text NOT NULL DEFAULT '',
-                        `en_us`      text NOT NULL DEFAULT '',
-                        `ja_jp`      text NOT NULL DEFAULT '',
-                        `ko_kr`      text NOT NULL DEFAULT '',
-                        PRIMARY KEY (`unique_key`)
-                    ) ENGINE = INNODB COMMENT 'i18n by yonna';");
+            $db->query(sprintf(I18nSql::pgsql, $this->store));
             DB::connect($this->config)->schemas('public')->table($this->store)->truncate(true); //截断清空
             DB::connect($this->config)->schemas('public')->table($this->store)->insertAll($i18nData);
         } else {
@@ -272,7 +255,7 @@ class I18n
             $fn = __DIR__ . "/lang/{$al}.json";
             ksort($fileData[$al]);
             @file_put_contents($fn, json_encode($fileData[$al], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-            @chmod($fn, 0644);
+            @chmod($fn, 0777);
         }
         return true;
     }

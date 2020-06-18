@@ -11,7 +11,7 @@ use Yonna\Middleware\MiddlewareType;
 
 /**
  * Class Config
- * @package Yonna\Scope
+ * @package Yonna\Log
  */
 class Config
 {
@@ -59,7 +59,7 @@ class Config
                 $call = function ($request) use ($call, $action) {
                     $Scope = Core::get($call, $request);
                     if (!$Scope instanceof Scope) {
-                        Exception::throw("Class {$call} is not instanceof Scope");
+                        Exception::throw("Class {$call} is not instanceof Log");
                     }
                     return $Scope->$action();
                 };

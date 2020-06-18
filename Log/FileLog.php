@@ -43,7 +43,7 @@ class FileLog
             }
         }
         closedir($files);
-        if ($dir !== $this->root . DIRECTORY_SEPARATOR . Config::getFile()) {
+        if ($dir !== $this->root . DIRECTORY_SEPARATOR . Config::getFileDirName()) {
             @rmdir($dir);
         }
     }
@@ -56,7 +56,7 @@ class FileLog
         if (Config::getFileExpireDay() <= 0) {
             return;
         }
-        $this->dirExpire($this->root . DIRECTORY_SEPARATOR . Config::getFile(), time() - 86400 * Config::getFileExpireDay());
+        $this->dirExpire($this->root . DIRECTORY_SEPARATOR . Config::getFileDirName(), time() - 86400 * Config::getFileExpireDay());
     }
 
     /**
@@ -67,7 +67,7 @@ class FileLog
     private function dir($key)
     {
         $path = $this->root
-            . DIRECTORY_SEPARATOR . Config::getFile()
+            . DIRECTORY_SEPARATOR . Config::getFileDirName()
             . DIRECTORY_SEPARATOR . date('Y-m-d')
             . DIRECTORY_SEPARATOR . $key;
         System::dirCheck($path, true);

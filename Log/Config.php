@@ -6,10 +6,16 @@ class Config
 {
 
     /**
+     * 日志文件目录根
+     * @var string
+     */
+    private static string $file_path_root = '';
+
+    /**
      * 日志文件目录名
      * @var string
      */
-    private static string $file = 'yonna_log';
+    private static string $file_dir_name = 'yonna_log';
 
     /**
      * 文件日志的过期天数
@@ -20,17 +26,33 @@ class Config
     /**
      * @return string
      */
-    public static function getFile(): string
+    public static function getFilePathRoot(): string
     {
-        return self::$file;
+        return self::$file_path_root;
     }
 
     /**
-     * @param string $file
+     * @param string $file_path_root
      */
-    public static function setFile(string $file): void
+    public static function setFilePathRoot(string $file_path_root): void
     {
-        self::$file = $file;
+        self::$file_path_root = $file_path_root;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getFileDirName(): string
+    {
+        return self::$file_dir_name;
+    }
+
+    /**
+     * @param string $file_dir_name
+     */
+    public static function setFileDirName(string $file_dir_name): void
+    {
+        self::$file_dir_name = $file_dir_name;
     }
 
     /**

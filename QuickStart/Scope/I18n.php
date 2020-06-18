@@ -1,33 +1,32 @@
 <?php
 
-namespace Yonna\I18n;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\IO\Request;
-use Yonna\Middleware\Before;
-use Yonna\Throwable\Exception;
+use Yonna\QuickStart\Middleware\Debug;
 use Yonna\Scope\Config;
+use Yonna\QuickStart\Config as QuickStartConfig;
+use Yonna\I18n\I18n as I18nModule;
+use Yonna\Throwable\Exception\DatabaseException;
 
-class Debug extends Before
+
+class I18n
 {
 
     /**
-     * @return Request
-     * @throws Exception\DebugException
+     * I18n constructor.
+     * @throws DatabaseException
      */
-    public function handle(): Request
+    public function __construct()
     {
-        if (getenv('IS_DEBUG') === 'false') {
-            Exception::debug('NOT_DEBUG');
+        $file = QuickStartConfig::getAppRoot() . '/i18n';
+        if (!is_file($file)) {
+            file_put_contents($file, '');
+            (new I18nModule())->initDatabase();
         }
-        return $this->request();
     }
 
-}
-
-class Scope
-{
-
-    public static function conf()
+    public static function install()
     {
         Config::middleware( // only debug
             [
@@ -35,16 +34,13 @@ class Scope
             ],
             function () {
                 Config::group(['i18n'], function () {
-                    Config::delete('init', function () {
-                        return (new I18n())->init();
-                    });
                     Config::delete('set', function (Request $request) {
                         $input = $request->getInput();
                         $data = [];
-                        foreach (I18n::ALLOW_LANG as $lang) {
+                        foreach (I18nModule::ALLOW_LANG as $lang) {
                             $data[$lang] = $input[$lang] ?? '';
                         }
-                        (new I18n())->set($input['unique_key'], $data);
+                        (new I18nModule())->set($input['unique_key'], $data);
                         return true;
                     });
                 });
@@ -52,20 +48,20 @@ class Scope
         );
         Config::group(['i18n'], function () {
             Config::put('backup', function () {
-                return (new I18n())->backup();
+                return (new I18nModule())->backup();
             });
             Config::post('all', function () {
-                return (new I18n())->get();
+                return (new I18nModule())->get();
             });
             Config::post('page', function (Request $request) {
                 $input = $request->getInput();
-                return (new I18n())->page(
+                return (new I18nModule())->page(
                     $input['current'] ?? 1,
                     $input['per'] ?? 10,
                     [
                         'unique_key' => $input['unique_key'] ?? null,
                     ],
-                    );
+                );
             });
         });
     }

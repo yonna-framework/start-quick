@@ -4,7 +4,7 @@ namespace Yonna\Scope;
 
 /**
  * Class Kernel
- * @package Core\Core\Scope
+ * @package Core\Core\Log
  */
 abstract class Kernel implements Interfaces\Kernel
 {

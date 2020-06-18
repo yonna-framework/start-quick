@@ -149,9 +149,9 @@ class Package extends Console
             System::dirDel($distDir);
         }
         // 构建必要的 dist 目录
-        mkdir($distDir, 0644);
+        mkdir($distDir, 0777);
         $distDir = realpath($distDir) . DIRECTORY_SEPARATOR;
-        mkdir($distDir . '/boot', 0644);
+        mkdir($distDir . '/boot', 0777);
         // 烟幕弹
         $smokeBomb = [
             'foundation', 'business', 'maven', 'common', 'system', 'config',

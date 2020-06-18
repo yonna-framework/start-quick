@@ -42,7 +42,7 @@ abstract class Middleware implements Interfaces\Middleware
     {
         $Scope = Core::get($call, $this->request());
         if (!$Scope instanceof Scope) {
-            Exception::throw("Class {$call} is not instanceof Scope");
+            Exception::throw("Class {$call} is not instanceof Log");
         }
         return $Scope->$action();
     }
