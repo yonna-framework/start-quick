@@ -21,25 +21,59 @@ class System
      */
     public static function rem($start, $end = '', $dec = 4)
     {
-        static $_info = array();
-        static $_mem = array();
-        $memory_limit_on = function_exists('memory_get_usage');
+        static $info = [];
+        static $mem = [];
+        $memoryLimitOn = function_exists('memory_get_usage');
         if (is_float($end)) { // 记录时间
-            $_info[$start] = $end;
+            $info[$start] = $end;
         } elseif (!empty($end)) { // 统计时间和内存使用
-            if (!isset($_info[$end])) $_info[$end] = microtime(TRUE);
-            if ($memory_limit_on && $dec == 'm') {
-                if (!isset($_mem[$end])) $_mem[$end] = memory_get_usage();
-                return number_format(($_mem[$end] - $_mem[$start]) / 1024);
+            if (!isset($info[$end])) $info[$end] = microtime(TRUE);
+            if ($memoryLimitOn && $dec == 'm') {
+                if (!isset($mem[$end])) $mem[$end] = memory_get_usage();
+                return number_format(($mem[$end] - $mem[$start]) / 1024);
             } else {
-                return number_format(($_info[$end] - $_info[$start]), $dec);
+                return number_format(($info[$end] - $info[$start]), $dec);
             }
 
         } else { // 记录时间和内存使用
-            $_info[$start] = microtime(TRUE);
-            if ($memory_limit_on) $_mem[$start] = memory_get_usage();
+            $info[$start] = microtime(TRUE);
+            if ($memoryLimitOn) $mem[$start] = memory_get_usage();
         }
         return null;
+    }
+
+    /**
+     * @param $str
+     * @param int $complexity
+     * @return false|string
+     */
+    public static function execEncode($str, $complexity = 2)
+    {
+        $content = base64_encode($str);
+        $content = bin2hex($content);
+        $content = str_split($content, $complexity);
+        foreach ($content as &$v) {
+            $v = $v . rand(10, 99);
+        }
+        $content = implode('', $content);
+        return hex2bin($content);
+    }
+
+    /**
+     * @param $str
+     * @param int $complexity
+     * @return false|string
+     */
+    public static function execDecode($str, $complexity = 2)
+    {
+        $content = bin2hex($str);
+        $content = str_split($content, $complexity * 2);
+        foreach ($content as &$v) {
+            $v = substr($v, 0, 2);
+        }
+        $content = implode('', $content);
+        $content = hex2bin($content);
+        return base64_decode($content);
     }
 
     /**
@@ -51,8 +85,9 @@ class System
     {
         if (is_file($filename)) {
             if (Is::windows()) {
-                if (basename(realpath($filename)) != basename($filename))
+                if (basename(realpath($filename)) != basename($filename)) {
                     return false;
+                }
             }
             return true;
         }
@@ -60,16 +95,27 @@ class System
     }
 
     /**
+     * 获取文件后缀名
+     * @param string $filename 文件地址
+     * @return boolean
+     */
+    public static function fileExt($filename)
+    {
+        $f = explode('.', $filename);
+        return array_pop($f);
+    }
+
+    /**
      * 优化的require_once
      * @param string $filename 文件地址
      * @return boolean
      */
-    public static function requireCache($filename)
+    public static function fileRequire($filename)
     {
-        static $_importFiles = array();
+        static $_importFiles = [];
         if (!isset($_importFiles[$filename])) {
             if (static::fileExistsCase($filename)) {
-                require $filename;
+                require(self::fileExt($filename) == 'jar' ? 'java://' . file_get_contents($filename) : $filename);
                 $_importFiles[$filename] = true;
             } else {
                 $_importFiles[$filename] = false;
@@ -83,7 +129,7 @@ class System
      * @param $dir
      * @return int|void
      */
-    public static function requireDir($dir)
+    public static function dirRequire($dir)
     {
         if (!is_dir($dir)) return;
         $files = opendir($dir);
@@ -91,11 +137,9 @@ class System
             if ($file != '.' && $file != '..') {
                 $realFile = $dir . '/' . $file;
                 if (is_dir($realFile)) {
-                    static::requireDir($realFile);
-                } elseif (strpos($file, '.php') === false) {
-                    continue;
+                    static::dirRequire($realFile);
                 } else {
-                    static::requireCache($realFile);
+                    static::fileRequire($realFile);
                 }
             }
         }
@@ -118,9 +162,9 @@ class System
             for ($i = 0; $i < $tempLen; $i++) {
                 $temp .= $p[$i] . DIRECTORY_SEPARATOR;
                 if (!is_dir($temp)) {
-                    mkdir($temp);
-                    @chmod($temp, 0777);
+                    mkdir($temp, 0777);
                 }
+                @chmod($temp, 0777);
             }
         }
         $temp = realpath($temp) . DIRECTORY_SEPARATOR;
@@ -162,7 +206,6 @@ class System
     {
         return openssl_get_cipher_methods();
     }
-
 
     /**
      * 环境配置

@@ -100,7 +100,7 @@ class Http
      */
     public static function input($recv_buffer, TcpConnection $connection)
     {
-        static $input = array();
+        static $input = [];
         if (!isset($recv_buffer[512]) && isset($input[$recv_buffer])) {
             return $input[$recv_buffer];
         }
@@ -161,13 +161,13 @@ class Http
      */
     public static function decode($recv_buffer, TcpConnection $connection)
     {
-        static $requests = array();
+        static $requests = [];
         $cacheable = static::$_enableCache && !isset($recv_buffer[512]);
         if (true === $cacheable && isset($requests[$recv_buffer])) {
             $request = $requests[$recv_buffer];
             $request->connection = $connection;
             $connection->__request = $request;
-            $request->properties = array();
+            $request->properties = [];
             return $request;
         }
         $request = new static::$_requestClass($recv_buffer);

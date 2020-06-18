@@ -10,13 +10,13 @@ use AmqpLib\Channel\AMQPChannel;
 abstract class GenericContent
 {
     /** @var array */
-    public $delivery_info = array();
+    public $delivery_info = [];
 
     /** @var array Final property definitions */
     protected $prop_types;
 
     /** @var array Properties content */
-    private $properties = array();
+    private $properties = [];
 
     /** @var null|string Compiled properties */
     private $serialized_properties;
@@ -123,7 +123,7 @@ abstract class GenericContent
     public function load_properties(AMQPReader $reader)
     {
         // Read 16-bit shorts until we get one with a low bit set to zero
-        $flags = array();
+        $flags = [];
 
         while (true) {
             $flag_bits = $reader->read_short();
@@ -135,7 +135,7 @@ abstract class GenericContent
         }
 
         $shift = 0;
-        $data = array();
+        $data = [];
 
         foreach ($this->prop_types as $key => $proptype) {
             if ($shift === 0) {
@@ -175,7 +175,7 @@ abstract class GenericContent
 
         $shift = 15;
         $flag_bits = 0;
-        $flags = array();
+        $flags = [];
         $raw_bytes = new AMQPWriter();
 
         foreach ($this->prop_types as $key => $prototype) {

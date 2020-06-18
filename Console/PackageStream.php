@@ -1,6 +1,5 @@
 <?php
 
-
 class PackageStream
 {
     private string $string;
@@ -28,10 +27,10 @@ class PackageStream
         return $ret;
     }
 
-//    public static function stream_set_option(int $option, int $arg1, int $arg2): bool
-//    {
-//        return true;
-//    }
+    public static function stream_set_option(int $option, int $arg1, int $arg2): bool
+    {
+        return true;
+    }
 
     public function stream_eof()
     {
@@ -45,23 +44,21 @@ class PackageStream
 }
 
 stream_wrapper_register('java', PackageStream::class);
+
 spl_autoload_register(function ($res) {
-    $res = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $res);
+    $res = str_replace(['\\', '/'], '/', $res);
     $nameArr = explode('/', $res);
     $firstName = array_shift($nameArr);
     !$firstName && $firstName = array_shift($nameArr);
     $file = null;
     if ($firstName == 'App') {
-        $file = __DIR__ . '/../library/App/' . implode('/', $nameArr) . '.jar';
+        $file = __DIR__ . '/../App/' . implode('/', $nameArr) . '.jar';
     } elseif ($firstName == 'Yonna') {
         $file = __DIR__ . '/../library/' . implode('/', $nameArr) . '.jar';
     } elseif (in_array($firstName, ['POption', 'Dotenv', 'Symfony', 'Seclib', 'AmqpLib', 'GuzzleHttp', 'Psr', 'Workerman'])) {
         $file = __DIR__ . '/../library/Plugins/' . $res . '.jar';
     }
-    var_dump($file);
     if (is_file($file)) {
         require('java://' . file_get_contents($file));
-    } else {
-        exit($file);
     }
 });

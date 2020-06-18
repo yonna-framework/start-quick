@@ -235,7 +235,7 @@ class Random
             $i = $crypto->encrypt(microtime()); // strlen(microtime()) == 21
             $r = $crypto->encrypt($i ^ $v); // strlen($v) == 20
             $v = $crypto->encrypt($r ^ $i); // strlen($r) == 20
-            $result.= $r;
+            $result .= $r;
         }
         return substr($result, 0, $length);
     }
@@ -263,7 +263,7 @@ if (!function_exists('Seclib_safe_serialize')) {
         if (isset($arr['__Seclib_marker'])) {
             return '';
         }
-        $safearr = array();
+        $safearr = [];
         $arr['__Seclib_marker'] = true;
         foreach (array_keys($arr) as $key) {
             // do not recurse on the '__Seclib_marker' key itself, for smaller memory usage

@@ -19,7 +19,7 @@ class Collector
     private $charset = 'utf-8';
     private $code = 0;
     private $msg = '';
-    private $data = array();
+    private $data = [];
 
     public function __construct()
     {

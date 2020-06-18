@@ -36,13 +36,13 @@ abstract class AbstractChannel
      * Lower level queue for frames
      * @var array
      */
-    protected $frame_queue = array();
+    protected $frame_queue = [];
 
     /**
      * Higher level queue for methods
      * @var array
      */
-    protected $method_queue = array();
+    protected $method_queue = [];
 
     /** @var bool */
     protected $auto_decode = false;
@@ -291,7 +291,7 @@ abstract class AbstractChannel
      */
     protected function createMessage($propertyReader, $contentReader)
     {
-        $bodyChunks = array();
+        $bodyChunks = [];
         $bodyReceivedBytes = 0;
 
         $message = new AMQPMessage();
@@ -391,7 +391,7 @@ abstract class AbstractChannel
     protected function process_deferred_methods($allowed_methods)
     {
         $dispatch = false;
-        $queued_method = array();
+        $queued_method = [];
 
         foreach ($this->method_queue as $qk => $qm) {
             $this->debug->debug_msg('checking queue method ' . $qk);

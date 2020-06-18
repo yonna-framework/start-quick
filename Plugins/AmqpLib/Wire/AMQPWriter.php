@@ -11,7 +11,7 @@ class AMQPWriter extends AbstractClient
     protected $out = '';
 
     /** @var array */
-    protected $bits = array();
+    protected $bits = [];
 
     /** @var int */
     protected $bitcount = 0;
@@ -20,7 +20,7 @@ class AMQPWriter extends AbstractClient
     {
         if (!empty($this->bits)) {
             $this->out .= implode('', array_map('chr', $this->bits));
-            $this->bits = array();
+            $this->bits = [];
             $this->bitcount = 0;
         }
     }

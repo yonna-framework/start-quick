@@ -219,14 +219,14 @@ class Inflector
      *
      * @var array
      */
-    private static $cache = array();
+    private static $cache = [];
 
     /**
      * The initial state of Inflector so reset() works.
      *
      * @var array
      */
-    private static $initialState = array();
+    private static $initialState = [];
 
     /**
      * Converts a word into the format for a Doctrine table name. Converts 'ModelName' to 'model_name'.
@@ -350,9 +350,9 @@ class Inflector
             }
 
             if ($type === 'plural') {
-                self::$cache['pluralize'] = self::$cache['tableize'] = array();
+                self::$cache['pluralize'] = self::$cache['tableize'] = [];
             } elseif ($type === 'singular') {
-                self::$cache['singularize'] = array();
+                self::$cache['singularize'] = [];
             }
         }
 

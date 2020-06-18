@@ -92,7 +92,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $packet_types = array();
+    var $packet_types = [];
 
     /**
      * Status Codes
@@ -101,7 +101,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $status_codes = array();
+    var $status_codes = [];
 
     /**
      * The Request ID
@@ -143,7 +143,7 @@ class SFTP extends SSH2
      * @see self::_initChannel()
      * @access private
      */
-    var $extensions = array();
+    var $extensions = [];
 
     /**
      * Server SFTP version
@@ -171,7 +171,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $packet_type_log = array();
+    var $packet_type_log = [];
 
     /**
      * Packet Log
@@ -180,7 +180,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $packet_log = array();
+    var $packet_log = [];
 
     /**
      * Error information
@@ -190,7 +190,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $sftp_errors = array();
+    var $sftp_errors = [];
 
     /**
      * Stat Cache
@@ -204,7 +204,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $stat_cache = array();
+    var $stat_cache = [];
 
     /**
      * Max SFTP Packet Size
@@ -234,7 +234,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $sortOptions = array();
+    var $sortOptions = [];
 
     /**
      * Canonicalization Flag
@@ -257,7 +257,7 @@ class SFTP extends SSH2
      * @var array
      * @access private
      */
-    var $requestBuffer = array();
+    var $requestBuffer = [];
 
     /**
      * Default Constructor.
@@ -597,7 +597,7 @@ class SFTP extends SSH2
      */
     function clearStatCache()
     {
-        $this->stat_cache = array();
+        $this->stat_cache = [];
     }
 
     /**
@@ -724,7 +724,7 @@ class SFTP extends SSH2
         }
 
         $path = explode('/', $path);
-        $new = array();
+        $new = [];
         foreach ($path as $dir) {
             if (!strlen($dir)) {
                 continue;
@@ -834,7 +834,7 @@ class SFTP extends SSH2
             return $files;
         }
 
-        $result = array();
+        $result = [];
         foreach ($files as $value) {
             if ($value == '.' || $value == '..') {
                 if ($relativeDir == '') {
@@ -941,7 +941,7 @@ class SFTP extends SSH2
 
         $this->_update_stat_cache($dir, array());
 
-        $contents = array();
+        $contents = [];
         while (true) {
             // http://tools.ietf.org/html/draft-ietf-secsh-filexfer-13#section-8.2.2
             // why multiple SSH_FXP_READDIR packets would be sent when the response to a single one can span arbitrarily many
@@ -1104,7 +1104,7 @@ class SFTP extends SSH2
      */
     function setListOrder()
     {
-        $this->sortOptions = array();
+        $this->sortOptions = [];
         $args = func_get_args();
         if (empty($args)) {
             return;
@@ -1163,10 +1163,10 @@ class SFTP extends SSH2
             //  1. a file was deleted and changed to a directory behind Seclib's back
             //  2. it's a symlink. when lstat is done it's unclear what it's a symlink to
             if (is_object($temp)) {
-                $temp = array();
+                $temp = [];
             }
             if (!isset($temp[$dir])) {
-                $temp[$dir] = array();
+                $temp[$dir] = [];
             }
             if ($i === $max) {
                 if (is_object($temp[$dir]) && is_object($value)) {
@@ -2793,7 +2793,7 @@ class SFTP extends SSH2
      */
     function _parseAttributes(&$response)
     {
-        $attr = array();
+        $attr = [];
         if (strlen($response) < 4) {
             user_error('Malformed file attributes');
             return array();
@@ -2991,7 +2991,7 @@ class SFTP extends SSH2
         parent::_reset_connection($reason);
         $this->use_request_id = false;
         $this->pwd = false;
-        $this->requestBuffer = array();
+        $this->requestBuffer = [];
     }
 
     /**

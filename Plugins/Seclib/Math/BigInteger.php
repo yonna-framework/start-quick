@@ -265,7 +265,7 @@ class BigInteger
 
         if (extension_loaded('openssl') && !defined('MATH_BIGINTEGER_OPENSSL_DISABLE') && !defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
             // some versions of XAMPP have mismatched versions of OpenSSL which causes it not to work
-            $versions = array();
+            $versions = [];
 
             // avoid generating errors (even with suppression) when phpinfo() is disabled (common in production systems)
             if (strpos(ini_get('disable_functions'), 'phpinfo') === false) {
@@ -345,7 +345,7 @@ class BigInteger
                 $this->value = '0';
                 break;
             default:
-                $this->value = array();
+                $this->value = [];
         }
 
         // '0' counts as empty() but when the base is 256 '0' is equal to ord('0') or 48
@@ -828,7 +828,7 @@ class BigInteger
      */
     function __debugInfo()
     {
-        $opts = array();
+        $opts = [];
         switch (MATH_BIGINTEGER_MODE) {
             case self::MODE_GMP:
                 $engine = 'gmp';
@@ -1605,7 +1605,7 @@ class BigInteger
     function _divide_digit($dividend, $divisor)
     {
         $carry = 0;
-        $result = array();
+        $result = [];
 
         for ($i = count($dividend) - 1; $i >= 0; --$i) {
             $temp = self::$baseFull * $carry + $dividend[$i];
@@ -1848,7 +1848,7 @@ class BigInteger
         $n_value = $n->value;
 
         // precompute $this^0 through $this^$window_size
-        $powers = array();
+        $powers = [];
         $powers[1] = $this->_prepareReduce($this->value, $n_value, $mode);
         $powers[2] = $this->_squareReduce($powers[1], $n_value, $mode);
 
@@ -2583,7 +2583,7 @@ class BigInteger
         $d = new static();
 
         $a->value = $d->value = $g->value = array(1);
-        $b->value = $c->value = array();
+        $b->value = $c->value = [];
 
         while (!empty($u->value)) {
             while (!($u->value[0] & 1)) {

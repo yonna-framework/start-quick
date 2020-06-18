@@ -8,7 +8,7 @@ use Yonna\Foundation\System;
 class Config
 {
 
-    protected static $stack = array();
+    protected static $stack = [];
 
     /**
      * @return array

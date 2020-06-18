@@ -34,7 +34,7 @@ class Schemas extends AbstractPDO
             $this->options['table'] = $tableEX[1];
             $this->options['table_origin'] = $tableEX[0];
             if (!isset($this->options['alia'])) {
-                $this->options['alia'] = array();
+                $this->options['alia'] = [];
             }
             $this->options['alia'][$tableEX[1]] = $tableEX[0];
         } else {

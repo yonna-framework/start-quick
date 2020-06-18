@@ -351,7 +351,7 @@ class SSH1
      * @var array
      * @access private
      */
-    var $protocol_flags = array();
+    var $protocol_flags = [];
 
     /**
      * Protocol Flag Log
@@ -360,7 +360,7 @@ class SSH1
      * @var array
      * @access private
      */
-    var $protocol_flag_log = array();
+    var $protocol_flag_log = [];
 
     /**
      * Message Log
@@ -369,7 +369,7 @@ class SSH1
      * @var array
      * @access private
      */
-    var $message_log = array();
+    var $message_log = [];
 
     /**
      * Real-time log file pointer

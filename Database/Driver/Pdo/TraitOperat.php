@@ -174,7 +174,7 @@ trait TraitOperat
         $table = $this->getTable();
         $sql = 'UPDATE ' . $this->parseTable($table);
         $ft = $this->getFieldType($table);
-        $set = array();
+        $set = [];
         foreach ($data as $key => $val) {
             if (!empty($ft[$table . '_' . $key])) { // 根据表字段过滤无效key
                 if (is_array($val) && !empty($val[0]) && 'exp' == $val[0]) {

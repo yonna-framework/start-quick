@@ -254,7 +254,7 @@ abstract class AbstractStubGenerator
     {
         $all = '';
         foreach ($this->rf_ext->getFunctions() as $function) {
-            $vp = array();
+            $vp = [];
             $comment = "/**\n";
             $params = $function->getParameters();
             foreach ($params as $param) {

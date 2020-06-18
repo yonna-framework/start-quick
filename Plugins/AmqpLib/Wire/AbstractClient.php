@@ -12,7 +12,7 @@ class AbstractClient
     protected $is64bits;
 
     /** @var BigInteger[][] */
-    protected static $bigIntegers = array();
+    protected static $bigIntegers = [];
 
     /**
      * @var bool
@@ -83,7 +83,7 @@ class AbstractClient
     protected static function getBigInteger($value, $base = 10)
     {
         if (!isset(self::$bigIntegers[$base])) {
-            self::$bigIntegers[$base] = array();
+            self::$bigIntegers[$base] = [];
         }
         if (isset(self::$bigIntegers[$base][$value])) {
             return self::$bigIntegers[$base][$value];

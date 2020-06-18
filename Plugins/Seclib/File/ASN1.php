@@ -110,7 +110,7 @@ class ASN1
      * @access private
      * @link http://en.wikipedia.org/wiki/Object_identifier
      */
-    var $oids = array();
+    var $oids = [];
 
     /**
      * Default date format
@@ -305,7 +305,7 @@ class ASN1
                     );
                 }
 
-                $newcontent = array();
+                $newcontent = [];
                 $remainingLength = $length;
                 while ($remainingLength > 0) {
                     $temp = $this->_decode_ber($content, $start, $content_pos);
@@ -415,7 +415,7 @@ class ASN1
             case self::TYPE_SEQUENCE:
             case self::TYPE_SET:
                 $offset = 0;
-                $current['content'] = array();
+                $current['content'] = [];
                 $content_len = strlen($content);
                 while ($content_pos < $content_len) {
                     // if indefinite length construction was used and we have an end-of-content string next
@@ -555,7 +555,7 @@ class ASN1
 
         switch ($decoded['type']) {
             case self::TYPE_SEQUENCE:
-                $map = array();
+                $map = [];
 
                 // ignore the min and max
                 if (isset($mapping['min']) && isset($mapping['max'])) {
@@ -627,7 +627,7 @@ class ASN1
 
             // the main diff between sets and sequences is the encapsulation of the foreach in another for loop
             case self::TYPE_SET:
-                $map = array();
+                $map = [];
 
                 // ignore the min and max
                 if (isset($mapping['min']) && isset($mapping['max'])) {
@@ -737,7 +737,7 @@ class ASN1
                         }
                         $offset = 0;
                     }
-                    $values = array();
+                    $values = [];
                     $map = array_reverse($mapping['mapping']);
                     foreach ($map as $i => $value) {
                         if ($bits[$i]) {
@@ -796,7 +796,7 @@ class ASN1
      */
     function encodeDER($source, $mapping, $special = array())
     {
-        $this->location = array();
+        $this->location = [];
         return $this->_encode_der($source, $mapping, null, $special);
     }
 
@@ -836,7 +836,7 @@ class ASN1
 
                 // ignore the min and max
                 if (isset($mapping['min']) && isset($mapping['max'])) {
-                    $value = array();
+                    $value = [];
                     $child = $mapping['children'];
 
                     foreach ($source as $content) {
@@ -1123,7 +1123,7 @@ class ASN1
             $eighty = new BigInteger(80);
         }
 
-        $oid = array();
+        $oid = [];
         $pos = 0;
         $len = strlen($content);
         $n = new BigInteger();

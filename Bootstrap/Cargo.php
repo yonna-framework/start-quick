@@ -35,7 +35,7 @@ class Cargo
             $this->$k = $v;
         }
         $this->root = realpath($this->root);
-        $this->app_root = realpath($this->root . '/app') ?? '';
+        $this->app_root = realpath($this->root . '/App') ?? '';
     }
 
     /**
@@ -138,22 +138,6 @@ class Cargo
     public function setProjectName(string $project_name): void
     {
         $this->project_name = $project_name;
-    }
-
-    /**
-     * @return int
-     */
-    public function getConfigQty(): int
-    {
-        return $this->config_qty;
-    }
-
-    /**
-     * @param int $config_qty
-     */
-    public function setConfigQty(int $config_qty): void
-    {
-        $this->config_qty = $config_qty;
     }
 
     /**

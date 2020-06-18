@@ -13,7 +13,7 @@ class Config
     public static function install(Cargo $Cargo): Cargo
     {
         $config_root = System::dirCheck($Cargo->getRoot() . '/App/Config', true);
-        System::requireDir($config_root);
+        System::dirRequire($config_root);
         return $Cargo;
     }
 }

@@ -416,7 +416,7 @@ class RSA
      * @var array
      * @access private
      */
-    var $components = array();
+    var $components = [];
 
     /**
      * Current String
@@ -472,7 +472,7 @@ class RSA
                     break;
                 case extension_loaded('openssl') && file_exists($this->configFile):
                     // some versions of XAMPP have mismatched versions of OpenSSL which causes it not to work
-                    $versions = array();
+                    $versions = [];
 
                     // avoid generating errors (even with suppression) when phpinfo() is disabled (common in production systems)
                     if (strpos(ini_get('disable_functions'), 'phpinfo') === false) {
@@ -557,7 +557,7 @@ class RSA
 
         // OpenSSL uses 65537 as the exponent and requires RSA keys be 384 bits minimum
         if (CRYPT_RSA_MODE == self::MODE_OPENSSL && $bits >= 384 && CRYPT_RSA_EXPONENT == 65537) {
-            $config = array();
+            $config = [];
             if (isset($this->configFile)) {
                 $config['config'] = $this->configFile;
             }
@@ -604,7 +604,7 @@ class RSA
         if (!empty($partial)) {
             extract(unserialize($partial));
         } else {
-            $exponents = $coefficients = $primes = array();
+            $exponents = $coefficients = $primes = [];
             $lcm = array(
                 'top' => $this->one->copy(),
                 'bottom' => false
@@ -877,7 +877,7 @@ class RSA
                        chunk_split(base64_encode($key), 70) .
                        "-----END OPENSSH PRIVATE KEY-----";
             default: // eg. self::PRIVATE_FORMAT_PKCS1
-                $components = array();
+                $components = [];
                 foreach ($raw as $name => $value) {
                     $components[$name] = pack('Ca*a*', self::ASN1_INTEGER, $this->_encodeLength(strlen($value)), $value);
                 }
@@ -1091,7 +1091,7 @@ class RSA
                 if (!is_array($key)) {
                     return false;
                 }
-                $components = array();
+                $components = [];
                 switch (true) {
                     case isset($key['e']):
                         $components['publicExponent'] = $key['e']->copy();
@@ -1179,7 +1179,7 @@ class RSA
                     $key = $decoded;
                 }
 
-                $components = array();
+                $components = [];
 
                 if (ord($this->_string_shift($key)) != self::ASN1_SEQUENCE) {
                     return false;
@@ -1381,7 +1381,7 @@ class RSA
             // http://en.wikipedia.org/wiki/XML_Signature
             case self::PRIVATE_FORMAT_XML:
             case self::PUBLIC_FORMAT_XML:
-                $this->components = array();
+                $this->components = [];
 
                 $xml = xml_parser_create('UTF-8');
                 xml_set_object($xml, $this);
@@ -1400,7 +1400,7 @@ class RSA
                 return isset($this->components['modulus']) && isset($this->components['publicExponent']) ? $this->components : false;
             // from PuTTY's SSHPUBK.C
             case self::PRIVATE_FORMAT_PUTTY:
-                $components = array();
+                $components = [];
                 $key = preg_split('#\r\n|\r|\n#', $key);
                 $type = trim(preg_replace('#PuTTY-User-Key-File-2: (.+)#', '$1', $key[0]));
                 if ($type != 'ssh-rsa') {
@@ -1470,7 +1470,7 @@ class RSA
 
                 return $components;
             case self::PRIVATE_FORMAT_OPENSSH:
-                $components = array();
+                $components = [];
                 $decoded = $this->_extractBER($key);
                 $magic = $this->_string_shift($decoded, 15);
                 if ($magic !== "openssh-key-v1\0") {
@@ -1671,9 +1671,9 @@ class RSA
                 $this->publicExponent = $key->publicExponent->copy();
             }
 
-            $this->primes = array();
-            $this->exponents = array();
-            $this->coefficients = array();
+            $this->primes = [];
+            $this->exponents = [];
+            $this->coefficients = [];
 
             foreach ($this->primes as $prime) {
                 $this->primes[] = $prime->copy();
@@ -1732,9 +1732,9 @@ class RSA
             $this->coefficients = $components['coefficients'];
             $this->publicExponent = $components['publicExponent'];
         } else {
-            $this->primes = array();
-            $this->exponents = array();
-            $this->coefficients = array();
+            $this->primes = [];
+            $this->exponents = [];
+            $this->coefficients = [];
             $this->publicExponent = false;
         }
 

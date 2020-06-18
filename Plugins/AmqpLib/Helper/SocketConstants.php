@@ -32,7 +32,7 @@ final class SocketConstants
             $this->constants = $constants['sockets'];
         } else {
             trigger_error('Sockets extension is not enabled', E_USER_WARNING);
-            $this->constants = array();
+            $this->constants = [];
         }
     }
 

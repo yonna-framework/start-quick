@@ -67,7 +67,7 @@ class Session
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * Session changed and need to save.
@@ -215,7 +215,7 @@ class Session
     public function flush()
     {
         $this->_needSave = true;
-        $this->_data = array();
+        $this->_data = [];
     }
 
     /**

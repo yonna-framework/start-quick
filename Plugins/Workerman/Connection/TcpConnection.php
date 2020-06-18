@@ -246,7 +246,7 @@ class TcpConnection extends ConnectionInterface
      *
      * @var array
      */
-    public static $connections = array();
+    public static $connections = [];
 
     /**
      * Status to string.

@@ -48,7 +48,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @var AMQPChannel[]
      * @internal
      */
-    public $channels = array();
+    public $channels = [];
 
     /** @var int */
     protected $version_major;
@@ -135,7 +135,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @var array
      * @see prepare_content()
      */
-    private $prepare_content_cache = array();
+    private $prepare_content_cache = [];
 
     /** @var int Maximal size of $prepare_content_cache */
     private $prepare_content_cache_max_size = 100;
@@ -233,7 +233,7 @@ abstract class AbstractConnection extends AbstractChannel
                 // Connect the socket
                 $this->io->connect();
 
-                $this->channels = array();
+                $this->channels = [];
                 // The connection object itself is treated as channel 0
                 parent::__construct($this, 0);
 
