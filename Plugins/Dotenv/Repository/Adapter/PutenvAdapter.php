@@ -2,7 +2,7 @@
 
 namespace Dotenv\Repository\Adapter;
 
-use PhpOption\Option;
+use POption\Option;
 
 class PutenvAdapter implements AvailabilityInterface, ReaderInterface, WriterInterface
 {
@@ -21,11 +21,11 @@ class PutenvAdapter implements AvailabilityInterface, ReaderInterface, WriterInt
      *
      * @param string $name
      *
-     * @return \PhpOption\Option<string|null>
+     * @return \POption\Option<string|null>
      */
     public function get($name)
     {
-        /** @var \PhpOption\Option<string|null> */
+        /** @var \POption\Option<string|null> */
         return Option::fromValue(getenv($name), false);
     }
 

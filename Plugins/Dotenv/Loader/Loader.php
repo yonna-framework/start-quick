@@ -4,7 +4,7 @@ namespace Dotenv\Loader;
 
 use Dotenv\Regex\Regex;
 use Dotenv\Repository\RepositoryInterface;
-use PhpOption\Option;
+use POption\Option;
 
 class Loader implements LoaderInterface
 {

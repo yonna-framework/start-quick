@@ -1,7 +1,7 @@
 <?php
 //引用所需文件
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
+use AmqpLib\Connection\AMQPStreamConnection;
+use AmqpLib\Message\AMQPMessage;
 
 class mq1
 {

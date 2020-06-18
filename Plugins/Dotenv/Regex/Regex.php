@@ -5,7 +5,7 @@ namespace Dotenv\Regex;
 use Dotenv\Result\Error;
 use Dotenv\Result\Result;
 use Dotenv\Result\Success;
-use PhpOption\Option;
+use POption\Option;
 
 class Regex
 {

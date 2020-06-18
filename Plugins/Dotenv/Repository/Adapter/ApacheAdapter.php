@@ -2,7 +2,7 @@
 
 namespace Dotenv\Repository\Adapter;
 
-use PhpOption\None;
+use POption\None;
 
 class ApacheAdapter implements AvailabilityInterface, ReaderInterface, WriterInterface
 {
@@ -26,7 +26,7 @@ class ApacheAdapter implements AvailabilityInterface, ReaderInterface, WriterInt
      *
      * @param string $name
      *
-     * @return \PhpOption\Option<string|null>
+     * @return \POption\Option<string|null>
      */
     public function get($name)
     {

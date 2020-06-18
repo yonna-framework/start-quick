@@ -2,8 +2,8 @@
 
 namespace Dotenv\Repository\Adapter;
 
-use PhpOption\None;
-use PhpOption\Some;
+use POption\None;
+use POption\Some;
 
 class ArrayAdapter implements AvailabilityInterface, ReaderInterface, WriterInterface
 {
@@ -29,7 +29,7 @@ class ArrayAdapter implements AvailabilityInterface, ReaderInterface, WriterInte
      *
      * @param string $name
      *
-     * @return \PhpOption\Option<string|null>
+     * @return \POption\Option<string|null>
      */
     public function get($name)
     {

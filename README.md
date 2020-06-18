@@ -7,7 +7,7 @@ Contains some very powerful business implementations to help you quickly build t
  - symfony/polyfill-ctype (v1.17.0)
  - phpoption/phpoption (1.7.3)
  - vlucas/phpdotenv (v4.1.6)
- - phpseclib/phpseclib (2.0.27)
+ - Seclib/Seclib (2.0.27)
  - php-amqplib/php-amqplib (v2.11.3)
  - ralouphie/getallheaders (3.0.3)
  - psr/http-message (1.0.1)

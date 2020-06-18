@@ -2,8 +2,8 @@
 
 namespace Dotenv\Result;
 
-use PhpOption\None;
-use PhpOption\Some;
+use POption\None;
+use POption\Some;
 
 /**
  * @template T
@@ -46,7 +46,7 @@ class Success extends Result
     /**
      * Get the success option value.
      *
-     * @return \PhpOption\Option<T>
+     * @return \POption\Option<T>
      */
     public function success()
     {
@@ -70,7 +70,7 @@ class Success extends Result
     /**
      * Get the error option value.
      *
-     * @return \PhpOption\Option<E>
+     * @return \POption\Option<E>
      */
     public function error()
     {

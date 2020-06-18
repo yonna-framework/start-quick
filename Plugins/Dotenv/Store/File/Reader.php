@@ -2,7 +2,7 @@
 
 namespace Dotenv\Store\File;
 
-use PhpOption\Option;
+use POption\Option;
 
 class Reader
 {
@@ -40,13 +40,13 @@ class Reader
      *
      * @param string $filePath
      *
-     * @return \PhpOption\Option<string>
+     * @return \POption\Option<string>
      */
     private static function readFromFile($filePath)
     {
         $content = @file_get_contents($filePath);
 
-        /** @var \PhpOption\Option<string> */
+        /** @var \POption\Option<string> */
         return Option::fromValue($content, false);
     }
 }

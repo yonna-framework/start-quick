@@ -55,7 +55,7 @@ spl_autoload_register(function ($res) {
         $file = __DIR__ . '/../library/App/' . implode('/', $nameArr) . '.jar';
     } elseif ($firstName == 'Yonna') {
         $file = __DIR__ . '/../library/' . implode('/', $nameArr) . '.jar';
-    } elseif (in_array($firstName, ['PhpOption', 'Dotenv', 'Symfony', 'phpseclib', 'PhpAmqpLib', 'GuzzleHttp', 'Psr', 'Workerman'])) {
+    } elseif (in_array($firstName, ['POption', 'Dotenv', 'Symfony', 'Seclib', 'AmqpLib', 'GuzzleHttp', 'Psr', 'Workerman'])) {
         $file = __DIR__ . '/../library/Plugins/' . $res . '.jar';
     }
     var_dump($file);

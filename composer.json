@@ -9,12 +9,12 @@
   "autoload": {
     "psr-4": {
       "Yonna\\": "",
-      "PhpOption\\": "Plugins/PhpOption/",
+      "POption\\": "Plugins/POption/",
       "Dotenv\\": "Plugins/Dotenv/",
       "Symfony\\Polyfill\\Ctype\\": "Plugins/Symfony/Polyfill/Ctype/",
       "Symfony\\Polyfill\\Intl\\Idn\\": "Plugins/Symfony/Polyfill/Intl/Idn/",
-      "phpseclib\\": "Plugins/Phpseclib/",
-      "PhpAmqpLib\\": "Plugins/PhpAmqpLib/",
+      "Seclib\\": "Plugins/Seclib/",
+      "AmqpLib\\": "Plugins/AmqpLib/",
       "GuzzleHttp\\": "Plugins/GuzzleHttp/",
       "GuzzleHttp\\Promise\\": "Plugins/GuzzleHttp/Promise/",
       "GuzzleHttp\\Psr7\\": "Plugins/GuzzleHttp/Psr7/",
@@ -25,7 +25,7 @@
     "files": [
       "Plugins/Symfony/Polyfill/Ctype/bootstrap.php",
       "Plugins/Symfony/Polyfill/Intl/Idn/bootstrap.php",
-      "Plugins/Phpseclib/bootstrap.php",
+      "Plugins/Seclib/bootstrap.php",
       "Plugins/GuzzleHttp/functions.php",
       "Plugins/GuzzleHttp/Promise/functions.php",
       "Plugins/GuzzleHttp/Psr7/functions.php",

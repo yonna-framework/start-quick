@@ -11,7 +11,7 @@ abstract class Result
     /**
      * Get the success option value.
      *
-     * @return \PhpOption\Option<T>
+     * @return \POption\Option<T>
      */
     abstract public function success();
 
@@ -41,7 +41,7 @@ abstract class Result
     /**
      * Get the error option value.
      *
-     * @return \PhpOption\Option<E>
+     * @return \POption\Option<E>
      */
     abstract public function error();
 

@@ -1,6 +1,6 @@
 <?php
 
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use AmqpLib\Connection\AMQPStreamConnection;
 
 
 class mq2

@@ -2,8 +2,8 @@
 
 namespace Dotenv\Repository\Adapter;
 
-use PhpOption\None;
-use PhpOption\Some;
+use POption\None;
+use POption\Some;
 
 class EnvConstAdapter implements AvailabilityInterface, ReaderInterface, WriterInterface
 {
@@ -22,7 +22,7 @@ class EnvConstAdapter implements AvailabilityInterface, ReaderInterface, WriterI
      *
      * @param string $name
      *
-     * @return \PhpOption\Option<string|null>
+     * @return \POption\Option<string|null>
      */
     public function get($name)
     {
