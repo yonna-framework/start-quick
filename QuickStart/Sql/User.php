@@ -56,17 +56,16 @@ class User
 
         "create table `y_user_meta` (
             `key` char(255) not null default '' comment 'meta key',
-            `type` char(255) not null default '' comment '类型',
+            `value_format` char(255) not null default '' comment '数据格式化类型',
             `ordering` int not null default 0 comment '排序[由大到小]',
             primary key (`key`),
-            index (`type`)
+            index (`value_format`)
         ) engine = innodb comment '用户可变自定义字段';",
 
         "create table `y_user_meta_info` (
             `user_id` bigint unsigned not null default 0 comment 'y_user_id',
             `mete_key` char(255) not null default '' comment 'meta key',
             `mete_value` varchar(1024) not null default '' comment 'meta value',
-            `ordering` int not null default 0 comment '排序[由大到小]',
             primary key (`user_id`),
             index (`mete_key`)
         ) engine = innodb comment '用户可变自定义信息';"
