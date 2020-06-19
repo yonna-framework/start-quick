@@ -85,15 +85,15 @@ class DatabaseLog
             } else {
                 throw new Exception('Set Database for Support Driver.');
             }
-            $obj = $obj->orderBy('log_time', 'desc');
+            $obj = $obj->orderBy('record_timestamp', 'desc');
             if (!empty($options['key'])) {
                 $obj = $obj->equalTo('key', $options['key']);
             }
             if (!empty($options['type'])) {
                 $obj = $obj->equalTo('type', $options['key']);
             }
-            if (!empty($options['log_time'])) {
-                $obj = $obj->between('log_time', $options['log_time']);
+            if (!empty($options['record_timestamp'])) {
+                $obj = $obj->between('record_timestamp', $options['record_timestamp']);
             }
             $res = $obj->page($current, $per);
         } catch (Throwable $e) {
@@ -117,7 +117,7 @@ class DatabaseLog
         $logData = [
             'key' => $key,
             'type' => $type,
-            'log_time' => time(),
+            'record_timestamp' => time(),
             'data' => $data,
         ];
         try {
