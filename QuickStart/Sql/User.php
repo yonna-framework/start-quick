@@ -6,16 +6,6 @@ class User
 {
     const mysql = [
 
-        "create table `y_license` (
-            `id` bigint unsigned auto_increment not null comment '许可id',
-            `upper_id` bigint unsigned not null default 0 comment 'y_license_id',
-            `name` char(255) not null default '' comment '许可名字',
-            `api` varchar(2048) not null default '' comment '许可支持的api',
-            primary key (`id`),
-            unique key (`name`),
-            index (`upper_id`)
-        ) engine = innodb comment '用户许可关系';",
-
         "create table `y_user`(
             `id` bigint unsigned auto_increment not null comment '用户id',
             `status` tinyint not null default -1 comment '状态[-3冻结,-2审核驳回,1待审核,2审核通过]',
@@ -32,6 +22,34 @@ class User
             `string` char(255) not null default '' comment '账号字串值',
             `allow_login` tinyint not null default -1 comment '是否允许登录'
         ) engine = innodb comment '用户账号数据';",
+
+        "create table `y_user_meta_category` (
+            `key` char(255) not null default '' comment 'meta key',
+            `value_format` char(255) not null default '' comment '数据格式化类型',
+            `status` tinyint not null default -1 comment '状态[-3冻结,-2审核驳回,1待审核,2审核通过]',
+            `ordering` int not null default 0 comment '排序[降序]',
+            primary key (`key`),
+            index (`value_format`),
+            index (`status`)
+        ) engine = innodb comment '用户可变自定义字段';",
+
+        "create table `y_user_meta` (
+            `user_id` bigint unsigned not null default 0 comment 'y_user_id',
+            `mete_key` char(255) not null default '' comment 'meta key',
+            `mete_value` varchar(1024) not null default '' comment 'meta value',
+            primary key (`user_id`),
+            index (`mete_key`)
+        ) engine = innodb comment '用户可变自定义详细信息';",
+
+        "create table `y_license` (
+            `id` bigint unsigned auto_increment not null comment '许可id',
+            `upper_id` bigint unsigned not null default 0 comment 'y_license_id',
+            `name` char(255) not null default '' comment '许可名字',
+            `api` varchar(2048) not null default '' comment '许可支持的api',
+            primary key (`id`),
+            unique key (`name`),
+            index (`upper_id`)
+        ) engine = innodb comment '用户许可关系';",
 
         "create table `y_user_license` (
             `user_id` bigint unsigned not null comment 'y_user_id',
@@ -53,22 +71,6 @@ class User
             `auth_reject_reason` varchar(1024) not null default '' comment '实名认证拒绝理由',
             primary key (`user_id`)
         ) engine = innodb comment '用户身份证拓展';",
-
-        "create table `y_user_meta` (
-            `key` char(255) not null default '' comment 'meta key',
-            `value_format` char(255) not null default '' comment '数据格式化类型',
-            `ordering` int not null default 0 comment '排序[由大到小]',
-            primary key (`key`),
-            index (`value_format`)
-        ) engine = innodb comment '用户可变自定义字段';",
-
-        "create table `y_user_meta_info` (
-            `user_id` bigint unsigned not null default 0 comment 'y_user_id',
-            `mete_key` char(255) not null default '' comment 'meta key',
-            `mete_value` varchar(1024) not null default '' comment 'meta value',
-            primary key (`user_id`),
-            index (`mete_key`)
-        ) engine = innodb comment '用户可变自定义信息';"
 
     ];
 

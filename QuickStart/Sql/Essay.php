@@ -14,7 +14,7 @@ class Essay
             `description` varchar(1024) not null default '' comment '描述',
             `logo` json comment '分类logo图',
             `status` tinyint not null default 1 comment '状态[-1审核驳回,1待审核,2审核通过]',
-            `ordering` int not null default 0 comment '排序[由大到小]',
+            `ordering` int not null default 0 comment '排序[降序]',
             primary key (`id`),
             unique key (`upper_id`, `name`),
             index (`level`),
@@ -27,7 +27,7 @@ class Essay
             `description` varchar(1024) not null default '' comment '描述',
             `logo` json comment '分类logo图',
             `status` tinyint not null default 1 comment '状态[-1审核驳回,1待审核,2审核通过]',
-            `ordering` int not null default 0 comment '排序[由大到小]',
+            `ordering` int not null default 0 comment '排序[降序]',
             primary key (`id`),
             unique key (`name`),
             index (`status`)
@@ -41,7 +41,7 @@ class Essay
             `status` tinyint not null default 1 comment '状态[-1审核驳回,1待审核,2审核通过]',
             `views` bigint unsigned not null default 0 comment '浏览量',
             `data` json comment '文章数据',
-            `ordering` int not null default 0 comment '排序[由大到小]',
+            `ordering` int not null default 0 comment '排序[降序]',
             primary key (`id`),
             index (`type`,`type_id`,`category_id`,`status`)
         ) engine = innodb comment '文章';",
