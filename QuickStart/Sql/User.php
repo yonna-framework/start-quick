@@ -34,7 +34,7 @@ class User
         ) engine = innodb comment '用户账号数据';",
 
         "create table `y_user_license` (
-            `user_id` bigint unsigned not null comment 'user_id',
+            `user_id` bigint unsigned not null comment 'y_user_id',
             `license_id` char(255) not null default '' comment 'y_license_id',
             `start_datetime` datetime not null default '1970-01-01 00:00:00' comment '起效时间',
             `end_datetime` datetime not null default '1970-01-01 00:00:00' comment '过期时间',
@@ -42,14 +42,14 @@ class User
         ) engine = innodb comment '用户许可证数据';",
 
         "create table `y_user_identity`(
-            `user_id` bigint unsigned not null comment '用户user_id',
+            `user_id` bigint unsigned not null comment 'y_user_id',
             `name` char(255) not null default '' comment '身份证姓名（真实姓名）',
             `card_no` char(255) not null default '' comment '身份证号',
             `card_pic_front` json comment '身份证正面',
             `card_pic_back` json comment '身份证背面',
             `card_pic_take` json comment '身份证手持',
             `card_expire_date` date not null default '1970-01-01' comment '身份证过期日期',
-            `auth_status` tinyint not null default -1 comment '实名认证状态[-1未认证,-2未通过,1认证中,3已认证]',
+            `auth_status` tinyint not null default 1 comment '实名认证状态[-1未通过,1待认证,2认证中,10已认证]',
             `auth_reject_reason` varchar(1024) not null default '' comment '实名认证拒绝理由',
             primary key (`user_id`)
         ) engine = innodb comment '用户身份证拓展';",
@@ -57,16 +57,16 @@ class User
         "create table `y_user_meta` (
             `key` char(255) not null default '' comment 'meta key',
             `type` char(255) not null default '' comment '类型',
-            `ordering` int not null default 0 comment '排序,升序',
+            `ordering` int not null default 0 comment '排序[由大到小]',
             primary key (`key`),
             index (`type`)
         ) engine = innodb comment '用户可变自定义字段';",
 
-        "create table `user_meta_info` (
-            `user_id` bigint unsigned not null default 0 comment '用户user_id',
+        "create table `y_user_meta_info` (
+            `user_id` bigint unsigned not null default 0 comment 'y_user_id',
             `mete_key` char(255) not null default '' comment 'meta key',
-            `mete_value` varchar(2048) not null default '' comment 'meta value',
-            `ordering` int not null default 0 comment '排序,升序',
+            `mete_value` varchar(1024) not null default '' comment 'meta value',
+            `ordering` int not null default 0 comment '排序[由大到小]',
             primary key (`user_id`),
             index (`mete_key`)
         ) engine = innodb comment '用户可变自定义信息';"
