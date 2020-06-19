@@ -4,7 +4,7 @@ namespace Yonna\QuickStart\Sql;
 
 class I18n
 {
-    const mysql = "CREATE TABLE IF NOT EXISTS `%s`(
+    const mysql = "CREATE TABLE `y_i18n`(
                         `unique_key` char(255) NOT NULL DEFAULT '' COMMENT '验证key',
                         `zh_cn`      char(255) NOT NULL DEFAULT '' COMMENT '简体中文',
                         `zh_hk`      char(255) NOT NULL DEFAULT '' COMMENT '香港繁体',
@@ -13,10 +13,10 @@ class I18n
                         `ja_jp`      char(255) NOT NULL DEFAULT '' COMMENT '日本语',
                         `ko_kr`      char(255) NOT NULL DEFAULT '' COMMENT '韩国语',
                         PRIMARY KEY (`unique_key`)
-                    ) ENGINE = INNODB COMMENT 'i18n by yonna';";
+                    ) ENGINE = INNODB COMMENT 'yonna i18n';";
 
 
-    const pgsql = "CREATE TABLE IF NOT EXISTS `%s`(
+    const pgsql = "CREATE TABLE `y_i18n`(
                         `unique_key` text NOT NULL DEFAULT '',
                         `zh_cn`      text NOT NULL DEFAULT '',
                         `zh_hk`      text NOT NULL DEFAULT '',
@@ -25,5 +25,5 @@ class I18n
                         `ja_jp`      text NOT NULL DEFAULT '',
                         `ko_kr`      text NOT NULL DEFAULT '',
                         PRIMARY KEY (`unique_key`)
-                    ) ENGINE = INNODB COMMENT 'i18n by yonna';";
+                    ) ENGINE = INNODB COMMENT 'yonna i18n';";
 }
