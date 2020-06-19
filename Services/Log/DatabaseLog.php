@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Log;
+namespace Yonna\Services\Log;
 
 
 use Exception;
@@ -9,7 +9,7 @@ use Yonna\Database\DB;
 use Yonna\Database\Driver\Mongo;
 use Yonna\Database\Driver\Mysql;
 use Yonna\Database\Driver\Pgsql;
-use Yonna\QuickStart\Sql\Log as LogSql;
+use Yonna\Services\I18n\Sql;
 
 class DatabaseLog
 {
@@ -55,9 +55,9 @@ class DatabaseLog
         $db = DB::connect($this->config);
         try {
             if ($db instanceof Mysql) {
-                $db->query(LogSql::mysql);
+                $db->query(Sql::mysql);
             } elseif ($db instanceof Pgsql) {
-                $db->query(LogSql::pgsql);
+                $db->query(Sql::pgsql);
             }
         } catch (Throwable $e) {
             Log::file()->throwable($e);

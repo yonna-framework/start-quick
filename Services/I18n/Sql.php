@@ -1,8 +1,8 @@
 <?php
 
-namespace Yonna\QuickStart\Sql;
+namespace Yonna\Services\I18n;
 
-class I18n
+class Sql
 {
     const mysql = "CREATE TABLE `y_i18n`(
                         `unique_key` char(255) NOT NULL DEFAULT '' COMMENT '验证key',

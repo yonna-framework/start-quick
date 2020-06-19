@@ -6,7 +6,7 @@ use Yonna\IO\Request;
 use Yonna\Middleware\Before;
 use Yonna\Throwable\Exception;
 
-class Sign extends Before
+class Login extends Before
 {
 
     /**

@@ -5,9 +5,9 @@ namespace Yonna\QuickStart\Scope;
 use Yonna\IO\Request;
 use Yonna\QuickStart\Config as QuickStartConfig;
 use Yonna\Scope\Config;
-use Yonna\Log\Config as LogConf;
-use Yonna\Log\DatabaseLog;
-use Yonna\Log\Log as LogLib;
+use Yonna\Services\Log\Config as LogConf;
+use Yonna\Services\Log\DatabaseLog;
+use Yonna\Services\Log\Log as LogLib;
 
 class Log
 {

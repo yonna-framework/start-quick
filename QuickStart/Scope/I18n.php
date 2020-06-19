@@ -6,7 +6,7 @@ use Yonna\IO\Request;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\Scope\Config;
 use Yonna\QuickStart\Config as QuickStartConfig;
-use Yonna\I18n\I18n as I18nModule;
+use Yonna\Services\I18n\I18n as I18nServices;
 use Yonna\Throwable\Exception\DatabaseException;
 
 
@@ -22,7 +22,7 @@ class I18n
         $file = QuickStartConfig::getAppRoot() . '/i18n';
         if (!is_file($file)) {
             file_put_contents($file, '');
-            (new I18nModule())->initDatabase();
+            (new I18nServices())->initDatabase();
         }
     }
 
@@ -37,10 +37,10 @@ class I18n
                     Config::delete('set', function (Request $request) {
                         $input = $request->getInput();
                         $data = [];
-                        foreach (I18nModule::ALLOW_LANG as $lang) {
+                        foreach (I18nServices::ALLOW_LANG as $lang) {
                             $data[$lang] = $input[$lang] ?? '';
                         }
-                        (new I18nModule())->set($input['unique_key'], $data);
+                        (new I18nServices())->set($input['unique_key'], $data);
                         return true;
                     });
                 });
@@ -48,14 +48,14 @@ class I18n
         );
         Config::group(['i18n'], function () {
             Config::put('backup', function () {
-                return (new I18nModule())->backup();
+                return (new I18nServices())->backup();
             });
             Config::post('all', function () {
-                return (new I18nModule())->get();
+                return (new I18nServices())->get();
             });
             Config::post('page', function (Request $request) {
                 $input = $request->getInput();
-                return (new I18nModule())->page(
+                return (new I18nServices())->page(
                     $input['current'] ?? 1,
                     $input['per'] ?? 10,
                     [

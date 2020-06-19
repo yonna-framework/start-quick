@@ -1,10 +1,10 @@
 <?php
 
-namespace Yonna\I18n;
+namespace Yonna\Services\I18n;
 
 /**
  * Class Result
- * @package Yonna\I18n
+ * @package Yonna\Services\I18n
  */
 class Result
 {

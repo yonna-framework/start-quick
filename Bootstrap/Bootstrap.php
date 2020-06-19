@@ -12,7 +12,7 @@ use Yonna\IO\RequestBuilder;
 use Yonna\Throwable\Exception;
 use Yonna\IO\IO;
 use Yonna\IO\Request;
-use Yonna\Log\FileLog;
+use Yonna\Services\Log\FileLog;
 use Yonna\Response\Collector;
 use Yonna\Response\Response;
 

@@ -6,7 +6,7 @@ use MongoDB\Driver\Command;
 use MongoDB\Driver\Server;
 use PDO;
 use Yonna\Database\Support\Record;
-use Yonna\Log\Log;
+use Yonna\Services\Log\Log;
 use Yonna\Throwable\Exception;
 
 abstract class AbstractDB

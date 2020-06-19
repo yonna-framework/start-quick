@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\I18n;
+namespace Yonna\Services\I18n;
 
 use Throwable;
 use Yonna\Database\DB;
@@ -10,9 +10,8 @@ use Yonna\Database\Driver\Pdo\Where as Pw;
 use Yonna\Database\Driver\Mdo\Where as Mw;
 use Yonna\Database\Driver\Pgsql;
 use Yonna\Database\Driver\Redis;
-use Yonna\Log\Log;
+use Yonna\Services\Log\Log;
 use Yonna\Throwable\Exception;
-use Yonna\QuickStart\Sql\I18n as I18nSql;
 
 class I18n
 {
@@ -224,11 +223,11 @@ class I18n
             $db->collection("y_i18n")->drop(true);
             $db->collection("y_i18n")->insertAll($i18nData);
         } elseif ($db instanceof Mysql) {
-            $db->query(I18nSql::mysql);
+            $db->query(Sql::mysql);
             DB::connect($this->config)->table('y_i18n')->truncate(true); //截断清空
             DB::connect($this->config)->table('y_i18n')->insertAll($i18nData);
         } elseif ($db instanceof Pgsql) {
-            $db->query(I18nSql::pgsql);
+            $db->query(Sql::pgsql);
             DB::connect($this->config)->schemas('public')->table('y_i18n')->truncate(true); //截断清空
             DB::connect($this->config)->schemas('public')->table('y_i18n')->insertAll($i18nData);
         } else {

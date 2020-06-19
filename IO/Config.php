@@ -6,7 +6,7 @@ use Yonna\Foundation\System;
 
 /**
  * Class Config
- * @package Yonna\Log
+ * @package Yonna\Services\Log
  */
 class Config
 {

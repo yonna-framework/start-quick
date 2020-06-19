@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Log;
+namespace Yonna\Services\Log;
 
 use Throwable;
 use Yonna\Foundation\System;

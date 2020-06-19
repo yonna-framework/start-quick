@@ -1,10 +1,10 @@
 <?php
 
 
-use Yonna\Log\DatabaseLog;
+use Yonna\Services\Log\DatabaseLog;
 use Yonna\QuickStart\Config as QuickStartConfig;
 use Yonna\QuickStart\Middleware\Limiter;
-use Yonna\QuickStart\Middleware\Sign;
+use Yonna\QuickStart\Middleware\Login;
 use Yonna\Scope\Config;
 use App\Scope\User\Fetch;
 use App\Scope\User\Modify;
@@ -35,7 +35,7 @@ class User
             function () {
                 Config::group(['user', 'login'], function () {
 
-                    Config::post('admin', Sign::class, 'in');
+                    Config::post('admin', Login::class, 'in');
 
                 });
             }
@@ -43,7 +43,7 @@ class User
 
         Config::group(['system', 'data'], function () {
 
-            Config::post('getInfoByKey', Sign::class, 'infoByKey');
+            Config::post('getInfoByKey', Login::class, 'infoByKey');
 
         });
 
@@ -53,7 +53,7 @@ class User
 
         Config::middleware( // check auth
             [
-                Sign::class,
+                Login::class,
             ],
             function () {
 
@@ -62,7 +62,7 @@ class User
                 });
                 Config::group('user', function () {
 
-                    Config::post('logout', Sign::class, 'out');
+                    Config::post('logout', Login::class, 'out');
 
                     Config::post('list', Fetch::class, 'list');
                     Config::post('info', Fetch::class, 'info');

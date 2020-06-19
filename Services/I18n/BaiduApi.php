@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\I18n;
+namespace Yonna\Services\I18n;
 
 use Closure;
 use GuzzleHttp\Client;
@@ -11,7 +11,7 @@ use Throwable;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Redis;
 use Yonna\Foundation\Str;
-use Yonna\Log\Log;
+use Yonna\Services\Log\Log;
 use Yonna\Throwable\Exception;
 
 class BaiduApi

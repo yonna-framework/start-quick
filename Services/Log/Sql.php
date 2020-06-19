@@ -1,8 +1,8 @@
 <?php
 
-namespace Yonna\QuickStart\Sql;
+namespace Yonna\Services\Log\Sql;
 
-class Log
+class Sql
 {
     const mysql = "CREATE TABLE `y_log`(
                         `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\I18n;
+namespace Yonna\Services\I18n;
 
 use Yonna\Foundation\System;
 
