@@ -26,7 +26,7 @@ class User
         "create table `y_user_meta_category` (
             `key` char(255) not null default '' comment 'meta key',
             `value_format` char(255) not null default '' comment '数据格式化类型',
-            `status` tinyint not null default -1 comment '状态[-3冻结,-2审核驳回,1待审核,2审核通过]',
+            `status` tinyint not null default -1 comment '状态[-1无效,1有效]',
             `ordering` int not null default 0 comment '排序[降序]',
             primary key (`key`),
             index (`value_format`),
@@ -45,7 +45,7 @@ class User
             `id` bigint unsigned auto_increment not null comment '许可id',
             `upper_id` bigint unsigned not null default 0 comment 'y_license_id',
             `name` char(255) not null default '' comment '许可名字',
-            `api` varchar(2048) not null default '' comment '许可支持的api',
+            `allow_scope` varchar(2048) not null default '' comment '许可支持的allow_scope',
             primary key (`id`),
             unique key (`name`),
             index (`upper_id`)

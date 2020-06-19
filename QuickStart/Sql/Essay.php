@@ -38,7 +38,7 @@ class Essay
             `uid` bigint unsigned not null default 0 comment 'y_user_uid',
             `type_id` bigint unsigned not null default 0 comment 'y_essay_type_id',
             `category_id` bigint unsigned not null default 0 comment 'y_essay_category_id',
-            `status` tinyint not null default 1 comment '状态[-1审核驳回,1待审核,2审核通过]',
+            `status` tinyint not null default 1 comment '状态[ ]',
             `views` bigint unsigned not null default 0 comment '浏览量',
             `data` json comment '文章数据',
             `ordering` int not null default 0 comment '排序[降序]',
