@@ -85,6 +85,57 @@ class FileLog
     }
 
     /**
+     * @param $dir
+     * @return array
+     */
+    private function explodeDir($dir)
+    {
+        $file_arr = scandir($dir);
+        $new_arr = [];
+        foreach ($file_arr as $f) {
+            if ($f != ".." && $f != ".") {
+                if (is_dir($dir . DIRECTORY_SEPARATOR . $f)) {
+                    array_unshift($new_arr, [
+                        'path' => $f,
+                        'children' => $this->explodeDir($dir . DIRECTORY_SEPARATOR . $f)
+                    ]);
+                } else {
+                    $new_arr[] = [
+                        'path' => $f,
+                    ];
+                }
+            }
+        }
+        return $new_arr;
+    }
+
+    /**
+     * 文件目录
+     * @return array
+     */
+    public function catalog()
+    {
+        $dir = realpath(Config::getFilePathRoot() . DIRECTORY_SEPARATOR . Config::getFileDirName());
+        if (!$dir) return [];
+        return $this->explodeDir($dir);
+    }
+
+    /**
+     * 文件内容
+     * @param $fileName
+     * @return string
+     */
+    public function fileContent($fileName)
+    {
+        $file = realpath(Config::getFilePathRoot() . DIRECTORY_SEPARATOR . Config::getFileDirName() . DIRECTORY_SEPARATOR . $fileName);
+        if (!is_file($file)) {
+            return '';
+        }
+        $content = file_get_contents($file);
+        return str_replace(["\r\n", "\r", "\n", "\t"], '<br/>', $content);
+    }
+
+    /**
      * 写入日志
      * @param $type
      * @param array $data

@@ -66,13 +66,11 @@ class DatabaseLog
 
     /**
      * 分页获得数据
-     * @param array $options
+     * @param Prism $prism
      * @return array
      */
-    public function page($options = [])
+    public function page(Prism $prism)
     {
-        $current = $options['current'] ?? 1;
-        $per = $options['per'] ?? 10;
         $res = [];
         try {
             $db = DB::connect($this->config);
@@ -86,16 +84,10 @@ class DatabaseLog
                 throw new Exception('Set Database for Support Driver.');
             }
             $obj = $obj->orderBy('record_timestamp', 'desc');
-            if (!empty($options['key'])) {
-                $obj = $obj->equalTo('key', $options['key']);
-            }
-            if (!empty($options['type'])) {
-                $obj = $obj->equalTo('type', $options['key']);
-            }
-            if (!empty($options['record_timestamp'])) {
-                $obj = $obj->between('record_timestamp', $options['record_timestamp']);
-            }
-            $res = $obj->page($current, $per);
+            $prism->getKey() && $obj = $obj->equalTo('key', $prism->getKey());
+            $prism->getType() && $obj = $obj->equalTo('type', $prism->getType());
+            $prism->getRecordTimestamp() && $obj = $obj->between('record_timestamp', $prism->getRecordTimestamp());
+            $res = $obj->page($prism->getCurrent(), $prism->getPer());
         } catch (Throwable $e) {
             Log::file()->throwable($e, 'log_db');
         }

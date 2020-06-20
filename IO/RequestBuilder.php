@@ -1251,11 +1251,12 @@ class RequestBuilder
     }
 
     /**
-     * @return array
+     * @param string $name
+     * @return mixed
      */
-    public function getInput(): array
+    public function getInput(string $name = '')
     {
-        return $this->input;
+        return $name === '' ? $this->input : ($this->input[$name] ?? null);
     }
 
     /**
