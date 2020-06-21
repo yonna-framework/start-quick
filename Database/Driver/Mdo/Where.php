@@ -3,30 +3,24 @@
 namespace Yonna\Database\Driver\Mdo;
 
 use Closure;
-use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\Regex;
-use Yonna\Database\Driver\AbstractMDO;
-use Yonna\Throwable\Exception;
 
 /**
  * Class Where
- * @package Yonna\Database\Driver\Mdo
  */
-class Where extends AbstractMDO
+class Where
 {
-    use TraitOperat;
 
     /**
      * filter -> where
      * @var array
      */
-    protected $filter = [];
+    protected array $filter = [];
 
     /**
      * where条件对象，实现闭包
      * @var array
      */
-    private $closure = [];
+    private array $closure = [];
 
     /**
      * where 条件类型设置
@@ -65,88 +59,6 @@ class Where extends AbstractMDO
     ];
 
     /**
-     * 构造方法
-     *
-     * @param array $options
-     */
-    public function __construct(array $options)
-    {
-        parent::__construct($options);
-    }
-
-    /**
-     * 析构方法
-     * @access public
-     */
-    public function __destruct()
-    {
-        parent::__destruct();
-    }
-
-    /**
-     * 清除所有数据
-     */
-    protected function resetAll()
-    {
-        $this->closure = [];
-        parent::resetAll();
-    }
-
-    /**
-     * where分析
-     * @return array
-     * @throws null
-     */
-    protected function parseWhere()
-    {
-        if (!$this->closure) {
-            return [];
-        }
-        return $this->builtFilter($this->closure);
-    }
-
-    /**
-     * value分析
-     * @access protected
-     * @param $field
-     * @param mixed $value
-     * @return string
-     */
-    protected function parseValue($field, $value)
-    {
-        if ($field === "_id") {
-            $value = new ObjectId($value);
-        } elseif (is_array($value)) {
-            foreach ($value as $k => $v) {
-                $field[$k] = $this->parseValue($k, $v);
-            }
-        }
-        return $value;
-    }
-
-    /**
-     * value分析
-     * @access protected
-     * @param $filter
-     * @return string
-     */
-    protected function getFilterStr($filter)
-    {
-        if (!$filter) {
-            return '{}';
-        }
-        $str = json_encode($filter, JSON_UNESCAPED_UNICODE);
-        preg_match_all('/{"\$oid":"(.*)"}/', $str, $match);
-        if ($match[0]) {
-            foreach ($match[0] as $mk => $m) {
-                $str = str_replace($m, 'ObjectId("__YONNA_MONGO_OBJECT_FUNC__")', $str);
-                $str = str_replace('__YONNA_MONGO_OBJECT_FUNC__', $match[1][$mk], $str);
-            }
-        }
-        return $str;
-    }
-
-    /**
      * @param string $operat see self
      * @param string $field
      * @param null $value
@@ -167,76 +79,6 @@ class Where extends AbstractMDO
         return $this;
     }
 
-    /**
-     * 构建where的Filter句
-     * @param $closure
-     * @param array $filter
-     * @param string $cond
-     * @return array
-     * @throws Exception\DatabaseException
-     */
-    private function builtFilter($closure, $filter = [], $cond = 'and')
-    {
-        foreach ($closure as $v) {
-            switch ($v['type']) {
-                case 'closure':
-                    $filter = $this->builtFilter($v['value']->getClosure(), $filter, $v['cond']);
-                    break;
-                case 'array':
-                    foreach ($v['value'] as $ka => $va) {
-                        $va = $this->parseValue($ka, $va);
-                        $filter[$ka] = $va;
-                    }
-                    break;
-                case 'chip':
-                default:
-                    if (!isset($filter[$v['field']])) {
-                        $filter[$v['field']] = [];
-                    }
-                    $value = $this->parseValue($v['field'], $v['value']);
-                    switch ($v['operat']) {
-                        case self::regex:
-                            $value = new Regex($value);
-                            break;
-                        case self::like:
-                        case self::notLike:
-                            $t = substr($value, 0, 1) === '%';
-                            $e = substr($value, -1) === '%';
-                            if ($t && $e) {
-                                $value = substr($value, 1, strlen($value) - 2);
-                            } elseif ($t) {
-                                $value = substr($value, 1);
-                                $value = "{$value}$";
-                            } elseif ($e) {
-                                $value = substr($value, 0, strlen($value) - 1);
-                                $value = "^{$value}";
-                            }
-                            $value = new Regex($value);
-                            break;
-                        case self::isNull:
-                        case self::isNotNull:
-                            $value = null;
-                            break;
-                        default:
-                            break;
-                    }
-                    if (strpos('not', strtolower($v['operat'])) !== false) {
-                        $value = ['$not' => $value];
-                    }
-                    if ($v['operat'] === self::isNull) {
-                        $filter[$v['field']] = $value;
-                    } else {
-                        $filter[$v['field']][self::operatVector[$v['operat']]] = $value;
-                    }
-                    break;
-            }
-        }
-        $f = [];
-        foreach ($filter as $kf => $vf) {
-            $f[] = [$kf => $vf];
-        }
-        return ["\${$cond}" => $f];
-    }
 
     /**
      * @param $field
@@ -431,7 +273,7 @@ class Where extends AbstractMDO
      */
     public function and(Closure $cells)
     {
-        $nw = new self($this->options);
+        $nw = new self();
         $cells($nw);
         $this->closure[] = ['type' => 'closure', 'cond' => 'and', 'value' => $nw];
         return $this;
@@ -444,7 +286,7 @@ class Where extends AbstractMDO
      */
     public function or(Closure $cells)
     {
-        $nw = new self($this->options);
+        $nw = new self();
         $cells($nw);
         $this->closure[] = ['type' => 'closure', 'cond' => 'or', 'value' => $nw];
         return $this;
@@ -457,7 +299,7 @@ class Where extends AbstractMDO
      */
     public function nor(Closure $cells)
     {
-        $nw = new self($this->options);
+        $nw = new self();
         $cells($nw);
         $this->closure[] = ['type' => 'closure', 'cond' => 'nor', 'value' => $nw];
         return $this;

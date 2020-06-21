@@ -2,11 +2,14 @@
 
 namespace Yonna\Database\Driver;
 
+use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Query;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\Exception\BulkWriteException;
 use Yonna\Database\Driver\Mdo\Client;
+use Yonna\Database\Driver\Mdo\Where;
 use Yonna\Throwable\Exception;
 
 /**
@@ -18,15 +21,9 @@ abstract class AbstractMDO extends AbstractDB
 {
 
     /**
-     * filter -> where
      * @var array
      */
-    protected $filter = [];
-
-    /**
-     * @var array
-     */
-    protected $data = [];
+    protected array $data = [];
 
     /**
      * 架构函数 取得模板对象实例
@@ -64,13 +61,107 @@ abstract class AbstractMDO extends AbstractDB
     }
 
     /**
+     * where-value分析
+     * @access protected
+     * @param $field
+     * @param mixed $value
+     * @return string
+     */
+    protected function parseWhereValue($field, $value)
+    {
+        if ($field === "_id") {
+            $value = new ObjectId($value);
+        } elseif (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $field[$k] = $this->parseWhereValue($k, $v);
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * 构建where的Filter句
+     * @param $closure
+     * @param array $filter
+     * @param string $cond
+     * @return array
+     * @throws Exception\DatabaseException
+     */
+    private function builtFilter($closure, $filter = [], $cond = 'and')
+    {
+        foreach ($closure as $v) {
+            switch ($v['type']) {
+                case 'closure':
+                    $filter = $this->builtFilter($v['value']->getClosure(), $filter, $v['cond']);
+                    break;
+                case 'array':
+                    foreach ($v['value'] as $ka => $va) {
+                        $va = $this->parseWhereValue($ka, $va);
+                        $filter[$ka] = $va;
+                    }
+                    break;
+                case 'chip':
+                default:
+                    if (!isset($filter[$v['field']])) {
+                        $filter[$v['field']] = [];
+                    }
+                    $value = $this->parseWhereValue($v['field'], $v['value']);
+                    switch ($v['operat']) {
+                        case Where::regex:
+                            $value = new Regex($value);
+                            break;
+                        case Where::like:
+                        case Where::notLike:
+                            $t = substr($value, 0, 1) === '%';
+                            $e = substr($value, -1) === '%';
+                            if ($t && $e) {
+                                $value = substr($value, 1, strlen($value) - 2);
+                            } elseif ($t) {
+                                $value = substr($value, 1);
+                                $value = "{$value}$";
+                            } elseif ($e) {
+                                $value = substr($value, 0, strlen($value) - 1);
+                                $value = "^{$value}";
+                            }
+                            $value = new Regex($value);
+                            break;
+                        case Where::isNull:
+                        case Where::isNotNull:
+                            $value = null;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (strpos('not', strtolower($v['operat'])) !== false) {
+                        $value = ['$not' => $value];
+                    }
+                    if ($v['operat'] === Where::isNull) {
+                        $filter[$v['field']] = $value;
+                    } else {
+                        $filter[$v['field']][Where::operatVector[$v['operat']]] = $value;
+                    }
+                    break;
+            }
+        }
+        $f = [];
+        foreach ($filter as $kf => $vf) {
+            $f[] = [$kf => $vf];
+        }
+        return ["\${$cond}" => $f];
+    }
+
+    /**
      * where分析
      * 这个where需要被继承的where覆盖才会有效
      * @return array
+     * @throws Exception\DatabaseException
      */
     protected function parseWhere()
     {
-        return [];
+        if (empty($this->options['where'])) {
+            return [];
+        }
+        return $this->builtFilter($this->options['where']);
     }
 
     /**
@@ -81,7 +172,18 @@ abstract class AbstractMDO extends AbstractDB
      */
     protected function getFilterStr($filter)
     {
-        return '{}';
+        if (!$filter) {
+            return '{}';
+        }
+        $str = json_encode($filter, JSON_UNESCAPED_UNICODE);
+        preg_match_all('/{"\$oid":"(.*)"}/', $str, $match);
+        if ($match[0]) {
+            foreach ($match[0] as $mk => $m) {
+                $str = str_replace($m, 'ObjectId("__YONNA_MONGO_OBJECT_FUNC__")', $str);
+                $str = str_replace('__YONNA_MONGO_OBJECT_FUNC__', $match[1][$mk], $str);
+            }
+        }
+        return $str;
     }
 
     /**

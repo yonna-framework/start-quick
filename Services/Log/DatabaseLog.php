@@ -9,7 +9,6 @@ use Yonna\Database\DB;
 use Yonna\Database\Driver\Mongo;
 use Yonna\Database\Driver\Mysql;
 use Yonna\Database\Driver\Pgsql;
-use Yonna\Services\I18n\Sql;
 
 class DatabaseLog
 {
@@ -83,11 +82,17 @@ class DatabaseLog
             } else {
                 throw new Exception('Set Database for Support Driver.');
             }
-            $obj = $obj->orderBy('record_timestamp', 'desc');
-            $prism->getKey() && $obj = $obj->equalTo('key', $prism->getKey());
-            $prism->getType() && $obj = $obj->equalTo('type', $prism->getType());
-            $prism->getRecordTimestamp() && $obj = $obj->between('record_timestamp', $prism->getRecordTimestamp());
-            $res = $obj->page($prism->getCurrent(), $prism->getPer());
+            $obj->orderBy('record_timestamp', 'desc');
+            $obj->where(function ($cond) use ($prism) {
+                /**
+                 * @var \Yonna\Database\Driver\Pdo\Where|\Yonna\Database\Driver\Mdo\Where $cond
+                 */
+                $prism->getKey() && $cond->equalTo('key', $prism->getKey());
+                $prism->getType() && $cond->equalTo('type', $prism->getType());
+                $prism->getRecordTimestamp() && $cond->between('record_timestamp', $prism->getRecordTimestamp());
+                $cond->or(fn($cond) => $cond->equalTo('key', 1)->equalTo('key', 2));
+            });
+            $res = $obj->fetchQuery()->page($prism->getCurrent(), $prism->getPer());
         } catch (Throwable $e) {
             Log::file()->throwable($e, 'log_db');
         }

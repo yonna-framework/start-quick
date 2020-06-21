@@ -171,7 +171,9 @@ class I18n
                                                 $xv[$mrk] = $mr;
                                             }
                                         }
-                                        $db->collection('y_i18n')->equalTo('unique_key', $xk)->update($xv);
+                                        $db->collection('y_i18n')
+                                            ->where(fn($cond) => $cond->equalTo('unique_key', $xk))
+                                            ->update($xv);
                                     } elseif ($db instanceof Mysql) {
                                         $db->table('y_i18n')->equalTo('unique_key', $xk)->update($xv);
                                     } elseif ($db instanceof Pgsql) {
@@ -220,15 +222,12 @@ class I18n
         }
         $db = DB::connect($this->config);
         if ($db instanceof Mongo) {
-            $db->collection("y_i18n")->drop(true);
             $db->collection("y_i18n")->insertAll($i18nData);
         } elseif ($db instanceof Mysql) {
             $db->query(Sql::mysql);
-            DB::connect($this->config)->table('y_i18n')->truncate(true); //截断清空
             DB::connect($this->config)->table('y_i18n')->insertAll($i18nData);
         } elseif ($db instanceof Pgsql) {
             $db->query(Sql::pgsql);
-            DB::connect($this->config)->schemas('public')->table('y_i18n')->truncate(true); //截断清空
             DB::connect($this->config)->schemas('public')->table('y_i18n')->insertAll($i18nData);
         } else {
             Exception::database('Set Database for Support Driver.');
@@ -306,7 +305,7 @@ class I18n
             return $res;
         }
         if (!empty($filter['unique_key'])) {
-            $obj = $obj->equalTo('unique_key', $filter['unique_key']);
+            $obj->equalTo('unique_key', $filter['unique_key']);
         }
         $res = $obj->page($current, $per);
         return $res;

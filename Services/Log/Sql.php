@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Services\Log\Sql;
+namespace Yonna\Services\Log;
 
 class Sql
 {
