@@ -16,7 +16,7 @@ use swoole_http_server;
 class SwooleHttp extends Console
 {
 
-    private $server = null;
+    private ?swoole_http_server $server = null;
     private string $root_path;
     private array $options;
 
@@ -45,8 +45,8 @@ class SwooleHttp extends Console
     private function requestBuilder(...$options): RequestBuilder
     {
         $server = $options[0];
-        $task_id = $options[1];
-        $from_id = $options[2];
+        // $task_id = $options[1];
+        // $from_id = $options[2];
         $request = $options[3];
         /**
          * @var RequestBuilder $requestBuilder

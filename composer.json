@@ -48,6 +48,7 @@
     "ext-iconv": "*",
     "ext-sockets": "*",
     "ext-mbstring": "*",
+    "ext-simplexml": "*",
     "php": "~7.4"
   },
   "type": "library"

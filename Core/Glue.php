@@ -11,7 +11,7 @@ class Glue
     /**
      * 类粘合
      */
-    protected static $glue = [];
+    protected static array $glue = [];
 
     /**
      * 获取所有粘合体

@@ -27,7 +27,13 @@ class Color
     const REVERSE = "7";
     const HIDDEN = "8";
 
-    private static function wrap($msg, $color, $style = array())
+    /**
+     * @param string $msg
+     * @param string $color
+     * @param array $style
+     * @return string
+     */
+    private static function wrap(string $msg, string $color, array $style = [])
     {
         $str = "\033[";
         if (!empty($style)) {
@@ -41,82 +47,82 @@ class Color
         return $str;
     }
 
-    public static function black($msg, $style = array())
+    public static function black(string $msg, array $style = [])
     {
         return self::wrap($msg, self::BLACK, $style);
     }
 
-    public static function red($msg, $style = array())
+    public static function red(string $msg, array $style = [])
     {
         return self::wrap($msg, self::RED, $style);
     }
 
-    public static function green($msg, $style = array())
+    public static function green(string $msg, array $style = [])
     {
         return self::wrap($msg, self::GREEN, $style);
     }
 
-    public static function yellow($msg, $style = array())
+    public static function yellow(string $msg, array $style = [])
     {
         return self::wrap($msg, self::YELLOW, $style);
     }
 
-    public static function blue($msg, $style = array())
+    public static function blue(string $msg, array $style = [])
     {
         return self::wrap($msg, self::BLUE, $style);
     }
 
-    public static function magenta($msg, $style = array())
+    public static function magenta(string $msg, array $style = [])
     {
         return self::wrap($msg, self::MAGENTA, $style);
     }
 
-    public static function cyan($msg, $style = array())
+    public static function cyan(string $msg, array $style = [])
     {
         return self::wrap($msg, self::CYAN, $style);
     }
 
-    public static function lightGray($msg, $style = array())
+    public static function lightGray(string $msg, array $style = [])
     {
         return self::wrap($msg, self::LIGHT_GRAY, $style);
     }
 
-    public static function darkGray($msg, $style = array())
+    public static function darkGray(string $msg, array $style = [])
     {
         return self::wrap($msg, self::DARK_GRAY, $style);
     }
 
-    public static function lightRed($msg, $style = array())
+    public static function lightRed(string $msg, array $style = [])
     {
         return self::wrap($msg, self::LIGHT_RED, $style);
     }
 
-    public static function lightGreen($msg, $style = array())
+    public static function lightGreen(string $msg, array $style = [])
     {
         return self::wrap($msg, self::LIGHT_GREEN, $style);
     }
 
-    public static function lightYellow($msg, $style = array())
+    public static function lightYellow(string $msg, array $style = [])
     {
         return self::wrap($msg, self::LIGHT_YELLOW, $style);
     }
 
-    public static function lightBlue($msg, $style = array())
+    public static function lightBlue(string $msg, array $style = [])
     {
         return self::wrap($msg, self::LIGHT_BLUE, $style);
     }
 
-    public static function lightMagenta($msg, $style = array())
+    public static function lightMagenta(string $msg, array $style = [])
     {
         return self::wrap($msg, self::LIGHT_MAGENTA, $style);
     }
 
-    public static function lightCyan($msg, $style = array())
+    public static function lightCyan(string $msg, array $style = [])
     {
         return self::wrap($msg, self::LIGHT_CYAN, $style);
     }
 
-    public static function white($msg, $style = array())
+    public static function white(string $msg, array $style = [])
     {
         return self::wrap($msg, self::WHITE, $style);
     }

@@ -249,6 +249,7 @@ class Table extends AbstractPDO
 
     /**
      * where
+     * Multiple use will be cover
      * @param Closure $condition
      * @return self
      */

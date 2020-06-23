@@ -31,7 +31,7 @@ class RequestBuilder
     /**
      * @var Cargo
      */
-    protected $cargo = null;
+    protected ?Cargo $cargo = null;
 
     /**
      * origin set

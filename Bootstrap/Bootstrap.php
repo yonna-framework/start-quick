@@ -33,7 +33,7 @@ class Bootstrap
      * @return Collector
      * @throws null
      */
-    public function boot($root, $env_name, $boot_type, RequestBuilder $builder = null)
+    public function boot($root, $env_name, $boot_type, ?RequestBuilder $builder = null)
     {
         /**
          * clear env name

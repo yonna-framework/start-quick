@@ -4,8 +4,8 @@ namespace Yonna\Services\Log;
 
 class Log
 {
-    private static $fileLog = null;
-    private static $databaseLog = null;
+    private static ?FileLog $fileLog = null;
+    private static ?DatabaseLog $databaseLog = null;
 
     /**
      * @return FileLog|null
