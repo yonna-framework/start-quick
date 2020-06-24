@@ -7,6 +7,7 @@ use Yonna\Mapping\Mapping;
 class UserStatus extends Mapping
 {
 
+    const DELETE = -10;
     const FREEZE = -3;
     const REJECTION = -2;
     const PENDING = 1;

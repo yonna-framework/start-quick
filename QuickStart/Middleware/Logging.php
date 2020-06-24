@@ -4,10 +4,10 @@ namespace Yonna\QuickStart\Middleware;
 
 use Yonna\IO\Request;
 use Yonna\Middleware\Before;
-use Yonna\QuickStart\Services\User\Sign;
+use Yonna\Services\User\Sign;
 use Yonna\Throwable\Exception;
 
-class Login extends Before
+class Logging extends Before
 {
 
     /**

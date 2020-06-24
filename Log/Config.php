@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Services\Log;
+namespace Yonna\Log;
 
 class Config
 {
@@ -15,7 +15,7 @@ class Config
      * 日志文件目录名
      * @var string
      */
-    private static string $file_dir_name = 'yonna_log';
+    private static string $file_dir_name = 'y_log';
 
     /**
      * 文件日志的过期天数

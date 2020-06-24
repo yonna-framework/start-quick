@@ -1,15 +1,14 @@
 <?php
 
 
-use Yonna\Services\Log\DatabaseLog;
+use Yonna\Log\DatabaseLog;
+use Yonna\Services\User\Fetch;
+use Yonna\Services\User\Modify;
+use Yonna\Services\User\Sign;
 use Yonna\QuickStart\Config as QuickStartConfig;
 use Yonna\QuickStart\Middleware\Limiter;
-use Yonna\QuickStart\Middleware\Login;
+use Yonna\QuickStart\Middleware\Logging;
 use Yonna\Scope\Config;
-use App\Scope\User\Fetch;
-use App\Scope\User\Modify;
-
-//use App\Scope\User\Sign;
 
 class User
 {
@@ -28,32 +27,18 @@ class User
 
     public function install()
     {
-        Config::middleware(
-            [
-                Limiter::class,
-            ],
+
+        Config::middleware([Limiter::class],
             function () {
-                Config::group(['user', 'login'], function () {
-
-                    Config::post('admin', Login::class, 'in');
-
+                Config::group(['user', 'admin'], function () {
+                    Config::post('login', Sign::class, 'in');
                 });
             }
         );
 
-        Config::group(['system', 'data'], function () {
-
-            Config::post('getInfoByKey', Login::class, 'infoByKey');
-
-        });
-
-        Config::group(['project'], function () {
-            Config::post('stat', \App\Scope\Project\Fetch::class, 'stat');
-        });
-
         Config::middleware( // check auth
             [
-                Login::class,
+                Logging::class,
             ],
             function () {
 
@@ -62,7 +47,7 @@ class User
                 });
                 Config::group('user', function () {
 
-                    Config::post('logout', Login::class, 'out');
+                    Config::post('logout', Logging::class, 'out');
 
                     Config::post('list', Fetch::class, 'list');
                     Config::post('info', Fetch::class, 'info');

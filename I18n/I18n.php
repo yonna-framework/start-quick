@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Services\I18n;
+namespace Yonna\I18n;
 
 use Throwable;
 use Yonna\Database\DB;
@@ -10,7 +10,7 @@ use Yonna\Database\Driver\Pdo\Where as Pw;
 use Yonna\Database\Driver\Mdo\Where as Mw;
 use Yonna\Database\Driver\Pgsql;
 use Yonna\Database\Driver\Redis;
-use Yonna\Services\Log\Log;
+use Yonna\Log\Log;
 use Yonna\Throwable\Exception;
 
 class I18n

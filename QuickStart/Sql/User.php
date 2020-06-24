@@ -8,7 +8,7 @@ class User
 
         "create table `y_user`(
             `id` bigint unsigned auto_increment not null comment '用户id',
-            `status` tinyint not null default -1 comment '状态[-3冻结,-2审核驳回,1待审核,2审核通过]',
+            `status` tinyint not null default 1 comment '状态[-10注销,-3冻结,-2审核驳回,1待审核,2审核通过]',
             `password` char(255) not null default '' comment '登录密码，不一定有，如通过微信登录的就没有',
             `inviter_user_id` bigint not null default 0 comment '邀请用户id[y_user_id]',
             `register_datetime` datetime not null default '1970-01-01 00:00:00' comment '注册时间',

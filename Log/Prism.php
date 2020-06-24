@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Services\Log;
+namespace Yonna\Log;
 
 
 class Prism extends \Yonna\IO\Prism

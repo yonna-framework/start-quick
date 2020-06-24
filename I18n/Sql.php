@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Services\I18n;
+namespace Yonna\I18n;
 
 class Sql
 {

@@ -1,10 +1,11 @@
 <?php
 
-namespace Yonna\QuickStart\Services\User;
+namespace Yonna\Services\User;
 
-use App\Mapping\Common\IsSure;
 use App\Scope\AbstractScope;
+use QuickStart\Mapping\User\UserStatus;
 use Yonna\Database\DB;
+use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception\DatabaseException;
 
 class Fetch extends abstractScope
@@ -17,8 +18,9 @@ class Fetch extends abstractScope
      */
     public function list(): array
     {
-        $db = DB::connect()->table('user');
-        $db->notEqualTo('uid', 1)->notEqualTo('status', IsSure::no);
+        $db = DB::connect()
+            ->table('user')
+            ->where(fn(Where $cond) => $cond->notEqualTo('uid', 1)->notEqualTo('status', UserStatus::DELETE));
         $whereSet = [
             'user' => [
                 'equalTo' => [

@@ -11,7 +11,7 @@ use Yonna\Middleware\MiddlewareType;
 
 /**
  * Class Config
- * @package Yonna\Services\Log
+ * @package Yonna\Log
  */
 class Config
 {

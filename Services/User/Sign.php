@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\QuickStart\Services\User;
+namespace Yonna\Services\User;
 
 use App\Helper\Password;
 use App\Mapping\Common\IsSure;
@@ -9,7 +9,8 @@ use App\Mapping\User\Status;
 use App\Scope\AbstractScope;
 use Throwable;
 use Yonna\Database\DB;
-use Yonna\Services\Log\Log;
+use Yonna\Database\Driver\Pdo\Where;
+use Yonna\Log\Log;
 use Yonna\Throwable\Exception;
 
 /**
@@ -95,9 +96,11 @@ class Sign extends abstractScope
         $accounts = DB::connect()
             ->table('user_account')
             ->field('uid')
-            ->in('type', [AccountType::NAME, AccountType::PHONE, AccountType::EMAIL,])
-            ->equalTo('string', $account)
-            ->equalTo('allow_login', IsSure::yes)
+            ->where(function (Where $cond) {
+                $cond->in('type', [AccountType::NAME, AccountType::PHONE, AccountType::EMAIL])
+                    ->equalTo('string', $account)
+                    ->equalTo('allow_login', IsSure::yes);
+            })
             ->one();
         if (empty($accounts['user_account_uid'])) {
             Exception::params("Account does not exist");
@@ -150,7 +153,7 @@ class Sign extends abstractScope
             Exception::origin($e);
         }
         return [
-            'user_uid' => $uid,
+            'user_id' => $uid,
             'user_account' => $account,
             'user_status' => $userInfo['user_status'],
         ];

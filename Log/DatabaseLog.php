@@ -1,6 +1,6 @@
 <?php
 
-namespace Yonna\Services\Log;
+namespace Yonna\Log;
 
 
 use Exception;
