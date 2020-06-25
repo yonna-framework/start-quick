@@ -103,4 +103,10 @@ class Install
             });
         });
     }
+
+    // user装载
+    public static function user(): void
+    {
+
+    }
 }
