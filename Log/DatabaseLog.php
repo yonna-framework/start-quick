@@ -47,23 +47,6 @@ class DatabaseLog
     }
 
     /**
-     * 初始化数据库
-     */
-    public function initDatabase()
-    {
-        $db = DB::connect($this->config);
-        try {
-            if ($db instanceof Mysql) {
-                $db->query(Sql::mysql);
-            } elseif ($db instanceof Pgsql) {
-                $db->query(Sql::pgsql);
-            }
-        } catch (Throwable $e) {
-            Log::file()->throwable($e);
-        }
-    }
-
-    /**
      * 分页获得数据
      * @param Prism $prism
      * @return array

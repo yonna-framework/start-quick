@@ -13,17 +13,6 @@ use Yonna\Scope\Config;
 class User
 {
 
-    /**
-     * I18n constructor.
-     */
-    public function __construct()
-    {
-        $file = QuickStartConfig::getAppRoot() . '/user';
-        if (!is_file($file)) {
-            file_put_contents($file, '');
-            (new DatabaseLog())->initDatabase();
-        }
-    }
 
     public function install()
     {

@@ -205,11 +205,11 @@ class I18n
     }
 
     /**
-     * 初始化数据库
+     * 初始化数据
      * @return bool
      * @throws Exception\DatabaseException
      */
-    public function initDatabase()
+    public function init()
     {
         $fileData = [];
         foreach (self::ALLOW_LANG as $al) {
@@ -233,13 +233,14 @@ class I18n
         }
         $db = DB::connect($this->config);
         if ($db instanceof Mongo) {
+            @$db->collection("y_i18n")->drop(true);
             $db->collection("y_i18n")->insertAll($i18nData);
         } elseif ($db instanceof Mysql) {
-            $db->query(Sql::mysql);
-            DB::connect($this->config)->table('y_i18n')->insertAll($i18nData);
+            $db->table('y_i18n')->truncate(true);
+            $db->table('y_i18n')->insertAll($i18nData);
         } elseif ($db instanceof Pgsql) {
-            $db->query(Sql::pgsql);
-            DB::connect($this->config)->schemas('public')->table('y_i18n')->insertAll($i18nData);
+            $db->schemas('public')->table('y_i18n')->truncate(true);
+            $db->schemas('public')->table('y_i18n')->insertAll($i18nData);
         } else {
             Exception::database('Set Database for Support Driver.');
         }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Yonna\QuickStart\Services\User;
+namespace Yonna\QuickStart\Scope\User;
 
 use App\Helper\LoginName;
-use App\Scope\AbstractScope;
 use Throwable;
 use Yonna\Database\DB;
+use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
-class Modify extends abstractScope
+class Modify extends AbstractScope
 {
 
     /**

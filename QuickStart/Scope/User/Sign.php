@@ -1,23 +1,23 @@
 <?php
 
-namespace Yonna\Services\User;
+namespace Yonna\QuickStart\Scope\User;
 
 use App\Helper\Password;
-use App\Mapping\Common\IsSure;
-use App\Mapping\User\AccountType;
-use App\Mapping\User\Status;
-use App\Scope\AbstractScope;
+use QuickStart\Mapping\Common\Boolean;
+use QuickStart\Mapping\User\AccountType;
+use QuickStart\Mapping\User\UserStatus;
 use Throwable;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Log\Log;
+use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Throwable\Exception;
 
 /**
  * Class Sign
  * @package App\Log\User
  */
-class Sign extends abstractScope
+class Sign extends AbstractScope
 {
 
     const ONLINE_KEEP_TIME = 86400;
@@ -96,30 +96,33 @@ class Sign extends abstractScope
         $accounts = DB::connect()
             ->table('user_account')
             ->field('uid')
-            ->where(function (Where $cond) {
+            ->where(function (Where $cond) use ($account) {
                 $cond->in('type', [AccountType::NAME, AccountType::PHONE, AccountType::EMAIL])
                     ->equalTo('string', $account)
-                    ->equalTo('allow_login', IsSure::yes);
+                    ->equalTo('allow_login', Boolean::true);
             })
             ->one();
-        if (empty($accounts['user_account_uid'])) {
+        if (empty($accounts['user_account_id'])) {
             Exception::params("Account does not exist");
         }
-        $uid = $accounts['user_account_uid'];
+        $user_id = $accounts['user_account_id'];
         $userInfo = DB::connect()
             ->table('user')
             ->field('uid,status,password')
-            ->equalTo('uid', $uid)
+            ->where(fn(Where $w) => $w->equalTo('id', $user_id))
             ->one();
         // 检查账号状态
         switch ($userInfo['user_status']) {
-            case Status::FREEZE:
+            case UserStatus::DELETE:
+                Exception::permission('Account is not exist');
+                break;
+            case UserStatus::FREEZE:
                 Exception::throw('Account has been frozen');
                 break;
-            case Status::UNVERIFY:
+            case UserStatus::PENDING:
                 Exception::throw('Account has not been approved, please wait for approval');
                 break;
-            case Status::UNPASS:
+            case UserStatus::REJECTION:
                 Exception::throw('Account audit failed');
                 break;
             default:

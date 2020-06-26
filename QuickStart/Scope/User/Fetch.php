@@ -1,14 +1,14 @@
 <?php
 
-namespace Yonna\Services\User;
+namespace Yonna\QuickStart\Scope\User;
 
-use App\Scope\AbstractScope;
 use QuickStart\Mapping\User\UserStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
+use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Throwable\Exception\DatabaseException;
 
-class Fetch extends abstractScope
+class Fetch extends AbstractScope
 {
 
     /**
