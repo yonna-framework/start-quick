@@ -1,6 +1,10 @@
 {
     "ACCESSING": "正在訪問。。。",
     "ACCOUNT": "帳戶",
+    "ACCOUNT DOES NOT EXIST": "帳戶不存在",
+    "ACCOUNT HAS NOT BEEN APPROVED, PLEASE WAIT FOR APPROVAL": "帳戶已未已準予,請等待準予",
+    "ACCOUNT NOT ANY LICENSED": "帳戶不任何許可",
+    "ACCOUNT NOT LICENSED": "帳戶未許可",
     "ACTION": "行動",
     "ADD": "添加",
     "API_ERROR": "API錯誤",

@@ -1,6 +1,10 @@
 {
     "ACCESSING": "访问中....",
     "ACCOUNT": "帐号",
+    "ACCOUNT DOES NOT EXIST": "帐户不存在",
+    "ACCOUNT HAS NOT BEEN APPROVED, PLEASE WAIT FOR APPROVAL": "帐户已未已批准,请等待批准",
+    "ACCOUNT NOT ANY LICENSED": "帐户不任何许可",
+    "ACCOUNT NOT LICENSED": "帐户未许可",
     "ACTION": "行动",
     "ADD": "添加",
     "API_ERROR": "API错误",

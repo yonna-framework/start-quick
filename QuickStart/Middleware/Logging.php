@@ -4,7 +4,7 @@ namespace Yonna\QuickStart\Middleware;
 
 use Yonna\IO\Request;
 use Yonna\Middleware\Before;
-use Yonna\Services\User\Sign;
+use Yonna\QuickStart\Scope\User\Sign;
 use Yonna\Throwable\Exception;
 
 class Logging extends Before

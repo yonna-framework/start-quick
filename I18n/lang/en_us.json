@@ -1,6 +1,10 @@
 {
     "ACCESSING": "ACCESSING..",
     "ACCOUNT": "Account",
+    "ACCOUNT DOES NOT EXIST": "account does not exist",
+    "ACCOUNT HAS NOT BEEN APPROVED, PLEASE WAIT FOR APPROVAL": "account has not been approved, please wait for approval",
+    "ACCOUNT NOT ANY LICENSED": "account not any licensed",
+    "ACCOUNT NOT LICENSED": "account not licensed",
     "ACTION": "action",
     "ADD": "Add",
     "API_ERROR": "API error",

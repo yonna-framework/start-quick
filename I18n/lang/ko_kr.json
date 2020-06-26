@@ -1,6 +1,10 @@
 {
     "ACCESSING": "방문중...",
     "ACCOUNT": "계정",
+    "ACCOUNT DOES NOT EXIST": "계정없음",
+    "ACCOUNT HAS NOT BEEN APPROVED, PLEASE WAIT FOR APPROVAL": "계정이미미승인%2C대기승인",
+    "ACCOUNT NOT ANY LICENSED": "계정불임의허가",
+    "ACCOUNT NOT LICENSED": "계정미허가",
     "ACTION": "행동",
     "ADD": "첨가하다.",
     "API_ERROR": "API오류",

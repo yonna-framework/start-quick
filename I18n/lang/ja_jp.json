@@ -1,6 +1,10 @@
 {
     "ACCESSING": "アクセス.",
     "ACCOUNT": "アカウント",
+    "ACCOUNT DOES NOT EXIST": "アカウントは存在しない存在する",
+    "ACCOUNT HAS NOT BEEN APPROVED, PLEASE WAIT FOR APPROVAL": "アカウントは承認された%2cを待つ承認承認",
+    "ACCOUNT NOT ANY LICENSED": "アカウントNOTライセンス",
+    "ACCOUNT NOT LICENSED": "アカウント・ライセンス",
     "ACTION": "アクション",
     "ADD": "追加",
     "API_ERROR": "APIエラー",
