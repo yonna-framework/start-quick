@@ -1,6 +1,6 @@
 <?php
 
-namespace QuickStart\Mapping\Essay;
+namespace Yonna\QuickStart\Mapping\Essay;
 
 use Yonna\Mapping\Mapping;
 

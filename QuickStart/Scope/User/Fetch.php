@@ -19,7 +19,7 @@ class Fetch extends AbstractScope
     public function list(): array
     {
         $db = DB::connect()
-            ->table('user')
+            ->table('y_user')
             ->where(fn(Where $cond) => $cond->notEqualTo('uid', 1)->notEqualTo('status', UserStatus::DELETE));
         $whereSet = [
             'user' => [
@@ -64,7 +64,7 @@ class Fetch extends AbstractScope
         if (!$this->input('uid')) {
             return [];
         }
-        $result = DB::connect()->table('user')->field('uid,status,source,register_time')
+        $result = DB::connect()->table('y_user')->field('uid,status,source,register_time')
             ->equalTo('uid', $this->input('uid'))
             ->one();
         return $result ?: [];

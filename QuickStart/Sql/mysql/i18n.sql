@@ -1,4 +1,4 @@
-CREATE TABLE `y_i18n`
+CREATE TABLE `i18n`
 (
     `unique_key` char(255) NOT NULL DEFAULT '' COMMENT '验证key',
     `zh_cn`      char(255) NOT NULL DEFAULT '' COMMENT '简体中文',

@@ -1,6 +1,6 @@
 <?php
 
-namespace QuickStart\Mapping\User;
+namespace Yonna\QuickStart\Mapping\User;
 
 use Yonna\Mapping\Mapping;
 

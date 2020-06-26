@@ -12,7 +12,7 @@ class FileLog
 
     public function __construct()
     {
-        $this->root = realpath($_SERVER['DOCUMENT_ROOT'] . '/../');
+        $this->root = Config::getFilePathRoot();
     }
 
     /**

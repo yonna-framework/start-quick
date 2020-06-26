@@ -1,4 +1,4 @@
-CREATE TABLE `y_log`
+CREATE TABLE `log`
 (
     `id`               bigint    NOT NULL AUTO_INCREMENT COMMENT 'id',
     `key`              char(255) NOT NULL DEFAULT 'default' COMMENT 'key',

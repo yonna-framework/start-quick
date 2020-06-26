@@ -2,20 +2,20 @@
 
 namespace Yonna\QuickStart\Scope\User;
 
-use App\Helper\Password;
-use QuickStart\Mapping\Common\Boolean;
-use QuickStart\Mapping\User\AccountType;
-use QuickStart\Mapping\User\UserStatus;
+use Yonna\QuickStart\Helper\Password;
+use Yonna\QuickStart\Mapping\Common\Boolean;
+use Yonna\QuickStart\Mapping\User\AccountType;
+use Yonna\QuickStart\Mapping\User\UserStatus;
+use Yonna\QuickStart\Scope\AbstractScope;
 use Throwable;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Log\Log;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Throwable\Exception;
 
 /**
  * Class Sign
- * @package App\Log\User
+ * @package Yonna\QuickStart\Scope\User
  */
 class Sign extends AbstractScope
 {
@@ -32,21 +32,21 @@ class Sign extends AbstractScope
      */
     private function loginRecord($userInfo)
     {
-        if (!$userInfo['user_uid']) {
+        if (!$userInfo['user_id']) {
             Exception::params('登录记录参数不全');
         }
         // 写日志
         $input = $this->input();
         $input['password'] = '*';
         $log = [
-            'uid' => $userInfo['user_uid'],
+            'user_id' => $userInfo['user_id'],
             'ip' => $this->request()->getIp(),
             'client_id' => $this->request()->getClientId(),
             'input' => $input,
         ];
         Log::db()->info($log, 'login');
         // 设定uid为登录状态
-        $onlineKey = self::ONLINE_REDIS_KEY . $log['uid'];
+        $onlineKey = self::ONLINE_REDIS_KEY . $log['user_id'];
         if (DB::redis()->get($onlineKey) === 'online') {
             DB::redis()->expire($onlineKey, self::ONLINE_KEEP_TIME);
         } else {
@@ -61,7 +61,7 @@ class Sign extends AbstractScope
      */
     public function isLogin()
     {
-        $onlineKey = self::ONLINE_REDIS_KEY . $this->input('auth_uid');
+        $onlineKey = self::ONLINE_REDIS_KEY . $this->input('auth_user_id');
         $res = DB::redis()->get($onlineKey) ?? null;
         return $res === 'online';
     }
@@ -73,7 +73,7 @@ class Sign extends AbstractScope
      */
     public function out()
     {
-        $onlineKey = self::ONLINE_REDIS_KEY . $this->input('auth_uid');
+        $onlineKey = self::ONLINE_REDIS_KEY . $this->input('auth_user_id');
         DB::redis()->delete($onlineKey);
         return true;
     }
@@ -95,20 +95,20 @@ class Sign extends AbstractScope
         // 看看账号是否存在
         $accounts = DB::connect()
             ->table('user_account')
-            ->field('uid')
+            ->field('user_id')
             ->where(function (Where $cond) use ($account) {
                 $cond->in('type', [AccountType::NAME, AccountType::PHONE, AccountType::EMAIL])
                     ->equalTo('string', $account)
                     ->equalTo('allow_login', Boolean::true);
             })
             ->one();
-        if (empty($accounts['user_account_id'])) {
+        if (empty($accounts['user_account_user_id'])) {
             Exception::params("Account does not exist");
         }
-        $user_id = $accounts['user_account_id'];
+        $user_id = $accounts['user_account_user_id'];
         $userInfo = DB::connect()
             ->table('user')
-            ->field('uid,status,password')
+            ->field('id,status,password')
             ->where(fn(Where $w) => $w->equalTo('id', $user_id))
             ->one();
         // 检查账号状态
@@ -132,17 +132,18 @@ class Sign extends AbstractScope
         $userLicense = DB::connect()
             ->table('user_license')
             ->field('license_id')
-            ->equalTo('uid', $uid)
-            ->lessThanOrEqualTo('start_time', date('Y-m-d H:i:s', time()))
-            ->greaterThanOrEqualTo('end_time', date('Y-m-d H:i:s', time()))
+            ->where(function (Where $w) use ($user_id) {
+                $w
+                    ->equalTo('user_id', $user_id)
+                    ->lessThanOrEqualTo('start_datetime', date('Y-m-d H:i:s', time()))
+                    ->greaterThanOrEqualTo('end_datetime', date('Y-m-d H:i:s', time()));
+            })
             ->multi();
         if (!$userLicense) {
             Exception::throw("Account not any licensed");
         }
         $userLicenseIds = array_column($userLicense, 'user_license_license_id');
-        if (in_array(1, $userLicenseIds)) {
-            //super account
-        } else {
+        if (!in_array(1, $userLicenseIds)) {
             Exception::throw("Account not licensed");
         }
         // 检查密码
@@ -156,7 +157,7 @@ class Sign extends AbstractScope
             Exception::origin($e);
         }
         return [
-            'user_id' => $uid,
+            'user_id' => $user_id,
             'user_account' => $account,
             'user_status' => $userInfo['user_status'],
         ];

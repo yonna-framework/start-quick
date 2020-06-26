@@ -69,14 +69,14 @@ class I18n
 
         $bdLimit = count(Config::getBaidu()) * 4;
 
-        $rk = 'y_i18n_qts';
+        $rk = 'i18n_qts';
         if ((int)$rds->gcr($rk) >= $bdLimit) {
             return;
         }
         $multi = null;
         $db = DB::connect($this->config);
         if ($db instanceof Mongo) {
-            $multi = $db->collection("y_i18n")
+            $multi = $db->collection('i18n')
                 ->where(function (Mw $cond) {
                     $cond
                         ->or(function (Mw $w) {
@@ -93,7 +93,7 @@ class I18n
                 ->limit(2)
                 ->multi();
         } elseif ($db instanceof Mysql) {
-            $multi = $db->table('y_i18n')
+            $multi = $db->table('i18n')
                 ->where(function (Pw $cond) {
                     $cond->or(function (Pw $w) {
                         foreach (self::ALLOW_LANG as $v) {
@@ -104,7 +104,7 @@ class I18n
                 ->limit(2)
                 ->multi();
         } elseif ($db instanceof Pgsql) {
-            $multi = $db->schemas('public')->table('y_i18n')
+            $multi = $db->schemas('public')->table('i18n')
                 ->where(function (Pw $cond) {
                     $cond->or(function (Pw $w) {
                         foreach (self::ALLOW_LANG as $v) {
@@ -123,17 +123,17 @@ class I18n
             $mongoRecord = [];
             foreach ($multi as $one) {
                 foreach (self::ALLOW_LANG as $v) {
-                    if (empty($one['y_i18n_' . $v])) {
+                    if (empty($one['i18n_' . $v])) {
                         $bi++;
                         if ($bi > $bdLimit) {
                             break;
                         }
-                        $uk = $one['y_i18n_unique_key'];
+                        $uk = $one['i18n_unique_key'];
                         $q = $uk;
                         $from = 'auto';
                         // 有英语用英语，无需怀疑
-                        if (!empty($one['y_i18n_en_us'])) {
-                            $q = $one['y_i18n_en_us'];
+                        if (!empty($one['i18n_en_us'])) {
+                            $q = $one['i18n_en_us'];
                             $from = 'en_us';
                         }
                         $translates[] = [
@@ -173,20 +173,20 @@ class I18n
                                 foreach ($mixed as $xk => $xv) {
                                     if ($db instanceof Mongo) {
                                         foreach ($mongoRecord[$xk] as $mrk => $mr) {
-                                            $mrk = str_replace('y_i18n_', '', $mrk);
+                                            $mrk = str_replace('i18n_', '', $mrk);
                                             if ($mrk != '_id' && empty($xv[$mrk])) {
                                                 $xv[$mrk] = $mr;
                                             }
                                         }
-                                        $db->collection('y_i18n')
+                                        $db->collection('i18n')
                                             ->where(fn($cond) => $cond->equalTo('unique_key', $xk))
                                             ->update($xv);
                                     } elseif ($db instanceof Mysql) {
-                                        $db->table('y_i18n')
+                                        $db->table('i18n')
                                             ->where(fn(Pw $cond) => $cond->equalTo('unique_key', $xk))
                                             ->update($xv);
                                     } elseif ($db instanceof Pgsql) {
-                                        $db->schemas('public')->table('y_i18n')
+                                        $db->schemas('public')->table('i18n')
                                             ->where(fn(Pw $cond) => $cond->equalTo('unique_key', $xk))
                                             ->update($xv);
                                     }
@@ -233,14 +233,14 @@ class I18n
         }
         $db = DB::connect($this->config);
         if ($db instanceof Mongo) {
-            @$db->collection("y_i18n")->drop(true);
-            $db->collection("y_i18n")->insertAll($i18nData);
+            @$db->collection('i18n')->drop(true);
+            $db->collection('i18n')->insertAll($i18nData);
         } elseif ($db instanceof Mysql) {
-            $db->table('y_i18n')->truncate(true);
-            $db->table('y_i18n')->insertAll($i18nData);
+            $db->table('i18n')->truncate(true);
+            $db->table('i18n')->insertAll($i18nData);
         } elseif ($db instanceof Pgsql) {
-            $db->schemas('public')->table('y_i18n')->truncate(true);
-            $db->schemas('public')->table('y_i18n')->insertAll($i18nData);
+            $db->schemas('public')->table('i18n')->truncate(true);
+            $db->schemas('public')->table('i18n')->insertAll($i18nData);
         } else {
             Exception::database('Set Database for Support Driver.');
         }
@@ -260,7 +260,7 @@ class I18n
         }
         foreach ($data as $d) {
             foreach (self::ALLOW_LANG as $al) {
-                $fileData[$al][$d['y_i18n_unique_key']] = $d['y_i18n_' . $al] ?? '';
+                $fileData[$al][$d['i18n_unique_key']] = $d['i18n_' . $al] ?? '';
             }
         }
         foreach (self::ALLOW_LANG as $al) {
@@ -282,11 +282,11 @@ class I18n
         $res = [];
         $db = DB::connect($this->config);
         if ($db instanceof Mongo) {
-            $res = $db->collection("y_i18n")->orderBy('unique_key', 'asc')->multi();
+            $res = $db->collection('i18n')->orderBy('unique_key', 'asc')->multi();
         } elseif ($db instanceof Mysql) {
-            $res = $db->table('y_i18n')->orderBy('unique_key', 'asc')->multi();
+            $res = $db->table('i18n')->orderBy('unique_key', 'asc')->multi();
         } elseif ($db instanceof Pgsql) {
-            $res = $db->schemas('public')->table('y_i18n')->orderBy('unique_key', 'asc')->multi();
+            $res = $db->schemas('public')->table('i18n')->orderBy('unique_key', 'asc')->multi();
         } else {
             Exception::database('Set Database for Support Driver.');
         }
@@ -307,11 +307,11 @@ class I18n
         $res = [];
         $db = DB::connect($this->config);
         if ($db instanceof Mongo) {
-            $obj = $db->collection("y_i18n")->orderBy('unique_key', 'asc');
+            $obj = $db->collection('i18n')->orderBy('unique_key', 'asc');
         } elseif ($db instanceof Mysql) {
-            $obj = $db->table("y_i18n")->orderBy('unique_key', 'asc');
+            $obj = $db->table('i18n')->orderBy('unique_key', 'asc');
         } elseif ($db instanceof Pgsql) {
-            $obj = $db->schemas('public')->table("y_i18n")->orderBy('unique_key', 'asc');
+            $obj = $db->schemas('public')->table('i18n')->orderBy('unique_key', 'asc');
         } else {
             Exception::database('Set Database for Support Driver.');
             return $res;
@@ -339,7 +339,7 @@ class I18n
         $db = DB::connect($this->config);
         try {
             if ($db instanceof Mongo) {
-                $res = $db->collection("y_i18n")
+                $res = $db->collection('i18n')
                     ->where(fn($cond) => $cond->equalTo('unique_key', $uniqueKey))
                     ->one();
                 if (!$res) {
@@ -349,32 +349,32 @@ class I18n
                             $data[$l] = '';
                         }
                     }
-                    $db->collection("y_i18n")->insert($data);
+                    $db->collection('i18n')->insert($data);
                 } else {
                     unset($res['_id']);
                     foreach ($res as $rk => $r) {
-                        $rk = str_replace('y_i18n_', '', $rk);
+                        $rk = str_replace('i18n_', '', $rk);
                         if (!isset($data[$rk])) {
                             $data[$rk] = $r;
                         }
                     }
-                    $db->collection("y_i18n")->where(fn(Mw $cond) => $cond->equalTo('unique_key', $uniqueKey))->update($data);
+                    $db->collection('i18n')->where(fn(Mw $cond) => $cond->equalTo('unique_key', $uniqueKey))->update($data);
                 }
             } elseif ($db instanceof Mysql) {
-                $res = $db->table("y_i18n")->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->one();
+                $res = $db->table('i18n')->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->one();
                 if (!$res) {
                     $data['unique_key'] = $uniqueKey;
-                    $db->table('y_i18n')->insert($data);
+                    $db->table('i18n')->insert($data);
                 } else {
-                    $db->table('y_i18n')->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->update($data);
+                    $db->table('i18n')->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->update($data);
                 }
             } elseif ($db instanceof Pgsql) {
-                $res = $db->schemas('public')->table('y_i18n')->one();
+                $res = $db->schemas('public')->table('i18n')->one();
                 if (!$res) {
                     $data['unique_key'] = $uniqueKey;
-                    $db->schemas('public')->table('y_i18n')->insert($data);
+                    $db->schemas('public')->table('i18n')->insert($data);
                 } else {
-                    $db->schemas('public')->table('y_i18n')
+                    $db->schemas('public')->table('i18n')
                         ->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))
                         ->update($data);
                 }

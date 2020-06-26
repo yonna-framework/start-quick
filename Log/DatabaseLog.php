@@ -57,11 +57,11 @@ class DatabaseLog
         try {
             $db = DB::connect($this->config);
             if ($db instanceof Mongo) {
-                $obj = $db->collection('y_log');
+                $obj = $db->collection('log');
             } elseif ($db instanceof Mysql) {
-                $obj = $db->table('y_log');
+                $obj = $db->table('log');
             } elseif ($db instanceof Pgsql) {
-                $obj = $db->schemas('public')->table('y_log');
+                $obj = $db->schemas('public')->table('log');
             } else {
                 throw new Exception('Set Database for Support Driver.');
             }
@@ -102,11 +102,11 @@ class DatabaseLog
         ];
         try {
             if ($db instanceof Mongo) {
-                $db->collection('y_log')->insert($logData);
+                $db->collection('log')->insert($logData);
             } elseif ($db instanceof Mysql) {
-                $db->table('y_log')->insert($logData);
+                $db->table('log')->insert($logData);
             } elseif ($db instanceof Pgsql) {
-                $db->schemas('public')->table('y_log')->insert($logData);
+                $db->schemas('public')->table('log')->insert($logData);
             } else {
                 throw new Exception('Set Database for Support Driver.');
             }

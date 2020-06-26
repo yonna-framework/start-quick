@@ -1,6 +1,6 @@
 <?php
 
-namespace QuickStart\Mapping\Sdk;
+namespace Yonna\QuickStart\Mapping\Sdk;
 
 use Yonna\Mapping\Mapping;
 

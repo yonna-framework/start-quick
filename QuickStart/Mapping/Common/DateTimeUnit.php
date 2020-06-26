@@ -1,7 +1,7 @@
 <?php
 //时间单位
 
-namespace QuickStart\Mapping\Common;
+namespace Yonna\QuickStart\Mapping\Common;
 
 use Yonna\Mapping\Mapping;
 
