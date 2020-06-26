@@ -72,18 +72,14 @@ create table `user_identity`
 ) engine = innodb comment '用户身份证拓展';
 
 
-insert into `license` (`name`, `upper_id`)
-values ('超级许可', 0),
-       ('系统管理员', 1);
+insert into `license` (`name`, `upper_id`, `allow_scope`)
+values ('超级管理员', 0, ',,,all');
 
 insert into `user` (`password`, `status`, `register_datetime`)
-values ('faa9a6ddddf57436961bf2d2bf4338df', 1, now()),
-       ('faa9a6ddddf57436961bf2d2bf4338df', 1, now());
+values ('faa9a6ddddf57436961bf2d2bf4338df', 2, now());
 
 insert into `user_license` (`user_id`, `license_id`, `start_datetime`, `end_datetime`)
-values (1, 1, now(), '2099-12-31 23:59:59'),
-       (2, 2, now(), '2099-12-31 23:59:59');
+values (1, 1, now(), '2099-12-31 23:59:59');
 
 insert into `user_account` (`user_id`, `type`, `string`, `allow_login`)
-values (1, 'name', 'admin', 1),
-       (2, 'name', 'hunzsig', 1);
+values (1, 'name', 'admin', 1);

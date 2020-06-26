@@ -143,7 +143,20 @@ class Sign extends AbstractScope
             Exception::throw("Account not any licensed");
         }
         $userLicenseIds = array_column($userLicense, 'user_license_license_id');
-        if (!in_array(1, $userLicenseIds)) {
+        $al = DB::connect()->table('license')
+            ->field('allow_scope')
+            ->where(fn(Where $w) => $w->in('id', $userLicenseIds))
+            ->multi();
+        $allowScopes = [];
+        foreach ($al as $l) {
+            foreach ($l['license_allow_scope'] as $s) {
+                $s = strtoupper($s);
+                $allowScopes[] = $s;
+            }
+        }
+        $allowScopes = array_unique($allowScopes);
+        $currentScope = strtoupper($this->input('scope'));
+        if (!in_array('ALL', $allowScopes) && !in_array($currentScope, $allowScopes)) {
             Exception::throw("Account not licensed");
         }
         // 检查密码

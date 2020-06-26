@@ -34,6 +34,11 @@ abstract class AbstractPDO extends AbstractDB
     protected $tempFieldType = [];
 
     /**
+     * @var string mysql逗号序列数据
+     */
+    private string $mysqlFindInSetSep = ',,,';
+
+    /**
      * 构造方法
      *
      * @param array $options
@@ -441,7 +446,7 @@ abstract class AbstractPDO extends AbstractDB
                 foreach ($arr as $ak => $a) {
                     $arr[$ak] = $this->parseValueByFieldType($a, $type);
                 }
-                $arr = ',,,,,' . implode(',', $arr);
+                $arr = $this->mysqlFindInSetSep . implode(',', $arr);
             } else {
                 $arr = null;
             }
@@ -460,7 +465,7 @@ abstract class AbstractPDO extends AbstractDB
     {
         if ($type && is_string($arr)) {
             if ($arr) {
-                $arr = str_replace(',,,,,', '', $arr);
+                $arr = str_replace($this->mysqlFindInSetSep, '', $arr);
                 $arr = explode(',', $arr);
                 $arr = array_filter($arr);
                 if ($this->isCrypto()) {
@@ -538,8 +543,11 @@ abstract class AbstractPDO extends AbstractDB
                         case 'char':
                         case 'varchar':
                         case 'text':
-                            if (strpos($v, ',,,,,') === false && $this->isCrypto()) {
+                            if (strpos($v, $this->mysqlFindInSetSep) === false && $this->isCrypto()) {
                                 $result[$k] = $this->Crypto::decrypt($v);
+                            }
+                            if (strpos($v, $this->mysqlFindInSetSep) === 0) {
+                                $result[$k] = $this->comma2arr($v, $ft);
                             }
                             break;
                         default:
@@ -557,9 +565,6 @@ abstract class AbstractPDO extends AbstractDB
                                 }
                             }
                             break;
-                    }
-                    if (strpos($v, ',,,,,') === 0) {
-                        $result[$k] = $this->comma2arr($v, $ft);
                     }
                 }
             }
