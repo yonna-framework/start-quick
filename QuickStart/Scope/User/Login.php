@@ -17,7 +17,7 @@ use Yonna\Throwable\Exception;
  * Class Sign
  * @package Yonna\QuickStart\Scope\User
  */
-class Sign extends AbstractScope
+class Login extends AbstractScope
 {
 
     const ONLINE_KEEP_TIME = 86400;

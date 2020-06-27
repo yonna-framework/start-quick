@@ -9,7 +9,7 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
-use Yonna\QuickStart\Scope\User\Sign;
+use Yonna\QuickStart\Scope\User\Login;
 use Yonna\Scope\Config;
 
 class Install
@@ -85,7 +85,7 @@ class Install
         Config::middleware([Limiter::class],
             function () {
                 Config::group(['user', 'admin'], function () {
-                    Config::post('login', Sign::class, 'in');
+                    Config::post('login', Login::class, 'in');
                 });
             }
         );

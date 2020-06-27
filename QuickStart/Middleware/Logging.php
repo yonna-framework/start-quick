@@ -4,7 +4,7 @@ namespace Yonna\QuickStart\Middleware;
 
 use Yonna\IO\Request;
 use Yonna\Middleware\Before;
-use Yonna\QuickStart\Scope\User\Sign;
+use Yonna\QuickStart\Scope\User\Login;
 use Yonna\Throwable\Exception;
 
 class Logging extends Before
@@ -17,7 +17,7 @@ class Logging extends Before
      */
     public function handle(): Request
     {
-        $isLogin = $this->scope(Sign::class, 'isLogin');
+        $isLogin = $this->scope(Login::class, 'isLogin');
         if ($isLogin !== true) {
             Exception::permission('UN_LOGIN');
         }
