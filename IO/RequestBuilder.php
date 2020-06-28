@@ -107,6 +107,7 @@ class RequestBuilder
     protected $ip = '0.0.0.0';
     protected $port = 80;
     protected $client_id = '';
+    protected $logging_id = null;
     protected $host = '';
     protected $local = false;
     protected $ssl = false;
@@ -205,7 +206,6 @@ class RequestBuilder
                         break;
                 }
                 break;
-            case 'STREAM':
             default:
                 $data = $this->getRawData();
                 break;
@@ -1329,6 +1329,22 @@ class RequestBuilder
     public function setClientId(string $client_id): void
     {
         $this->client_id = $client_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLoggingId()
+    {
+        return $this->logging_id;
+    }
+
+    /**
+     * @param mixed $logging_id
+     */
+    public function setLoggingId($logging_id): void
+    {
+        $this->logging_id = $logging_id;
     }
 
     /**

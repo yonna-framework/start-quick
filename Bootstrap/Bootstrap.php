@@ -76,10 +76,10 @@ class Bootstrap
             $log->throwable($e);
             if ($e instanceof Exception\PermissionException) {
                 $collector = Response::notPermission($e->getMessage());
-            } else if ($e instanceof ErrorException) {
-                $collector = Response::error($e);
-            } else {
+            } else if ($e instanceof ErrorException || $e instanceof Exception\ThrowException) {
                 $collector = Response::throwable($e);
+            } else {
+                $collector = Response::error($e);
             }
         }
         return $collector;

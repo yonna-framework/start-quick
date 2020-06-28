@@ -18,7 +18,7 @@ abstract class Scope extends Kernel
      * @return mixed
      * @throws Exception\ThrowException
      */
-    public function axis(string $call, string $action)
+    public function scope(string $call, string $action)
     {
         $Scope = Core::get($call, $this->request());
         if (!$Scope instanceof Scope) {

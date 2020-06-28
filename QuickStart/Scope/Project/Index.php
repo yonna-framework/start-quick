@@ -26,7 +26,7 @@ class Index extends AbstractScope
                 'label' => $v,
             ];
         }
-        $userCount = $this->axis(UserStat::class, 'count');
+        $userCount = $this->scope(UserStat::class, 'count');
         foreach ($userCount as $u) {
             $stat['user'][$u['user_status']]['qty'] = $u['qty'];
         }

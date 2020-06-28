@@ -17,7 +17,7 @@ class Logging extends Before
      */
     public function handle(): Request
     {
-        $isLogin = $this->scope(Login::class, 'isLogin');
+        $isLogin = $this->scope(Login::class, 'isLogging');
         if ($isLogin !== true) {
             Exception::permission('UN_LOGIN');
         }

@@ -20,7 +20,6 @@ class Cargo
     public bool $windows = false;
     public bool $linux = false;
     public bool $debug = false;
-    public bool $memory_limit_on = false;
 
     public array $env = [];
 
@@ -208,24 +207,6 @@ class Cargo
     public function setEnv(array $env): void
     {
         $this->env = $env;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMemoryLimitOn(): bool
-    {
-        return $this->memory_limit_on;
-    }
-
-    /**
-     * @param bool $memory_limit_on
-     * @return Cargo
-     */
-    public function setMemoryLimitOn(bool $memory_limit_on): Cargo
-    {
-        $this->memory_limit_on = $memory_limit_on;
-        return $this;
     }
 
 }

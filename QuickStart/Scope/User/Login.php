@@ -59,9 +59,9 @@ class Login extends AbstractScope
      * @return bool
      * @throws null
      */
-    public function isLogin()
+    public function isLogging()
     {
-        $onlineKey = self::ONLINE_REDIS_KEY . $this->input('auth_user_id');
+        $onlineKey = self::ONLINE_REDIS_KEY . $this->request()->getLoggingId();
         $res = DB::redis()->get($onlineKey) ?? null;
         return $res === 'online';
     }
@@ -73,7 +73,7 @@ class Login extends AbstractScope
      */
     public function out()
     {
-        $onlineKey = self::ONLINE_REDIS_KEY . $this->input('auth_user_id');
+        $onlineKey = self::ONLINE_REDIS_KEY . $this->request()->getLoggingId();
         DB::redis()->delete($onlineKey);
         return true;
     }

@@ -65,6 +65,10 @@ class Crypto
             $request->setClientId($input['client_id']);
             unset($input['client_id']);
         }
+        if (isset($input['logging_id'])) {
+            $request->setLoggingId($input['logging_id']);
+            unset($input['logging_id']);
+        }
         $request->setInput($input);
         return $request;
     }

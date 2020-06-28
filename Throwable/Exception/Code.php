@@ -7,10 +7,12 @@ abstract class Code
 
     const THROW = 0;
 
-    const DEBUG = 1001;
-    const PARAMS = 1002;
-    const DATABASE = 1003;
-    const SDK = 1004;
-    const PERMISSION = 1005;
+    const DEBUG = 1000;
+
+    const PARAMS = 2001;
+    const DATABASE = 2002;
+    const SDK = 2003;
+    const PERMISSION = 2004;
+    const TIPS = 2005;
 
 }

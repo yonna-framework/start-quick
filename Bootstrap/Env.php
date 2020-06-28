@@ -54,7 +54,6 @@ class Env
         $Cargo->setMinimumPhpVersion(self::MINIMUM_PHP_VERSION);
         $Cargo->setWindows($isWindows);
         $Cargo->setLinux(!$isWindows);
-        $Cargo->setMemoryLimitOn(function_exists('memory_get_usage'));
         $Cargo->setProjectName(getenv('PROJECT_NAME') ?? 'Yonna');
         $Cargo->setTimezone(TIMEZONE);
         return $Cargo;
