@@ -9,12 +9,13 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
+use Yonna\QuickStart\Scope\Project\Index;
 use Yonna\QuickStart\Scope\User\Login;
 use Yonna\Scope\Config;
 
 class Install
 {
-    // log装载
+
     public static function log(): void
     {
         Config::middleware([Logging::class],
@@ -34,7 +35,6 @@ class Install
         );
     }
 
-    // i18n装载
     public static function i18n(): void
     {
         Config::middleware([Debug::class],
@@ -79,7 +79,17 @@ class Install
         });
     }
 
-    // user装载
+    public static function project(): void
+    {
+        Config::middleware([Limiter::class, Logging::class],
+            function () {
+                Config::group(['project'], function () {
+                    Config::post('index', Index::class, 'stat');
+                });
+            }
+        );
+    }
+
     public static function user(): void
     {
         Config::middleware([Limiter::class],

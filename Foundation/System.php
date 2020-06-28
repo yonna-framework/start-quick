@@ -12,32 +12,36 @@ class System
      * // ... 区间运行代码
      * rem('end'); // 记录结束标签位
      * echo rem('begin','end',6); // 统计区间运行时间 精确到小数后6位
-     * echo rem('begin','end','m'); // 统计区间内存使用情况
      * 如果end标记位没有定义，则会自动以当前作为标记位
      * @param string $start 开始标签
      * @param string $end 结束标签
      * @param integer|string $dec 小数位或者m
      * @return mixed
      */
-    public static function rem($start, $end = '', $dec = 4)
+    public static function rem($start, $end = null, $dec = 4)
     {
-        static $info = [];
+        static $dur = [];
         static $mem = [];
         $memoryLimitOn = function_exists('memory_get_usage');
-        if (is_float($end)) { // 记录时间
-            $info[$start] = $end;
-        } elseif (!empty($end)) { // 统计时间和内存使用
-            if (!isset($info[$end])) $info[$end] = microtime(TRUE);
-            if ($memoryLimitOn && $dec == 'm') {
-                if (!isset($mem[$end])) $mem[$end] = memory_get_usage();
-                return number_format(($mem[$end] - $mem[$start]) / 1024);
-            } else {
-                return number_format(($info[$end] - $info[$start]), $dec);
+        if ($end === null) {
+            $dur[$start] = microtime(true);
+            if ($memoryLimitOn) {
+                $mem[$start] = memory_get_usage();
             }
-
-        } else { // 记录时间和内存使用
-            $info[$start] = microtime(TRUE);
-            if ($memoryLimitOn) $mem[$start] = memory_get_usage();
+        } else {
+            if (empty($dur[$end])) {
+                $dur[$end] = microtime(true);
+            }
+            $costDur = number_format(($dur[$end] - $dur[$start]), $dec) . 'ms';
+            if ($memoryLimitOn) {
+                if (empty($mem[$end])) {
+                    $mem[$end] = memory_get_usage();
+                }
+                $costMem = number_format(($mem[$end] - $mem[$start]) / 1024, $dec) . 'KB';
+                return $costDur . '; ' . $costMem;
+            } else {
+                return $costDur;
+            }
         }
         return null;
     }

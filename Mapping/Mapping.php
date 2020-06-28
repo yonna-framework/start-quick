@@ -4,13 +4,22 @@ namespace Yonna\Mapping;
 
 use Exception;
 use ReflectionClass;
-use ReflectionException;
 
 abstract class Mapping
 {
 
     protected static array $map_data = [];
     protected static array $fetch_cache = [];
+
+    /**
+     * 获取Map Data
+     * @return array
+     */
+    public static function getMapData(): array
+    {
+        $self = new static();
+        return $self::$map_data;
+    }
 
     /**
      * 设置一个值的自定义参数
@@ -34,8 +43,7 @@ abstract class Mapping
      */
     public static function getOption($value, $optKey)
     {
-        $self = new static();
-        $map_data = $self::$map_data;
+        $map_data = static::getMapData();
         return isset($map_data[static::class][$value][$optKey])
             ? $map_data[static::class][$value][$optKey] : null;
     }
@@ -43,9 +51,9 @@ abstract class Mapping
     /**
      * 设置一个值的label
      * @param $value
-     * @param $label
+     * @param string $label
      */
-    protected static function setLabel($value, $label)
+    protected static function setLabel($value, string $label)
     {
         static::setOptions($value, 'label', $label);
     }
@@ -55,7 +63,7 @@ abstract class Mapping
      * @param $value
      * @return string
      */
-    public static function getLabel($value)
+    public static function getLabel($value): string
     {
         return static::getOption($value, 'label') ?: '';
     }
@@ -82,36 +90,26 @@ abstract class Mapping
 
     /**
      * 反射mapping的数据
-     * @return mixed
-     * @throws Exception
+     * @return array
      */
-    public static function fetch()
+    public static function fetch(): array
     {
         if (!isset(static::$fetch_cache[static::class])) {
-            try {
-                $objClass = new ReflectionClass(static::class);
-                $arrConst = $objClass->getConstants();
-                static::$fetch_cache[static::class] = $arrConst;
-            } catch (ReflectionException $e) {
-                throw new Exception($e->getMessage());
-            }
+            $objClass = new ReflectionClass(static::class);
+            $arrConst = $objClass->getConstants();
+            static::$fetch_cache[static::class] = $arrConst;
         }
-        return static::$fetch_cache[static::class] ?? [];
+        return static::$fetch_cache[static::class];
     }
 
     /**
      * Value to Array
-     * @return mixed
+     * @return array
      */
-    public static function toArray()
+    public static function toArray(): array
     {
-        $arr = [];
-        try {
-            $arr = static::fetch();
-            sort($arr);
-        } catch (Exception $e) {
-            //
-        }
+        $arr = static::fetch();
+        sort($arr);
         return $arr;
     }
 
@@ -121,13 +119,8 @@ abstract class Mapping
      */
     public static function toJson()
     {
-        $obj = (object)[];
-        try {
-            $obj = static::fetch();
-        } catch (Exception $e) {
-            //
-        }
-        return json_encode($obj);
+        $obj = static::fetch();
+        return empty($obj) ? json_encode((object)[]) : json_encode($obj);
     }
 
     /**
@@ -162,8 +155,9 @@ abstract class Mapping
     {
         $data = static::toArray();
         $kv = [];
+        $map_data = static::getMapData();
         foreach ($data as $v) {
-            $kv[$v] = static::$map_data[static::class][$v];
+            $kv[$v] = $map_data[static::class][$v];
         }
         return $kv;
     }

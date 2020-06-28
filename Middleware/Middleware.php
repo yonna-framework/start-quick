@@ -33,8 +33,8 @@ abstract class Middleware implements Interfaces\Middleware
     }
 
     /**
-     * @param string $call
-     * @param string $action
+     * @param string $call scope class name
+     * @param string $action function name
      * @return mixed
      * @throws Exception\ThrowException
      */
