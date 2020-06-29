@@ -102,6 +102,7 @@ class RequestBuilder
      * extent set
      */
     protected $raw_data = '';
+    protected $scopes = [];
     protected $input = [];
     protected $input_type = InputType::UN_KNOW;
     protected $ip = '0.0.0.0';
@@ -111,7 +112,6 @@ class RequestBuilder
     protected $host = '';
     protected $local = false;
     protected $ssl = false;
-    protected $scope = '';
     protected $stack = '';
 
     /**
@@ -1251,6 +1251,22 @@ class RequestBuilder
     }
 
     /**
+     * @return array
+     */
+    public function getScopes(): array
+    {
+        return $this->scopes;
+    }
+
+    /**
+     * @param array $scopes
+     */
+    public function setScopes(array $scopes): void
+    {
+        $this->scopes = $scopes;
+    }
+
+    /**
      * @param string $name
      * @return mixed
      */
@@ -1377,22 +1393,6 @@ class RequestBuilder
     public function setSsl(bool $ssl): void
     {
         $this->ssl = $ssl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getScope(): string
-    {
-        return $this->scope;
-    }
-
-    /**
-     * @param string $scope
-     */
-    public function setScope(string $scope): void
-    {
-        $this->scope = $scope;
     }
 
     /**

@@ -40,10 +40,10 @@ class Install
         Config::middleware([Debug::class],
             function () {
                 Config::group(['i18n'], function () {
-                    Config::put('init', function (Request $request) {
+                    Config::post('init', function (Request $request) {
                         return (new I18n())->init();
                     });
-                    Config::delete('set', function (Request $request) {
+                    Config::post('set', function (Request $request) {
                         $input = $request->getInput();
                         $data = [];
                         foreach (I18n::ALLOW_LANG as $lang) {
@@ -57,7 +57,7 @@ class Install
         );
         Config::middleware([Logging::class], function () {
             Config::group(['i18n'], function () {
-                Config::put('backup', function () {
+                Config::post('backup', function () {
                     return (new I18n())->backup();
                 });
                 Config::post('page', function (Request $request) {

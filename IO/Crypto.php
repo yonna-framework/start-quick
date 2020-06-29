@@ -56,20 +56,21 @@ class Crypto
     public static function input(Request $request)
     {
         if (self::isCrypto($request) === false) {
-            $input = $request->getRawData() ? json_decode($request->getRawData(), true) : [];
+            $raw = $request->getRawData() ? json_decode($request->getRawData(), true) : [];
         } else {
-            $input = self::decrypt(Str::replaceFirst(Config::getCryptoProtocol(), '', $request->getRawData()));
-            $input = $input ? json_decode($input, true) : [];
+            $raw = self::decrypt(Str::replaceFirst(Config::getCryptoProtocol(), '', $request->getRawData()));
+            $raw = $raw ? json_decode($raw, true) : [];
         }
-        if (isset($input['client_id'])) {
-            $request->setClientId($input['client_id']);
-            unset($input['client_id']);
+        if (isset($raw['client_id'])) {
+            $request->setClientId($raw['client_id']);
+            unset($raw['client_id']);
         }
-        if (isset($input['logging_id'])) {
-            $request->setLoggingId($input['logging_id']);
-            unset($input['logging_id']);
+        if (isset($raw['logging_id'])) {
+            $request->setLoggingId($raw['logging_id']);
+            unset($raw['logging_id']);
         }
-        $request->setInput($input);
+        $request->setScopes($raw['scopes']);
+        unset($raw);
         return $request;
     }
 
