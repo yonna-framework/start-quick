@@ -26,7 +26,7 @@ class Modify extends AbstractScope
         if (!LoginName::check($this->input('login_name'))) {
             Exception::params(LoginName::getFalseMsg());
         }
-        $used = DB::connect()->table('y_user')->equalTo('login_name', $this->input('login_name'))->one();
+        $used = DB::connect()->table('user')->equalTo('login_name', $this->input('login_name'))->one();
         if ($used) {
             if ($used['user_uid'] == $this->input('uid')) {
                 Exception::params('You can\'t use the same name.');
@@ -35,7 +35,7 @@ class Modify extends AbstractScope
             }
         }
         try {
-            DB::connect()->table('y_user')->equalTo('uid', $this->input('uid'))->update([
+            DB::connect()->table('user')->equalTo('uid', $this->input('uid'))->update([
                 'login_name' => $this->input('login_name')
             ]);
         } catch (Throwable $e) {
@@ -61,7 +61,7 @@ class Modify extends AbstractScope
         if (!LoginName::check($this->input('login_name'))) {
             Exception::params(LoginName::getFalseMsg());
         }
-        $used = DB::connect()->table('y_user')->equalTo('login_name', $this->input('login_name'))->one();
+        $used = DB::connect()->table('user')->equalTo('login_name', $this->input('login_name'))->one();
         if ($used) {
             if ($used['user_uid'] == $this->input('uid')) {
                 Exception::params('You can\'t use the same name.');
@@ -70,7 +70,7 @@ class Modify extends AbstractScope
             }
         }
         try {
-            DB::connect()->table('y_user')->equalTo('uid', $this->input('uid'))->update([
+            DB::connect()->table('user')->equalTo('uid', $this->input('uid'))->update([
                 'login_name' => $this->input('login_name')
             ]);
         } catch (Throwable $e) {

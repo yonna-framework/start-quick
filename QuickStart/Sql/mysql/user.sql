@@ -30,11 +30,11 @@ create table `user_meta_category`
 
 create table `user_meta`
 (
-    `user_id`    bigint unsigned not null default 0 comment 'y_user_id',
-    `mete_key`   char(255)       not null default '' comment 'meta key',
-    `mete_value` varchar(1024)   not null default '' comment 'meta value',
+    `user_id` bigint unsigned not null default 0 comment 'y_user_id',
+    `key`     char(255)       not null default '' comment 'meta key',
+    `value`   varchar(1024)   not null default '' comment 'meta value',
     primary key (`user_id`),
-    index (`mete_key`)
+    index (`key`)
 ) engine = innodb comment '用户可变自定义详细信息';
 
 create table `license`

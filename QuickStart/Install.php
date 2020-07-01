@@ -10,6 +10,7 @@ use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
 use Yonna\QuickStart\Scope\Project\Index;
+use Yonna\QuickStart\Scope\User\FetchAdmin;
 use Yonna\QuickStart\Scope\User\Login;
 use Yonna\Scope\Config;
 
@@ -96,6 +97,8 @@ class Install
             function () {
                 Config::group(['user', 'admin'], function () {
                     Config::post('login', Login::class, 'in');
+                    Config::post('me', FetchAdmin::class, 'me');
+                    Config::post('info', FetchAdmin::class, 'info');
                 });
             }
         );
