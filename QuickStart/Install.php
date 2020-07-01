@@ -12,6 +12,7 @@ use Yonna\QuickStart\Middleware\Logging;
 use Yonna\QuickStart\Scope\Project\Index;
 use Yonna\QuickStart\Scope\User\FetchAdmin;
 use Yonna\QuickStart\Scope\User\Login;
+use Yonna\QuickStart\Scope\User\Meta;
 use Yonna\Scope\Config;
 
 class Install
@@ -95,10 +96,20 @@ class Install
     {
         Config::middleware([Limiter::class],
             function () {
-                Config::group(['user', 'admin'], function () {
+                Config::group(['admin'], function () {
+
                     Config::post('login', Login::class, 'in');
+                    Config::post('logout', Login::class, 'out');
                     Config::post('me', FetchAdmin::class, 'me');
-                    Config::post('info', FetchAdmin::class, 'info');
+
+                    Config::group(['user'], function () {
+
+                        Config::post('info', FetchAdmin::class, 'info');
+
+                        Config::group(['meta'], function () {
+                            Config::post('categoryAdd', Meta::class, 'addCategory');
+                        });
+                    });
                 });
             }
         );

@@ -60,7 +60,7 @@ class Collection extends AbstractMDO
      * @param string $sort
      * @return self
      */
-    public function orderBy($orderBy, $sort = self::ASC): self
+    public function orderBy($orderBy, $sort = 'asc'): self
     {
         if (!$orderBy) {
             return $this;
@@ -75,9 +75,9 @@ class Collection extends AbstractMDO
                 if (count($o) > 1) {
                     $o[1] = strtolower($o[1]);
                     $orderBy[$o[0]] = $o[1];
-                    $this->options['sort'][$o[0]] = $o[1] === self::ASC ? 1 : -1;
+                    $this->options['sort'][$o[0]] = $o[1] === 'asc' ? 1 : -1;
                 } else {
-                    $this->options['sort'][$o[0]] = $sort === self::ASC ? 1 : -1;
+                    $this->options['sort'][$o[0]] = $sort === 'asc' ? 1 : -1;
                 }
             }
         }

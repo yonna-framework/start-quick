@@ -11,11 +11,6 @@ use Yonna\Throwable\Exception;
 
 abstract class AbstractDB
 {
-    /**
-     * 排序类型设置
-     */
-    const DESC = 'desc';
-    const ASC = 'asc';
 
     /**
      * @var array

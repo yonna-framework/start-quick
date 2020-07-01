@@ -19,12 +19,15 @@ create table `user_account`
 
 create table `user_meta_category`
 (
-    `key`          char(255) not null default '' comment 'meta key',
-    `value_format` char(255) not null default '' comment '数据格式化类型',
-    `status`       tinyint   not null default -1 comment '状态[-1无效,1有效]',
-    `ordering`     int       not null default 0 comment '排序[降序]',
+    `key`           char(255) not null default '' comment 'meta key',
+    `value_format`  char(255) not null default '' comment '数据格式化类型',
+    `value_default` char(255) not null default '' comment '默认值',
+    `status`        tinyint   not null default -1 comment '状态[-1无效,1有效]',
+    `ordering`      int       not null default 0 comment '排序[降序]',
     primary key (`key`),
+    unique key `uk_key` (`key`),
     index (`value_format`),
+    index (`value_default`),
     index (`status`)
 ) engine = innodb comment '用户可变自定义字段';
 
@@ -34,6 +37,7 @@ create table `user_meta`
     `key`     char(255)       not null default '' comment 'meta key',
     `value`   varchar(1024)   not null default '' comment 'meta value',
     primary key (`user_id`),
+    unique key `uk_user_key` (`user_id`, `key`),
     index (`key`)
 ) engine = innodb comment '用户可变自定义详细信息';
 
@@ -83,3 +87,8 @@ values (1, 1, now(), '2099-12-31 23:59:59');
 
 insert into `user_account` (`user_id`, `type`, `string`, `allow_login`)
 values (1, 'name', 'admin', 1);
+
+insert into `user_meta_category` (`key`, `value_format`, `status`)
+values ('nickname', 'string', 1);
+insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`)
+values ('sex', 'integer', '0', 1);

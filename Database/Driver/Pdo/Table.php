@@ -167,7 +167,7 @@ class Table extends AbstractPDO
      * @param string | null $table
      * @return self
      */
-    public function orderBy($orderBy, $sort = self::ASC, $table = null)
+    public function orderBy($orderBy, $sort = 'asc', $table = null)
     {
         if (!$orderBy) {
             return $this;

@@ -6,7 +6,7 @@ use Yonna\QuickStart\Mapping\User\UserStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Scope\AbstractScope;
-use Yonna\Throwable\Exception\DatabaseException;
+use Yonna\Throwable\Exception;
 
 class FetchAdmin extends AbstractScope
 {
@@ -14,7 +14,7 @@ class FetchAdmin extends AbstractScope
     /**
      * 获取列表
      * @return array
-     * @throws DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function list(): array
     {
@@ -60,33 +60,27 @@ class FetchAdmin extends AbstractScope
     /**
      * 获取当前登陆用户详情
      * @return array
-     * @throws DatabaseException
+     * @throws Exception\ThrowException
      */
     public function me(): array
     {
-        $result = DB::connect()->table('user')
-            ->field('id,register_time')
-            ->where(fn(Where $w) => $w->equalTo('id', $this->request()->getLoggingId()))
-            ->one();
-        $meta = DB::connect()->table('user_meta')
-            ->field('key,value')
-            ->where(fn(Where $w) => $w->equalTo('user_id', $this->request()->getLoggingId()))
-            ->multi();
-        print_r($meta);
-        return $result ?: [];
+        $result = ['user_id' => $this->request()->getLoggingId()];
+        $meta = $this->scope(Meta::class, 'me');
+        $result = array_merge($result, $meta);
+        return $result;
     }
 
     /**
      * 获取详情
      * @return array
-     * @throws DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function info(): array
     {
         if (!$this->input('id')) {
             return [];
         }
-        $result = DB::connect()->table('user')->field('id,status,register_time')
+        $result = DB::connect()->table('user')->field('id,status,register_datetime')
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->one();
         return $result ?: [];
