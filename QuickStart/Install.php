@@ -99,17 +99,22 @@ class Install
                 Config::group(['admin'], function () {
 
                     Config::post('login', Login::class, 'in');
-                    Config::post('logout', Login::class, 'out');
-                    Config::post('me', FetchAdmin::class, 'me');
 
-                    Config::group(['user'], function () {
+                    Config::middleware([Logging::class],
+                        function () {
+                            Config::post('logout', Login::class, 'out');
+                            Config::post('me', FetchAdmin::class, 'me');
 
-                        Config::post('info', FetchAdmin::class, 'info');
+                            Config::group(['user'], function () {
 
-                        Config::group(['meta'], function () {
-                            Config::post('categoryAdd', Meta::class, 'addCategory');
-                        });
-                    });
+                                Config::post('info', FetchAdmin::class, 'info');
+
+                                Config::group(['meta'], function () {
+                                    Config::post('categoryAdd', Meta::class, 'addCategory');
+                                });
+                            });
+                        }
+                    );
                 });
             }
         );

@@ -89,6 +89,8 @@ insert into `user_account` (`user_id`, `type`, `string`, `allow_login`)
 values (1, 'name', 'admin', 1);
 
 insert into `user_meta_category` (`key`, `value_format`, `status`)
+values ('name', 'string', 1);
+insert into `user_meta_category` (`key`, `value_format`, `status`)
 values ('nickname', 'string', 1);
 insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`)
 values ('sex', 'integer', '0', 1);

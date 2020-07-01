@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope\User;
 
+use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Mapping\User\UserStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -60,7 +61,7 @@ class FetchAdmin extends AbstractScope
     /**
      * 获取当前登陆用户详情
      * @return array
-     * @throws Exception\ThrowException
+     * @throws Exception\ThrowException|Exception\DatabaseException
      */
     public function me(): array
     {
