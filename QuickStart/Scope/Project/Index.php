@@ -20,7 +20,7 @@ class Index extends AbstractScope
         $stat = [
             'user' => [],
         ];
-        foreach (UserStatus::toKV('label') as $k => $v) {
+        foreach (UserStatus::toKv('label') as $k => $v) {
             $stat['user'][$k] = [
                 'qty' => 0,
                 'label' => $v,

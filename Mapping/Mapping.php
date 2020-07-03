@@ -103,6 +103,15 @@ abstract class Mapping
     }
 
     /**
+     * 获取<K,{options}>格式的关联数组
+     * @return array
+     */
+    public static function toMixed()
+    {
+        return static::getMapData()[static::class];
+    }
+
+    /**
      * Value to Array
      * @return array
      */
@@ -137,7 +146,7 @@ abstract class Mapping
      * @param string $target
      * @return array
      */
-    public static function toKV($target = 'label')
+    public static function toKv($target = 'label')
     {
         $data = static::toArray();
         $kv = [];
@@ -148,16 +157,16 @@ abstract class Mapping
     }
 
     /**
-     * 获取<K,{options}>格式的关联数组
+     * 获取<Antd select>格式的数组
+     * @param string $target
      * @return array
      */
-    public static function toMixed()
+    public static function toAntd($target = 'label')
     {
-        $data = static::toArray();
+        $data = static::toKv($target);
         $kv = [];
-        $map_data = static::getMapData();
-        foreach ($data as $v) {
-            $kv[$v] = $map_data[static::class][$v];
+        foreach ($data as $k => $v) {
+            $kv[] = ['value' => $k, 'label' => $v];
         }
         return $kv;
     }
