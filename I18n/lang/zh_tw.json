@@ -59,9 +59,11 @@
     "FAIL": "失敗",
     "FETCH ARRAY SUCCESS": "獲取數組成功",
     "FETCH BOOLEAN SUCCESS": "獲取布林成功",
+    "FETCH MULTI SUCCESS": "獲取多重成功",
     "FETCH STRING SUCCESS": "獲取字串成功",
     "FILE": "檔案",
     "FILES": "資料夾",
+    "FILL IN THE BLANK TO INDICATE NO MODIFICATION": "填寫空白則表示不修改",
     "FILL_INT": "內景",
     "FILL_NUM": "號碼",
     "FILTER_ERROR": "過濾是中斷",
@@ -179,5 +181,6 @@
     "WRONG PASSWORD": "錯誤密碼",
     "YELLOW": "黃色的",
     "YES": "是的",
+    "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "您應該返回一些響應數據，而不是返回空",
     "YOUR": "你的"
 }

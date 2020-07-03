@@ -59,9 +59,11 @@
     "FAIL": "Fail",
     "FETCH ARRAY SUCCESS": "FETCH ARRAY SUCCESS",
     "FETCH BOOLEAN SUCCESS": "FETCH BOOLEAN SUCCESS",
+    "FETCH MULTI SUCCESS": "fetch multi success",
     "FETCH STRING SUCCESS": "fetch string success",
     "FILE": "file",
     "FILES": "Files",
+    "FILL IN THE BLANK TO INDICATE NO MODIFICATION": "fill in the blank to indicate no modification",
     "FILL_INT": "Int",
     "FILL_NUM": "Num",
     "FILTER_ERROR": "Filter is break",
@@ -179,5 +181,6 @@
     "WRONG PASSWORD": "wrong password",
     "YELLOW": "yellow",
     "YES": "Yes",
+    "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "You should return some response data instead of returning null",
     "YOUR": "your"
 }
