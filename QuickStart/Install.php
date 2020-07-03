@@ -81,12 +81,12 @@ class Install
         });
     }
 
-    public static function project(): void
+    public static function stat(): void
     {
         Config::middleware([Limiter::class, Logging::class],
             function () {
-                Config::group(['project'], function () {
-                    Config::post('index', Index::class, 'stat');
+                Config::group(['stat'], function () {
+                    Config::post('user', Index::class, 'stat');
                 });
             }
         );
