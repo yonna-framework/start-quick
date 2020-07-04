@@ -13,6 +13,7 @@ use Yonna\QuickStart\Scope\Project\Index;
 use Yonna\QuickStart\Scope\User\FetchAdmin;
 use Yonna\QuickStart\Scope\User\Login;
 use Yonna\QuickStart\Scope\User\Meta;
+use Yonna\QuickStart\Scope\User\Stat;
 use Yonna\Scope\Config;
 
 class Install
@@ -86,7 +87,8 @@ class Install
         Config::middleware([Limiter::class, Logging::class],
             function () {
                 Config::group(['stat'], function () {
-                    Config::post('user', Index::class, 'stat');
+                    Config::post('user', Stat::class, 'user');
+                    Config::post('userAccount', Stat::class, 'account');
                 });
             }
         );
@@ -110,6 +112,7 @@ class Install
                                 Config::post('info', FetchAdmin::class, 'info');
 
                                 Config::group(['meta'], function () {
+                                    Config::post('category', Meta::class, 'category');
                                     Config::post('categoryAdd', Meta::class, 'addCategory');
                                 });
                             });
