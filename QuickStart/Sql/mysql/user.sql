@@ -19,11 +19,13 @@ create table `user_account`
 
 create table `user_meta_category`
 (
-    `key`           char(255) not null default '' comment 'meta key',
-    `value_format`  char(255) not null default '' comment '数据格式化类型',
-    `value_default` char(255) not null default '' comment '默认值',
-    `status`        tinyint   not null default -1 comment '状态[-1无效,1有效]',
-    `ordering`      int       not null default 0 comment '排序[降序]',
+    `key`              char(255) not null default '' comment 'meta key',
+    `value_format`     char(255) not null default 'string' comment '数据格式化类型',
+    `value_default`    char(255) not null default '' comment '默认值',
+    `component_type`   char(255) not null default 'input_string' comment '前端组件类型',
+    `component_values` char(255) not null default '' comment '前端组件数据需求',
+    `status`           tinyint   not null default -1 comment '状态[-1无效,1有效]',
+    `ordering`         int       not null default 0 comment '排序[降序]',
     primary key (`key`),
     unique key `uk_key` (`key`),
     index (`value_format`),
@@ -92,5 +94,6 @@ insert into `user_meta_category` (`key`, `value_format`, `status`)
 values ('name', 'string', 1);
 insert into `user_meta_category` (`key`, `value_format`, `status`)
 values ('nickname', 'string', 1);
-insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`)
-values ('sex', 'integer', '0', 1);
+insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`, `component_type`,
+                                  `component_values`)
+values ('sex', 'integer', '-1', 1, 'select', ',,,-1,1,2');
