@@ -2,14 +2,13 @@
 
 namespace Yonna\QuickStart\Scope\User;
 
-use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Mapping\User\UserStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Throwable\Exception;
 
-class FetchAdmin extends AbstractScope
+class AdminFetch extends AbstractScope
 {
 
     /**

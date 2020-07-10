@@ -13,6 +13,7 @@ abstract class Code
     const DATABASE = 2002;
     const SDK = 2003;
     const PERMISSION = 2004;
-    const TIPS = 2005;
+    const NOT_LOGGING = 2005;
+    const TIPS = 2006;
 
 }

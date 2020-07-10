@@ -174,6 +174,18 @@ class Response
         return $HandleCollector;
     }
 
+    public static function notLogging(string $msg = 'not logging', array $data = array(), $type = 'json', $charset = 'utf-8')
+    {
+        $HandleCollector = new Collector();
+        $HandleCollector
+            ->setResponseDataType($type)
+            ->setCharset($charset)
+            ->setCode(Code::NOT_LOGGING)
+            ->setMsg($msg)
+            ->setData($data);
+        return $HandleCollector;
+    }
+
     public static function notFound(string $msg = 'not found', array $data = array(), $type = 'json', $charset = 'utf-8')
     {
         $HandleCollector = new Collector();

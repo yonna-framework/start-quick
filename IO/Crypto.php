@@ -65,10 +65,6 @@ class Crypto
             $request->setClientId($raw['client_id']);
             unset($raw['client_id']);
         }
-        if (isset($raw['logging_id'])) {
-            $request->setLoggingId($raw['logging_id']);
-            unset($raw['logging_id']);
-        }
         if (isset($raw['scopes'])) {
             $request->setScopes($raw['scopes']);
         } elseif (isset($raw['scope'])) {

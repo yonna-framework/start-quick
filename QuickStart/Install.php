@@ -9,7 +9,7 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
-use Yonna\QuickStart\Scope\User\FetchAdmin;
+use Yonna\QuickStart\Scope\User\AdminFetch;
 use Yonna\QuickStart\Scope\User\Login;
 use Yonna\QuickStart\Scope\User\Meta;
 use Yonna\QuickStart\Scope\User\Stat;
@@ -89,7 +89,7 @@ class Install
                 Config::group(['xoss'], function () {
 
                     Config::post('download', Xoss::class, 'download');
-                    
+
                     Config::middleware([Logging::class], function () {
                         Config::post('upload', Xoss::class, 'upload');
                     });
@@ -121,11 +121,11 @@ class Install
                     Config::middleware([Logging::class],
                         function () {
                             Config::post('logout', Login::class, 'out');
-                            Config::post('me', FetchAdmin::class, 'me');
+                            Config::post('me', AdminFetch::class, 'me');
 
                             Config::group(['user'], function () {
 
-                                Config::post('info', FetchAdmin::class, 'info');
+                                Config::post('info', AdminFetch::class, 'info');
 
                                 Config::group(['meta'], function () {
                                     Config::post('category', Meta::class, 'category');

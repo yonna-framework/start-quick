@@ -22,6 +22,7 @@ class Code
     const NOT_PERMISSION = 403;
     const NOT_FOUND = 404;
     const ABORT = 405;
+    const NOT_LOGGING = 444;
 
     const THROWABLE = 500;
 

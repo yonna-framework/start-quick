@@ -6,6 +6,7 @@ namespace Yonna\Throwable;
 use Throwable;
 use Yonna\Throwable\Exception\DatabaseException;
 use Yonna\Throwable\Exception\DebugException;
+use Yonna\Throwable\Exception\NotLoggingException;
 use Yonna\Throwable\Exception\ParamsException;
 use Yonna\Throwable\Exception\PermissionException;
 use Yonna\Throwable\Exception\SDKException;
@@ -75,6 +76,15 @@ class Exception
     public static function permission($msg)
     {
         throw new PermissionException($msg);
+    }
+
+    /**
+     * @param $msg
+     * @throws NotLoggingException
+     */
+    public static function notLogging($msg)
+    {
+        throw new NotLoggingException($msg);
     }
 
 }

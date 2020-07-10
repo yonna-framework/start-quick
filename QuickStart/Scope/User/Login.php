@@ -61,7 +61,7 @@ class Login extends AbstractScope
      * @return int
      * @throws null
      */
-    public function getLoggingUserId(): int
+    public function getLoggingId(): int
     {
         if (!$this->request()->getClientId()) {
             return 0;
@@ -76,7 +76,7 @@ class Login extends AbstractScope
      */
     public function isLogging(): bool
     {
-        return $this->getLoggingUserId() > 0;
+        return $this->getLoggingId() > 0;
     }
 
     /**

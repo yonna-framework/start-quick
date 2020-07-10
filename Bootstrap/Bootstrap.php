@@ -76,6 +76,8 @@ class Bootstrap
             $log->throwable($e);
             if ($e instanceof Exception\PermissionException) {
                 $collector = Response::notPermission($e->getMessage());
+            } elseif ($e instanceof Exception\NotLoggingException) {
+                $collector = Response::notLogging($e->getMessage());
             } else if ($e instanceof Exception\ParamsException
                 || $e instanceof Exception\TipsException
                 || $e instanceof Exception\SDKException) {
