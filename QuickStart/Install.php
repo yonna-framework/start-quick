@@ -9,7 +9,6 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
-use Yonna\QuickStart\Scope\Project\Index;
 use Yonna\QuickStart\Scope\User\FetchAdmin;
 use Yonna\QuickStart\Scope\User\Login;
 use Yonna\QuickStart\Scope\User\Meta;
