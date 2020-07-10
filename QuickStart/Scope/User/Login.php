@@ -47,25 +47,36 @@ class Login extends AbstractScope
         Log::db()->info($log, 'login');
         // 设定client_id为登录状态
         $onlineKey = self::ONLINE_REDIS_KEY . $log['client_id'];
-        if (DB::redis()->get($onlineKey) === 'online') {
+        $onlineId = DB::redis()->get($onlineKey);
+        $onlineId = (int)$onlineId;
+        if ($onlineId > 0) {
             DB::redis()->expire($onlineKey, self::ONLINE_KEEP_TIME);
         } else {
-            DB::redis()->set($onlineKey, 'online', self::ONLINE_KEEP_TIME);
+            DB::redis()->set($onlineKey, $log['user_id'], self::ONLINE_KEEP_TIME);
         }
         return true;
+    }
+
+    /**
+     * @return int
+     * @throws null
+     */
+    public function getLoggingUserId(): int
+    {
+        if (!$this->request()->getClientId()) {
+            return 0;
+        }
+        $id = DB::redis()->get(self::ONLINE_REDIS_KEY . $this->request()->getClientId()) ?? 0;
+        return (int)$id;
     }
 
     /**
      * @return bool
      * @throws null
      */
-    public function isLogging()
+    public function isLogging(): bool
     {
-        if (!$this->request()->getClientId()) {
-            return false;
-        }
-        $res = DB::redis()->get(self::ONLINE_REDIS_KEY . $this->request()->getClientId()) ?? null;
-        return $res === 'online';
+        return $this->getLoggingUserId() > 0;
     }
 
     /**
