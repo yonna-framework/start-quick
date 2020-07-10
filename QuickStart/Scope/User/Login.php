@@ -14,7 +14,7 @@ use Yonna\Log\Log;
 use Yonna\Throwable\Exception;
 
 /**
- * Class Sign
+ * Class Login
  * @package Yonna\QuickStart\Scope\User
  */
 class Login extends AbstractScope
@@ -45,8 +45,8 @@ class Login extends AbstractScope
             'input' => $input,
         ];
         Log::db()->info($log, 'login');
-        // 设定uid为登录状态
-        $onlineKey = self::ONLINE_REDIS_KEY . $log['user_id'];
+        // 设定client_id为登录状态
+        $onlineKey = self::ONLINE_REDIS_KEY . $log['client_id'];
         if (DB::redis()->get($onlineKey) === 'online') {
             DB::redis()->expire($onlineKey, self::ONLINE_KEEP_TIME);
         } else {
@@ -61,8 +61,10 @@ class Login extends AbstractScope
      */
     public function isLogging()
     {
-        $onlineKey = self::ONLINE_REDIS_KEY . $this->request()->getLoggingId();
-        $res = DB::redis()->get($onlineKey) ?? null;
+        if (!$this->request()->getClientId()) {
+            return false;
+        }
+        $res = DB::redis()->get(self::ONLINE_REDIS_KEY . $this->request()->getClientId()) ?? null;
         return $res === 'online';
     }
 
@@ -73,8 +75,9 @@ class Login extends AbstractScope
      */
     public function out()
     {
-        $onlineKey = self::ONLINE_REDIS_KEY . $this->request()->getLoggingId();
-        DB::redis()->delete($onlineKey);
+        if ($this->request()->getClientId()) {
+            DB::redis()->delete(self::ONLINE_REDIS_KEY . $this->request()->getClientId());
+        }
         return true;
     }
 

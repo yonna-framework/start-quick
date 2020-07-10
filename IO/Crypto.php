@@ -69,7 +69,11 @@ class Crypto
             $request->setLoggingId($raw['logging_id']);
             unset($raw['logging_id']);
         }
-        $request->setScopes($raw['scopes']);
+        if (isset($raw['scopes'])) {
+            $request->setScopes($raw['scopes']);
+        } elseif (isset($raw['scope'])) {
+            $request->setScopes([$raw['scope'] => []]);
+        }
         unset($raw);
         return $request;
     }

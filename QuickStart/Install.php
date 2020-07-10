@@ -13,6 +13,7 @@ use Yonna\QuickStart\Scope\User\FetchAdmin;
 use Yonna\QuickStart\Scope\User\Login;
 use Yonna\QuickStart\Scope\User\Meta;
 use Yonna\QuickStart\Scope\User\Stat;
+use Yonna\QuickStart\Scope\Xoss\Xoss;
 use Yonna\Scope\Config;
 
 class Install
@@ -79,6 +80,22 @@ class Install
                 return (new I18n())->get();
             });
         });
+    }
+
+    public static function xoss(): void
+    {
+        Config::middleware([Limiter::class],
+            function () {
+                Config::group(['xoss'], function () {
+
+                    Config::post('download', Xoss::class, 'download');
+                    
+                    Config::middleware([Logging::class], function () {
+                        Config::post('upload', Xoss::class, 'upload');
+                    });
+                });
+            }
+        );
     }
 
     public static function stat(): void
