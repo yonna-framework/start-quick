@@ -20,6 +20,11 @@ use Yonna\Throwable\Exception;
 class Xoss extends AbstractScope
 {
 
+    private function analysisFile()
+    {
+        
+    }
+
     public function upload()
     {
         return true;
