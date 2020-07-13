@@ -11,7 +11,7 @@ create table `user`
 
 create table `user_account`
 (
-    `user_id`     bigint unsigned not null comment 'y_user_id',
+    `user_id`     bigint unsigned not null comment 'user_id',
     `type`        char(255)       not null default '' comment '账号类型[name|phone|email|wx_open_id|wx_union_id]',
     `string`      char(255)       not null default '' comment '账号字串值',
     `allow_login` tinyint         not null default -1 comment '是否允许登录'
@@ -35,7 +35,7 @@ create table `user_meta_category`
 
 create table `user_meta`
 (
-    `user_id` bigint unsigned not null default 0 comment 'y_user_id',
+    `user_id` bigint unsigned not null default 0 comment 'user_id',
     `key`     char(255)       not null default '' comment 'meta key',
     `value`   varchar(1024)   not null default '' comment 'meta value',
     primary key (`user_id`),
@@ -46,7 +46,7 @@ create table `user_meta`
 create table `license`
 (
     `id`          bigint unsigned auto_increment not null comment '许可id',
-    `upper_id`    bigint unsigned                not null default 0 comment 'y_license_id',
+    `upper_id`    bigint unsigned                not null default 0 comment 'license_id',
     `name`        char(255)                      not null default '' comment '许可名字',
     `allow_scope` varchar(2048)                  not null default '' comment '许可支持的allow_scope',
     primary key (`id`),
@@ -56,8 +56,8 @@ create table `license`
 
 create table `user_license`
 (
-    `user_id`        bigint unsigned not null comment 'y_user_id',
-    `license_id`     char(255)       not null default '' comment 'y_license_id',
+    `user_id`        bigint unsigned not null comment 'user_id',
+    `license_id`     char(255)       not null default '' comment 'license_id',
     `start_datetime` datetime        not null default '1970-01-01 00:00:00' comment '起效时间',
     `end_datetime`   datetime        not null default '1970-01-01 00:00:00' comment '过期时间',
     index (`user_id`)

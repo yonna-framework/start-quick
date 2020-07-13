@@ -1,7 +1,7 @@
 create table `feedback`
 (
     `id`                bigint unsigned auto_increment not null comment 'id',
-    `user_id`           bigint unsigned                not null default 0 comment 'y_user_id',
+    `user_id`           bigint unsigned                not null default 0 comment 'user_id',
     `content`           varchar(1024)                  not null default '' comment '问题内容',
     `answer`            varchar(1024)                  not null default '' comment '答复内容',
     `ip`                char(255)                      not null default '' comment 'ip地址',

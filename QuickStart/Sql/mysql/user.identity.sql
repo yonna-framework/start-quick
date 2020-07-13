@@ -1,6 +1,6 @@
 create table `user_identity`
 (
-    `user_id`            bigint unsigned not null comment 'y_user_id',
+    `user_id`            bigint unsigned not null comment 'user_id',
     `name`               char(255)       not null default '' comment '身份证姓名（真实姓名）',
     `card_no`            char(255)       not null default '' comment '身份证号',
     `card_pic_front`     json comment '身份证正面',

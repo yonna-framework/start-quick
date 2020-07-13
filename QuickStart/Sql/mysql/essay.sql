@@ -1,7 +1,7 @@
 create table `essay_category`
 (
     `id`          bigint unsigned auto_increment not null comment 'id',
-    `upper_id`    bigint unsigned                not null default 0 comment 'y_essay_category_id',
+    `upper_id`    bigint unsigned                not null default 0 comment 'essay_category_id',
     `name`        char(255)                      not null default '' comment '分类名称',
     `level`       bigint unsigned                not null default 1 comment '分类等级',
     `description` varchar(1024)                  not null default '' comment '描述',
@@ -30,10 +30,10 @@ create table `essay_type`
 create table `essay`
 (
     `id`          bigint unsigned auto_increment not null comment 'id',
-    `user_id`     bigint unsigned                not null default 0 comment 'y_user_id',
-    `type_id`     bigint unsigned                not null default 0 comment 'y_essay_type_id',
-    `category_id` bigint unsigned                not null default 0 comment 'y_essay_category_id',
-    `status`      tinyint                        not null default 1 comment '状态[ ]',
+    `user_id`     bigint unsigned                not null default 0 comment 'user_id',
+    `type_id`     bigint unsigned                not null default 0 comment 'essay_type_id',
+    `category_id` bigint unsigned                not null default 0 comment 'essay_category_id',
+    `status`      tinyint                        not null default 1 comment '状态[-1无效,1有效]',
     `views`       bigint unsigned                not null default 0 comment '浏览量',
     `data`        json comment '文章数据',
     `ordering`    int                            not null default 0 comment '排序[降序]',
