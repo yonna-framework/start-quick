@@ -403,6 +403,14 @@ class RequestBuilder
     }
 
     /**
+     * @return Cargo
+     */
+    public function getCargo(): Cargo
+    {
+        return $this->cargo;
+    }
+
+    /**
      * @return int
      */
     public function getContentLength(): int
