@@ -67,8 +67,11 @@ class Crypto
         }
         if (isset($raw['scopes'])) {
             $request->setScopes($raw['scopes']);
-        } elseif (isset($raw['scope'])) {
-            $request->setScopes([$raw['scope'] => []]);
+            unset($raw['scopes']);
+        } else if (isset($raw['scope'])) {
+            $s = $raw['scope'];
+            unset($raw['scope']);
+            $request->setScopes([$s => $raw]);
         }
         unset($raw);
         return $request;

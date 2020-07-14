@@ -88,7 +88,7 @@ class Install
             function () {
                 Config::group(['xoss'], function () {
 
-                    Config::post('download', Xoss::class, 'download');
+                    Config::get('download', Xoss::class, 'download');
 
                     Config::middleware([Logging::class], function () {
                         Config::post('upload', Xoss::class, 'upload');

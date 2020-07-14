@@ -5,6 +5,7 @@ namespace Yonna\QuickStart\Scope\Xoss;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\System;
+use Yonna\IO\Request;
 use Yonna\QuickStart\Helper\Assets;
 use Yonna\QuickStart\Scope\AbstractScope;
 
@@ -175,4 +176,9 @@ class Xoss extends AbstractScope
         return $this->analysisFile();
     }
 
+    public function download()
+    {
+        $input = $this->request()->getInput();
+        return $input;
+    }
 }

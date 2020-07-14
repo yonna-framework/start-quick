@@ -155,7 +155,7 @@ class RequestBuilder
         switch ($this->getRequestMethod()) {
             case 'GET':
                 switch ($this->content_type) {
-                    case null:
+                    case '':
                         $data = $this->getGet();
                         break;
                     case 'application/x-www-form-urlencoded':
@@ -175,7 +175,7 @@ class RequestBuilder
                 break;
             case 'POST':
                 switch ($this->content_type) {
-                    case null:
+                    case '':
                     case 'multipart/form-data':
                     case 'application/x-www-form-urlencoded':
                         $data = $this->getPost();
