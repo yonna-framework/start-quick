@@ -7,6 +7,7 @@ namespace Yonna\Response;
 
 use Throwable;
 use Yonna\Foundation\Convert;
+use Yonna\Response\Consequent;
 
 /**
  * Class Collector
@@ -16,7 +17,7 @@ class Collector
 {
 
     private $response_data_type = 'json';
-    private $charset = 'utf-8';
+    private $charset = '';
     private $code = 0;
     private $msg = '';
     private $data = [];
@@ -27,9 +28,9 @@ class Collector
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getResponseDataType(): string
+    public function getResponseDataType()
     {
         return $this->response_data_type;
     }
@@ -105,18 +106,18 @@ class Collector
     }
 
     /**
-     * @return array
+     * @return mixed
      */
-    public function getData(): array
+    public function getData()
     {
         return $this->data;
     }
 
     /**
-     * @param array $data
+     * @param $data
      * @return Collector
      */
-    public function setData(array $data): self
+    public function setData($data): self
     {
         $this->data = $data;
         return $this;
@@ -180,6 +181,9 @@ class Collector
     {
         $response = null;
         switch ($this->getResponseDataType()) {
+            case 'file':
+                $response = $this->getData()->getRaw();
+                break;
             case 'xml':
                 $response = $this->toXml();
                 break;
@@ -198,39 +202,32 @@ class Collector
     }
 
     /**
-     * @param string $format
      * @return mixed
      */
-    public function getHeader($format = 'str')
+    public function getHeader()
     {
+        $header = [];
+        if ($this->getCharset()) {
+            $header['Content-Type'] = $this->getCharset();
+        }
         switch ($this->getResponseDataType()) {
+            case 'file':
+                $header['Content-Disposition'] = 'attachment;filename=' . $this->getData()->getName();
+                $header['Accept-Ranges'] = 'bytes';
+                $header['Accept-Length'] = strlen($this->getData()->getRaw());
+                $header['Content-Type'] = $this->getData()->getContentType();
+                break;
             case 'xml':
-                $ContentType = 'application/xml';
+                $header['Content-Type'] = 'application/xml';
                 break;
             case 'json':
-                $ContentType = 'application/json';
+                $header['Content-Type'] = 'application/json';
                 break;
             case 'html':
-                $ContentType = 'text/html';
+                $header['Content-Type'] = 'text/html';
                 break;
             default:
-                $ContentType = 'text/plain';
-                break;
-        }
-        switch ($format) {
-            case 'arr':
-            case 'array':
-                $header = [
-                    'Content-Type' => $ContentType,
-                    'Charset' => $this->getCharset()
-                ];
-                break;
-            case 'str':
-            case 'string':
-            case 'text':
-            default:
-                $header = 'Content-Type:' . $ContentType;
-                $header .= ';Charset=' . $this->getCharset();
+                $header['Content-Type'] = 'text/plain';
                 break;
         }
         return $header;
@@ -242,7 +239,9 @@ class Collector
     public function end()
     {
         try {
-            header($this->getHeader('str'));
+            foreach ($this->getHeader() as $k => $v) {
+                header($k . ':' . $v);
+            }
         } catch (Throwable $e) {
             exit('Yonna cannot modify header information - headers already sent by');
         }

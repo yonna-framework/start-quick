@@ -96,7 +96,7 @@ class WorkermanHttp extends Console
                 $this->requestBuilder($connection, $request)
             );
             if ($responseCollector instanceof Collector) {
-                $responseHeader = $responseCollector->getHeader('arr');
+                $responseHeader = $responseCollector->getHeader();
                 foreach ($responseHeader as $hk => $hv) {
                     \Workerman\Protocols\Http::header($hk . ':' . $hv);
                 }

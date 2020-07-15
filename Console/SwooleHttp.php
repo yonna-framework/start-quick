@@ -114,7 +114,7 @@ class SwooleHttp extends Console
             $this->server->task($requestVars, -1, function ($server, $task_id, Collector $responseCollector) use ($response) {
                 $response->header('Server', 'Pure');
                 if ($responseCollector !== false) {
-                    $responseHeader = $responseCollector->getHeader('arr');
+                    $responseHeader = $responseCollector->getHeader();
                     foreach ($responseHeader as $hk => $hv) {
                         $response->header($hk, $hv);
                     }

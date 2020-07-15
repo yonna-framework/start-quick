@@ -5,9 +5,9 @@ namespace Yonna\QuickStart\Scope\Xoss;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\System;
-use Yonna\IO\Request;
 use Yonna\QuickStart\Helper\Assets;
 use Yonna\QuickStart\Scope\AbstractScope;
+use Yonna\Response\Consequent\File;
 
 /**
  * Class Xoss
@@ -176,9 +176,36 @@ class Xoss extends AbstractScope
         return $this->analysisFile();
     }
 
-    public function download()
+    /**
+     * http://url?scope=xoss_download&_=key|
+     * $params [_] 参数以 | 隔开，依次为：key|
+     * @return File
+     * @throws \Yonna\Throwable\Exception\DatabaseException
+     */
+    public function download(): File
     {
-        $input = $this->request()->getInput();
-        return $input;
+        $input = $this->request()->getInput('_');
+        $params = explode('|', $input);
+        $key = $params[0] ?? null;
+
+        $rawData = null;
+        $contentType = null;
+        $fileName = null;
+
+        $fileData = DB::connect()->table('xoss')->where(fn(Where $w) => $w->equalTo('key', $key))->one();
+        if ($fileData) {
+            // 热度
+            DB::connect()->table('xoss')->where(fn(Where $w) => $w->equalTo('key', $key))->update([
+                'views' => $fileData['xoss_views'] + 1
+            ]);
+            // 图片处理
+            if (strpos($fileData['xoss_content_type'], "image") >= 0) {
+
+            }
+            $rawData = @file_get_contents($fileData['xoss_uri']);
+            $contentType = $fileData['xoss_content_type'];
+            $fileName = $fileData['xoss_name'];
+        }
+        return (new File($rawData, $contentType, $fileName));
     }
 }

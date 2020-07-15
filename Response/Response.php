@@ -7,6 +7,7 @@
 namespace Yonna\Response;
 
 use Throwable;
+use Yonna\Response\Consequent;
 
 /**
  * Class Response
@@ -197,5 +198,15 @@ class Response
             ->setData($data);
         return $HandleCollector;
     }
+
+    public static function download(Consequent\File $data = null)
+    {
+        $HandleCollector = new Collector();
+        $HandleCollector
+            ->setResponseDataType('file')
+            ->setData($data);
+        return $HandleCollector;
+    }
+
 
 }

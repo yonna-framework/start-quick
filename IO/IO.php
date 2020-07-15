@@ -9,6 +9,7 @@ use Closure;
 use Yonna\Foundation\Arr;
 use Yonna\Foundation\Str;
 use Yonna\Response\Collector;
+use Yonna\Response\Consequent;
 use Yonna\Response\Response;
 use Yonna\Scope\Config;
 use Yonna\Throwable\Exception;
@@ -62,19 +63,21 @@ class IO
                     }
                 }
                 $response = $sc['call']($request);
-                foreach ($sv as $vKey => $vVal) {
-                    $data = isset($response['list']) ? $response['list'] : $response;
-                    if ($vKey === '*') {
-                        foreach ($data as &$l) {
-                            $l['_'] = $this->scopes($vVal, $request, $l)[0];
+                if (is_array($response)) {
+                    foreach ($sv as $vKey => $vVal) {
+                        $data = isset($response['list']) ? $response['list'] : $response;
+                        if ($vKey === '*') {
+                            foreach ($data as &$l) {
+                                $l['_'] = $this->scopes($vVal, $request, $l)[0];
+                            }
+                            if (isset($response['list'])) {
+                                $response['list'] = $data;
+                            } else {
+                                $response = $data;
+                            }
+                        } elseif ($vKey === '+') {
+                            $response['_'] = $this->scopes($vVal, $request, $data)[0];
                         }
-                        if (isset($response['list'])) {
-                            $response['list'] = $data;
-                        } else {
-                            $response = $data;
-                        }
-                    } elseif ($vKey === '+') {
-                        $response['_'] = $this->scopes($vVal, $request, $data)[0];
                     }
                 }
                 if ($sc['after']) {
@@ -110,6 +113,8 @@ class IO
         if ($responses[1] === 1) {
             if ($response === null) {
                 $response = Response::notFound('You should return some response but not null');
+            } else if ($response instanceof Consequent\File) {
+                $response = Response::download($response);
             } else if (is_array($response)) {
                 $response = Response::success('fetch array success', $response);
             } else if (is_string($response)) {
