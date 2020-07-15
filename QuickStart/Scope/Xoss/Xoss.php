@@ -177,16 +177,20 @@ class Xoss extends AbstractScope
     }
 
     /**
-     * http://url?scope=xoss_download&_=key|
-     * $params [_] 参数以 | 隔开，依次为：key|
+     * $params[k]访键]
+     * $params[reverse]反相 (1 or 0)
+     * $params[grayscale]灰度：grayscale=1 (1 or 0)
+     * $params[resize]缩放：100,100 | 100%,100% 支持百分比（urlencode=%25）及固定参数,height可省略
+     * $params[blur]模糊：blur=2 (distance)模糊程度，数值越大越模糊
+     * $params[thumb]裁剪：thumb=500,500,1200,1200 (x1,y1,x2,y2) 坐标以左上角为(0,0)
+     * $params[flip]翻转：flip=0,1 (x,y) 支持0 or 1，1表示该轴翻转
      * @return File
      * @throws \Yonna\Throwable\Exception\DatabaseException
      */
     public function download(): File
     {
-        $input = $this->request()->getInput('_');
-        $params = explode('|', $input);
-        $key = $params[0] ?? null;
+        $input = $this->request()->getInput();
+        $key = $params['k'] ?? null;
 
         $rawData = null;
         $contentType = null;
@@ -200,7 +204,7 @@ class Xoss extends AbstractScope
             ]);
             // 图片处理
             if (strpos($fileData['xoss_content_type'], "image") >= 0) {
-
+                exit('f');
             }
             $rawData = @file_get_contents($fileData['xoss_uri']);
             $contentType = $fileData['xoss_content_type'];

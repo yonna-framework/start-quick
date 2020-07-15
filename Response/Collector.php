@@ -212,8 +212,11 @@ class Collector
         }
         switch ($this->getResponseDataType()) {
             case 'file':
-                $header['Content-Disposition'] = 'attachment;filename=' . $this->getData()->getName();
                 $header['Accept-Ranges'] = 'bytes';
+                $header['Content-Transfer-Encoding'] = 'binary';
+                $header['Cache-Control'] = 'no-cache,no-store,max-age=0,must-revalidate';
+                $header['Pragma'] = 'no-cache';
+                $header['Content-Disposition'] = 'attachment;filename=' . $this->getData()->getName();
                 $header['Accept-Length'] = strlen($this->getData()->getRaw());
                 $header['Content-Type'] = $this->getData()->getContentType();
                 break;
