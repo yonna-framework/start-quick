@@ -271,9 +271,8 @@ class Xoss extends AbstractScope
 
                         }
                         // 模糊
-                        if ($blur) {
-                            $blur = round($blur);
-                            $imageSource[] = Image::blur($imageSource[0], $rotate);
+                        if ($blur && $blur > 0) {
+                            $imageSource[] = Image::blur($imageSource[0], $blur);
                             if (false !== $imageSource[1]) {
                                 array_shift($imageSource);
                             } else {
@@ -283,7 +282,7 @@ class Xoss extends AbstractScope
                         }
                         // 灰度
                         if ($grayscale && $grayscale == 1) {
-                            $imageSource[] = Image::grayscale($imageSource[0], $rotate);
+                            $imageSource[] = Image::grayscale($imageSource[0]);
                             if (false !== $imageSource[1]) {
                                 array_shift($imageSource);
                             } else {
@@ -299,10 +298,8 @@ class Xoss extends AbstractScope
                             } else {
                                 array_pop($imageSource);
                             }
-
                         }
                     }
-
                     if ($imageSource !== null) {
                         $imageSource = current($imageSource);
                         ob_start();

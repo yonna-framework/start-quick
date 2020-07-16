@@ -125,6 +125,27 @@ class Image extends AbstractHelper
     }
 
     /**
+     * 灰度化(黑白化)
+     * @param $srcSource
+     * @return false|resource
+     */
+    public static function grayscale($srcSource)
+    {
+        $imageWidth = imagesx($srcSource);
+        $imageHeight = imagesy($srcSource);
+        $tempSource = imagecreatetruecolor($imageWidth, $imageHeight);
+        self::colorTransparent($tempSource);
+        for ($y = 0; $y < $imageHeight; $y++) {
+            for ($x = 0; $x < $imageWidth; $x++) {
+                $gray = (ImageColorAt($srcSource, $x, $y) >> 8) & 0xFF;
+                $hex = imagecolorallocate($tempSource, $gray, $gray, $gray);
+                imagesetpixel($tempSource, $x, $y, $hex);
+            }
+        }
+        return $tempSource;
+    }
+
+    /**
      * 反相
      * @param $srcSource
      * @return false|resource
@@ -145,6 +166,47 @@ class Image extends AbstractHelper
                 $hex = imagecolorallocate($tempSource, $red, $green, $blue);
                 imagesetpixel($tempSource, $x, $y, $hex);
             }
+        }
+        return $tempSource;
+    }
+
+    /**
+     * 模糊
+     * @param $srcSource
+     * @param $blur
+     * @return false|resource
+     */
+    public static function blur($srcSource, $blur)
+    {
+        $blur = floor($blur);
+        if ($blur < 1) {
+            return false;
+        }
+        $imageWidth = imagesx($srcSource);
+        $imageHeight = imagesy($srcSource);
+        $smallestWidth = ceil($imageWidth * pow(0.5, $blur));
+        $smallestHeight = ceil($imageHeight * pow(0.5, $blur));
+        $prevImage = $srcSource;
+        $prevWidth = $imageWidth;
+        $prevHeight = $imageHeight;
+        $nextImage = false;
+        $nextWidth = 0;
+        $nextHeight = 0;
+        for ($i = 0; $i < $blur; $i += 1) {
+            $nextWidth = $smallestWidth * pow(2, $i);
+            $nextHeight = $smallestHeight * pow(2, $i);
+            $nextImage = imagecreatetruecolor($nextWidth, $nextHeight);
+            imagecopyresized($nextImage, $prevImage, 0, 0, 0, 0, $nextWidth, $nextHeight, $prevWidth, $prevHeight);
+            imagefilter($nextImage, IMG_FILTER_GAUSSIAN_BLUR);
+            $prevImage = $nextImage;
+            $prevWidth = $nextWidth;
+            $prevHeight = $nextHeight;
+        }
+        if ($nextImage !== false) {
+            $tempSource = imagecreatetruecolor($imageWidth, $imageHeight);
+            self::colorTransparent($tempSource);
+            imagecopyresized($tempSource, $nextImage, 0, 0, 0, 0, $imageWidth, $imageHeight, $nextWidth, $nextHeight);
+            imagefilter($tempSource, IMG_FILTER_GAUSSIAN_BLUR);
         }
         return $tempSource;
     }
