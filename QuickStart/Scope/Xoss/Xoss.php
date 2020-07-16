@@ -45,29 +45,26 @@ class Xoss extends AbstractScope
         if (!empty($data['error'])) {
             switch ($data['error']) {
                 case '1':
-                    $error = 'out of size in .ini';
+                    $error = 'Maximum file size is ' . ini_get('upload_max_filesize');
                     break;
                 case '2':
-                    $error = 'out of form size';
+                    $error = 'Form size limit exceeded';
                     break;
                 case '3':
-                    $error = 'file is damaged';
+                    $error = 'The file is damaged';
                     break;
                 case '4':
-                    $error = 'file lose';
+                    $error = 'File missing';
                     break;
                 case '6':
-                    $error = 'temp file not found';
+                    $error = 'No temporary file found';
                     break;
                 case '7':
-                    $error = 'hard disk error';
-                    break;
-                case '8':
-                    $error = 'aborted by extended file upload';
+                    $error = 'File write failed';
                     break;
                 case '999':
                 default:
-                    $error = 'unknow';
+                    $error = 'Unknown mistake';
             }
             return $this->false($error);
         }

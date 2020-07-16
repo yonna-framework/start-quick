@@ -186,26 +186,28 @@ class Image extends AbstractHelper
         $imageHeight = imagesy($srcSource);
         $smallestWidth = ceil($imageWidth * pow(0.5, $blur));
         $smallestHeight = ceil($imageHeight * pow(0.5, $blur));
-        $prevImage = $srcSource;
+        $prevImage = [null];
         $prevWidth = $imageWidth;
         $prevHeight = $imageHeight;
-        $nextImage = false;
         $nextWidth = 0;
         $nextHeight = 0;
         for ($i = 0; $i < $blur; $i += 1) {
             $nextWidth = $smallestWidth * pow(2, $i);
             $nextHeight = $smallestHeight * pow(2, $i);
-            $nextImage = imagecreatetruecolor($nextWidth, $nextHeight);
-            imagecopyresized($nextImage, $prevImage, 0, 0, 0, 0, $nextWidth, $nextHeight, $prevWidth, $prevHeight);
-            imagefilter($nextImage, IMG_FILTER_GAUSSIAN_BLUR);
-            $prevImage = $nextImage;
+            $prevImage[] = imagecreatetruecolor($nextWidth, $nextHeight);
+            imagecopyresized($prevImage[1], $prevImage[0] ?? $srcSource, 0, 0, 0, 0, $nextWidth, $nextHeight, $prevWidth, $prevHeight);
+            imagefilter($prevImage[1], IMG_FILTER_GAUSSIAN_BLUR);
             $prevWidth = $nextWidth;
             $prevHeight = $nextHeight;
+            $im = array_shift($prevImage);
+            if ($im !== null) {
+                imagedestroy($im);
+            }
         }
-        if ($nextImage !== false) {
+        if ($prevImage[0] !== false) {
             $tempSource = imagecreatetruecolor($imageWidth, $imageHeight);
             self::colorTransparent($tempSource);
-            imagecopyresized($tempSource, $nextImage, 0, 0, 0, 0, $imageWidth, $imageHeight, $nextWidth, $nextHeight);
+            imagecopyresized($tempSource, $prevImage[0], 0, 0, 0, 0, $imageWidth, $imageHeight, $nextWidth, $nextHeight);
             imagefilter($tempSource, IMG_FILTER_GAUSSIAN_BLUR);
         }
         return $tempSource;
