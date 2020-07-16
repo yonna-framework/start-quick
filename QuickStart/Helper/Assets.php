@@ -272,6 +272,7 @@ class Assets extends AbstractHelper
             case 'bmp':
             case 'wbmp':
                 imagewbmp($source, $path);
+                imagewbmp($source, $path);
                 break;
         }
     }

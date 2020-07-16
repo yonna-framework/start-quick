@@ -6,6 +6,7 @@ use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\System;
 use Yonna\QuickStart\Helper\Assets;
+use Yonna\QuickStart\Helper\Image;
 use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Response\Consequent\File;
 
@@ -189,26 +190,145 @@ class Xoss extends AbstractScope
      */
     public function download(): File
     {
-        $input = $this->request()->getInput();
-        $key = $params['k'] ?? null;
-
         $rawData = null;
         $contentType = null;
         $fileName = null;
 
-        $fileData = DB::connect()->table('xoss')->where(fn(Where $w) => $w->equalTo('key', $key))->one();
-        if ($fileData) {
-            // 热度
-            DB::connect()->table('xoss')->where(fn(Where $w) => $w->equalTo('key', $key))->update([
-                'views' => $fileData['xoss_views'] + 1
-            ]);
-            // 图片处理
-            if (strpos($fileData['xoss_content_type'], "image") >= 0) {
-                exit('f');
+        $input = $this->request()->getInput();
+        $key = $input['k'] ?? null;
+        if ($key) {
+            $fileData = DB::connect()->table('xoss')->where(fn(Where $w) => $w->equalTo('key', $key))->one();
+            if ($fileData) {
+                // 热度
+                DB::connect()->table('xoss')->where(fn(Where $w) => $w->equalTo('key', $key))->update([
+                    'views' => $fileData['xoss_views'] + 1
+                ]);
+                //
+                $rawData = @file_get_contents($fileData['xoss_uri']);
+                $contentType = $fileData['xoss_content_type'];
+                $fileName = $fileData['xoss_name'];
+                // 图片处理(支持5种图片格式)
+                $thumb = $input['thumb'] ?? null;
+                $resize = $input['resize'] ?? null;
+                $flip = $input['flip'] ?? null;
+                $rotate = $input['rotate'] ?? null;
+                $blur = $input['blur'] ?? null;
+                $grayscale = $input['grayscale'] ?? null;
+                $reverse = $input['reverse'] ?? null;
+                if (in_array($contentType, ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'])
+                    && ($thumb || $resize || $flip || $rotate || $blur || $grayscale || $reverse)) {
+                    $imageSource[] = imagecreatefromstring($rawData);
+                    if ($imageSource[0] !== false) {
+                        // 裁剪
+                        if ($thumb) {
+                            $thumbSplit = explode(",", $thumb);
+                            $imageSource[] = Image::thumb($imageSource[0], $thumbSplit);
+                            if (false !== $imageSource[1]) {
+                                array_shift($imageSource);
+                            } else {
+                                array_pop($imageSource);
+                            }
+                        }
+                        // 缩放
+                        if ($resize) {
+                            $resizeSplit = explode(",", $resize);
+                            $imageSource[] = Image::resize($imageSource[0], $resizeSplit);
+                            if (false !== $imageSource[1]) {
+                                array_shift($imageSource);
+                            } else {
+                                array_pop($imageSource);
+                            }
+                        }
+                        // 翻转
+                        if ($flip) {
+                            $flipSplit = explode(",", $flip);
+                            if (isset($flipSplit[0]) && $flipSplit[0] == 1) {
+                                $imageSource[] = Image::flipX($imageSource[0]);
+                                if (false !== $imageSource[1]) {
+                                    array_shift($imageSource);
+                                } else {
+                                    array_pop($imageSource);
+                                }
+                            }
+                            if (isset($flipSplit[1]) && $flipSplit[1] == 1) {
+                                $imageSource[] = Image::flipY($imageSource[0]);
+                                if (false !== $imageSource[1]) {
+                                    array_shift($imageSource);
+                                } else {
+                                    array_pop($imageSource);
+                                }
+                            }
+                        }
+                        // 旋转
+                        if ($rotate) {
+                            $rotate = round($rotate);
+                            $imageSource[] = Image::rotate($imageSource[0], $rotate);
+                            if (false !== $imageSource[1]) {
+                                array_shift($imageSource);
+                            } else {
+                                array_pop($imageSource);
+                            }
+
+                        }
+                        // 模糊
+                        if ($blur) {
+                            $blur = round($blur);
+                            $imageSource[] = Image::blur($imageSource[0], $rotate);
+                            if (false !== $imageSource[1]) {
+                                array_shift($imageSource);
+                            } else {
+                                array_pop($imageSource);
+                            }
+
+                        }
+                        // 灰度
+                        if ($grayscale && $grayscale == 1) {
+                            $imageSource[] = Image::grayscale($imageSource[0], $rotate);
+                            if (false !== $imageSource[1]) {
+                                array_shift($imageSource);
+                            } else {
+                                array_pop($imageSource);
+                            }
+
+                        }
+                        // 色相反转
+                        if ($reverse && $reverse == 1) {
+                            $imageSource[] = Image::reverse($imageSource[0]);
+                            if (false !== $imageSource[1]) {
+                                array_shift($imageSource);
+                            } else {
+                                array_pop($imageSource);
+                            }
+
+                        }
+                    }
+
+                    if ($imageSource !== null) {
+                        $imageSource = current($imageSource);
+                        ob_start();
+                        switch ($contentType) {
+                            case 'image/jpeg':
+                                imagejpeg($imageSource);
+                                break;
+                            case 'image/png':
+                                imagepng($imageSource);
+                                break;
+                            case 'image/gif':
+                                imagegif($imageSource);
+                                break;
+                            case 'image/bmp':
+                                imagebmp($imageSource);
+                                break;
+                            case 'image/webp':
+                                imagewebp($imageSource);
+                                break;
+                        }
+                        $rawData = ob_get_contents();
+                        ob_end_clean();
+                        imagedestroy($imageSource);
+                    }
+                }
             }
-            $rawData = @file_get_contents($fileData['xoss_uri']);
-            $contentType = $fileData['xoss_content_type'];
-            $fileName = $fileData['xoss_name'];
         }
         return (new File($rawData, $contentType, $fileName));
     }
