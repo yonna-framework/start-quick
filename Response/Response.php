@@ -94,7 +94,7 @@ class Response
             ->setMsg($t->getMessage())
             ->setData([
                 'error_code' => $t->getCode(),
-                'error_trace' => self::debug_backtrace($t->getTrace(), getenv('IS_DEBUG') !== 'true')
+                'error_trace' => self::debug_backtrace($t->getTrace(), getenv('DEBUG') !== 'true')
             ]);
         return $HandleCollector;
     }
@@ -110,7 +110,7 @@ class Response
             ->setData([
                 'error_code' => $t->getCode(),
                 'error_data' => $data,
-                'error_trace' => self::debug_backtrace($t->getTrace(), getenv('IS_DEBUG') !== 'true')
+                'error_trace' => self::debug_backtrace($t->getTrace(), getenv('DEBUG') !== 'true')
             ]);
         return $HandleCollector;
     }

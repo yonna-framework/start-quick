@@ -37,7 +37,7 @@ class Env
         }
         date_default_timezone_set(TIMEZONE);
         // debug
-        if (getenv('IS_DEBUG') === 'true') {
+        if (getenv('DEBUG') === 'true') {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
             $Cargo->setDebug(true);

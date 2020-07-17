@@ -14,7 +14,7 @@ class Debug extends Before
      */
     public function handle(): Request
     {
-        if (getenv('IS_DEBUG') === 'false') {
+        if (getenv('DEBUG') === 'false') {
             Exception::debug('NOT_DEBUG');
         }
         return $this->request();

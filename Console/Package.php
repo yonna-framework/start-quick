@@ -103,7 +103,7 @@ class Package extends Console
                 $content = file_get_contents($source);
                 // 如果是env文件
                 if (strpos($source, '.env') !== false) {
-//                    $content = preg_replace('/IS_DEBUG(.*?)=(.*?)true/i', 'IS_DEBUG=false', $content);
+                    $content = preg_replace('/DEBUG(.*?)=(.*?)true/i', 'DEBUG=false', $content);
                 }
                 // 去除空行
                 $content = str_replace(["\r\n", "\r", "\n"], PHP_EOL, $content);

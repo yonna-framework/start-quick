@@ -30,7 +30,7 @@ class Login extends AbstractScope
      * @throws Exception\DatabaseException
      * @throws Exception\ParamsException
      */
-    private function loginRecord($userInfo)
+    public function loginRecord($userInfo)
     {
         if (!$userInfo['user_id']) {
             Exception::params('登录记录参数不全');

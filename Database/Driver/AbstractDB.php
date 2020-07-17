@@ -388,7 +388,7 @@ abstract class AbstractDB
      */
     protected function query(string $query)
     {
-        if (getenv('IS_DEBUG') === 'true') {
+        if (getenv('DEBUG') === 'true') {
             Log::file()->info(['query' => $query], 'database_' . $this->options['db_type']);
         }
         Record::add($this->options['db_type'], $this->last_connection, $query);
