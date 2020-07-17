@@ -98,6 +98,7 @@ CREATE TABLE `league_mission`
     `rejection_datetime`  datetime                       not null default '1970-01-01 00:00:00' not null comment '驳回日期时间',
     `pass_datetime`       datetime                       not null default '1970-01-01 00:00:00' not null comment '通过日期时间',
     `delete_datetime`     datetime                       not null default '1970-01-01 00:00:00' not null comment '作废日期时间',
+    `event_photos`        json comment '活动图片',
     `self_evaluation`     numeric(3, 1)                  not null default 0.0 comment '自我评分',
     `platform_evaluation` numeric(3, 1)                  not null default 0.0 comment '平台评分',
     PRIMARY KEY (`id`),
