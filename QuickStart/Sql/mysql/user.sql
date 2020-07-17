@@ -19,13 +19,12 @@ create table `user_account`
 
 create table `user_meta_category`
 (
-    `key`              char(255) not null default '' comment 'meta key',
-    `value_format`     char(255) not null default 'string' comment '数据格式化类型',
-    `value_default`    char(255) not null default '' comment '默认值',
-    `component_type`   char(255) not null default '' comment '前端组件类型',
-    `component_values` char(255) not null default '' comment '前端组件数据需求',
-    `status`           tinyint   not null default -1 comment '状态[-1无效,1有效]',
-    `ordering`         int       not null default 0 comment '排序[降序]',
+    `key`           char(255) not null default '' comment 'meta key',
+    `value_format`  char(255) not null default 'string' comment '数据格式化类型',
+    `value_default` char(255) not null default '' comment '默认值',
+    `component`     char(255) not null default '' comment '前端组件',
+    `status`        tinyint   not null default -1 comment '状态[-1无效,1有效]',
+    `ordering`      int       not null default 0 comment '排序[降序]',
     primary key (`key`),
     unique key `uk_key` (`key`),
     index (`value_format`),
@@ -76,33 +75,32 @@ values (1, 1, now(), '2099-12-31 23:59:59');
 insert into `user_account` (`user_id`, `type`, `string`, `allow_login`)
 values (1, 'name', 'admin', 1);
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('name', 'string', 1, 'input_string');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('nickname', 'string', 1, 'input_string');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('birth_date', 'datetime', 1, 'input_string');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('age', 'integer', 1, 'input_integer');
 
-insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`, `component_type`,
-                                  `component_values`)
-values ('sex', 'integer', '-1', 1, 'select', ',,,-1,1,2');
+insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`, `component`)
+values ('sex', 'integer', '-1', 1, 'select:mapping:Yonna_QuickStart_Mapping_User_Sex');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('region', 'integer', 1, 'cascader_region');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('address', 'string', 1, 'input_string');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
-values ('work', 'integer[]', 1, 'checkbox_multiple');
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
+values ('work', 'integer[]', 1, 'checkbox_multiple:db.default:data_work.name');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
-values ('hobby', 'integer[]', 1, 'checkbox_multiple');
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
+values ('hobby', 'integer[]', 1, 'checkbox_multiple:db.default:data_hobby.name');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component_type`)
-values ('speciality', 'integer[]', 1, 'checkbox_multiple');
+insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
+values ('speciality', 'integer[]', 1, 'checkbox_multiple:db.default:data_speciality.name');
