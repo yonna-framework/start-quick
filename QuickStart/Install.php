@@ -9,6 +9,7 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
+use Yonna\QuickStart\Scope\Sdk\Wxmp;
 use Yonna\QuickStart\Scope\User\AdminFetch;
 use Yonna\QuickStart\Scope\User\Login;
 use Yonna\QuickStart\Scope\User\Meta;
@@ -114,28 +115,57 @@ class Install
     {
         Config::middleware([Limiter::class],
             function () {
-                Config::group(['admin'], function () {
+                Config::group(['user'], function () {
+                    Config::post('logging', Login::class, 'isLogging');
+                    Config::post('logout', Login::class, 'out');
+                });
+                Config::middleware([Logging::class], function () {
+                    Config::group(['meta'], function () {
+                        Config::post('category', Meta::class, 'category');
+                        Config::post('categoryAdd', Meta::class, 'addCategory');
+                    });
+                });
+            }
+        );
+    }
 
-                    Config::post('login', Login::class, 'in');
+    public static function sdk(): void
+    {
+        Config::middleware([Limiter::class],
+            function () {
+                Config::group(['sdk'], function () {
+
+                    Config::group(['wxmp'], function () {
+                        Config::post('login', Wxmp::class, 'in');
+                    });
 
                     Config::middleware([Logging::class],
                         function () {
-                            Config::post('logout', Login::class, 'out');
-                            Config::post('me', AdminFetch::class, 'me');
 
-                            Config::group(['user'], function () {
-
-                                Config::post('info', AdminFetch::class, 'info');
-
-                                Config::group(['meta'], function () {
-                                    Config::post('category', Meta::class, 'category');
-                                    Config::post('categoryAdd', Meta::class, 'addCategory');
-                                });
-                            });
                         }
                     );
                 });
             }
         );
     }
+
+    public static function admin(): void
+    {
+        Config::group(['admin'], function () {
+            Config::middleware([Limiter::class], function () {
+                Config::post('login', Login::class, 'in');
+            });
+            Config::middleware([Logging::class], function () {
+                Config::group(['user'], function () {
+                    Config::post('info', AdminFetch::class, 'info');
+                });
+            });
+        });
+    }
+
+    public static function usual(): void
+    {
+
+    }
+
 }
