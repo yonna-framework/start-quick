@@ -13,7 +13,7 @@ class Limiter extends Before
     const REDIS_KEY = 'limiter:';
     const TIMEOUT = 3;
     const BAN = 60 * 10; // 10分钟封号
-    const LIMIT = 20;
+    const LIMIT = 30;
 
     /**
      * IP N秒内请求限制器
@@ -27,7 +27,6 @@ class Limiter extends Before
         $k = self::REDIS_KEY . $ip;
         $limit = DB::redis()->gcr($k);
         if ($limit > self::LIMIT) {
-            DB::redis()->incr($k, 100);
             DB::redis()->expire($k, self::BAN);
             Exception::permission('OVER LIMIT');
         }

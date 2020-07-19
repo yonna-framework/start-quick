@@ -122,7 +122,7 @@ class IO
             } else if (is_numeric($response)) {
                 $response = Response::success('fetch number success', ['number' => $response]);
             } else if (is_bool($response)) {
-                $response = $response === true ? Response::success('fetch boolean success', ['bool' => $response]) : Response::error('error');
+                $response = Response::success('fetch boolean success', ['bool' => $response]);
             }
         } else {
             $response = Response::success('fetch multi success', $response);
