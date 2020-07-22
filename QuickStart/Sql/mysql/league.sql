@@ -21,6 +21,7 @@ CREATE TABLE `league`
     `id`                   bigint unsigned auto_increment not null comment 'id',
     `master_user_id`       bigint unsigned                not null comment '社团拥有者user_id',
     `name`                 char(255)                      not null comment '社团名',
+    `logo_pic`             char(255)                      not null comment 'LOGO图',
     `business_license_pic` char(255)                      not null comment '营业执照',
     `status`               tinyint                        not null default 1 comment '状态[-2作废,-1申请驳回,1待审核,2审核通过]',
     `apply_reason`         char(255)                      not null default '' comment '申请理由',
