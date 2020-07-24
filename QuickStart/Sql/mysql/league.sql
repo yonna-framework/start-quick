@@ -90,7 +90,7 @@ CREATE TABLE `league_mission`
     `work_range`          varchar(1024)                  not null comment '范围:工作',
     `speciality_range`    varchar(1024)                  not null comment '范围:特长',
     `points`              numeric(7, 1)                  not null default 0.0 comment '任务价值分数',
-    `status`              tinyint                        not null default 1 comment '状态[-2作废,-1申请驳回,1待审核,2审核通过]',
+    `status`              tinyint                        not null default 1 comment '状态[-2作废,-1申请驳回,1待审核,2审核通过,10已完成]',
     `apply_reason`        char(255)                      not null default '' comment '申请理由',
     `rejection_reason`    char(255)                      not null default '' comment '驳回理由',
     `passed_reason`       char(255)                      not null default '' comment '通过理由',
