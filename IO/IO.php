@@ -36,7 +36,7 @@ class IO
             $sk = Str::upper($sk);
             $sc = Arr::get(Config::fetch(), "{$request->getRequestMethod()}.{$sk}");
             if (!$sc) {
-                Exception::throw('no scope isset');
+                Exception::throw("no scope isset: {$request->getRequestMethod()}.{$sk}");
             }
             if ($sc['call'] instanceof Closure) {
                 // 判断 upperData

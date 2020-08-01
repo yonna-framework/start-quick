@@ -118,11 +118,11 @@ class Install
                 Config::group(['user'], function () {
                     Config::post('logging', Login::class, 'isLogging');
                     Config::post('logout', Login::class, 'out');
-                });
-                Config::middleware([Logging::class], function () {
-                    Config::group(['meta'], function () {
-                        Config::post('category', Meta::class, 'category');
-                        Config::post('categoryAdd', Meta::class, 'addCategory');
+                    Config::middleware([Logging::class], function () {
+                        Config::group(['meta'], function () {
+                            Config::post('category', Meta::class, 'category');
+                            Config::post('categoryAdd', Meta::class, 'addCategory');
+                        });
                     });
                 });
             }
