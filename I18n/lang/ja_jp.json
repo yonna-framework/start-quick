@@ -1,4 +1,5 @@
 {
+    "ACCESSIBILITY": "アクセシビリティ",
     "ACCESSING": "アクセス.",
     "ACCOUNT": "アカウント",
     "ACCOUNT DOES NOT EXIST": "アカウントは存在しない存在する",
@@ -172,6 +173,7 @@
     "STACK_THEN_ERROR": "StackHoundはエラー",
     "STATISTIC": "統計量",
     "STATISTICS": "統計",
+    "STYLE": "スタイル",
     "SUBMIT": "提出する",
     "SUCCESS": "成功",
     "SURE": "確か",
@@ -181,6 +183,7 @@
     "THE TWO PASSWORDS THAT YOU ENTERED DO NOT MATCH!": "入力した2つのパスワードが一致しません！",
     "THIS": "この",
     "TIME": "時間",
+    "TIPS": "ヒント",
     "TODAY": "今日",
     "TOO_LONG": "あまりにも長い",
     "TOO_SHORT": "ショートカット",

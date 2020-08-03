@@ -1,4 +1,5 @@
 {
+    "ACCESSIBILITY": "무장애",
     "ACCESSING": "방문중...",
     "ACCOUNT": "계정",
     "ACCOUNT DOES NOT EXIST": "계정없음",
@@ -172,6 +173,7 @@
     "STACK_THEN_ERROR": "스택쌓고오류",
     "STATISTIC": "통계적",
     "STATISTICS": "통계학",
+    "STYLE": "풍격.",
     "SUBMIT": "제출하다.",
     "SUCCESS": "성공!",
     "SURE": "물론입니다.",
@@ -181,6 +183,7 @@
     "THE TWO PASSWORDS THAT YOU ENTERED DO NOT MATCH!": "입력한2개의비밀번호가일치하지않습니다!",
     "THIS": "이거.",
     "TIME": "시간.",
+    "TIPS": "제시하다.",
     "TODAY": "오늘",
     "TOO_LONG": "너무길다.",
     "TOO_SHORT": "너무짧다.",

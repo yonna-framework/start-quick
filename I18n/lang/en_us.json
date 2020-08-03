@@ -1,4 +1,5 @@
 {
+    "ACCESSIBILITY": "accessibility",
     "ACCESSING": "ACCESSING..",
     "ACCOUNT": "Account",
     "ACCOUNT DOES NOT EXIST": "account does not exist",
@@ -172,6 +173,7 @@
     "STACK_THEN_ERROR": "Stack_then error",
     "STATISTIC": "statistic",
     "STATISTICS": "statistics",
+    "STYLE": "style",
     "SUBMIT": "Submit",
     "SUCCESS": "success",
     "SURE": "Sure",
@@ -181,6 +183,7 @@
     "THE TWO PASSWORDS THAT YOU ENTERED DO NOT MATCH!": "the two passwords that you entered do not match!",
     "THIS": "this",
     "TIME": "time",
+    "TIPS": "tips",
     "TODAY": "today",
     "TOO_LONG": "Too long",
     "TOO_SHORT": "Too short",

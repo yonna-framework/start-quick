@@ -1,4 +1,5 @@
 {
+    "ACCESSIBILITY": "辅助功能",
     "ACCESSING": "访问中....",
     "ACCOUNT": "帐号",
     "ACCOUNT DOES NOT EXIST": "帐户不存在",
@@ -172,6 +173,7 @@
     "STACK_THEN_ERROR": "stack_then错误",
     "STATISTIC": "统计",
     "STATISTICS": "统计学",
+    "STYLE": "风格",
     "SUBMIT": "提交",
     "SUCCESS": "成功",
     "SURE": "确定",
@@ -181,6 +183,7 @@
     "THE TWO PASSWORDS THAT YOU ENTERED DO NOT MATCH!": "您输入的两个密码不匹配!",
     "THIS": "这个",
     "TIME": "时间",
+    "TIPS": "提示",
     "TODAY": "今天",
     "TOO_LONG": "太长",
     "TOO_SHORT": "太短",

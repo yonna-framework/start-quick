@@ -1,4 +1,5 @@
 {
+    "ACCESSIBILITY": "無障礙",
     "ACCESSING": "正在訪問。。。",
     "ACCOUNT": "帳戶",
     "ACCOUNT DOES NOT EXIST": "帳戶不存在",
@@ -172,6 +173,7 @@
     "STACK_THEN_ERROR": "堆棧然後錯誤",
     "STATISTIC": "統計",
     "STATISTICS": "統計學",
+    "STYLE": "風格",
     "SUBMIT": "提交",
     "SUCCESS": "成功",
     "SURE": "當然",
@@ -181,6 +183,7 @@
     "THE TWO PASSWORDS THAT YOU ENTERED DO NOT MATCH!": "您輸入的兩個密碼不匹配!",
     "THIS": "這個",
     "TIME": "時間",
+    "TIPS": "提示",
     "TODAY": "今天",
     "TOO_LONG": "太長",
     "TOO_SHORT": "太短",
