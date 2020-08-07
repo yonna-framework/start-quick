@@ -328,11 +328,14 @@ class I18n
      * 如果有则更新，没有则添加
      * @param $uniqueKey
      * @param array $data
+     * @return bool|mixed|object
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function set($uniqueKey, $data = [])
     {
         if (empty($uniqueKey)) {
-            return;
+            Exception::params('not uniqueKey');
         }
         $uniqueKey = strtoupper($uniqueKey);
         $data = array_filter($data);
@@ -365,15 +368,15 @@ class I18n
                 if (!$res) {
                     $data['unique_key'] = $uniqueKey;
                     $db->table('i18n')->insert($data);
-                } else {
+                } else if ($data) {
                     $db->table('i18n')->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->update($data);
                 }
             } elseif ($db instanceof Pgsql) {
-                $res = $db->schemas('public')->table('i18n')->one();
+                $res = $db->schemas('public')->table('i18n')->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->one();
                 if (!$res) {
                     $data['unique_key'] = $uniqueKey;
                     $db->schemas('public')->table('i18n')->insert($data);
-                } else {
+                } else if ($data) {
                     $db->schemas('public')->table('i18n')
                         ->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))
                         ->update($data);
@@ -383,8 +386,19 @@ class I18n
             }
         } catch (Exception\DatabaseException $e) {
             Log::file()->throwable($e, 'I18N');
+            Exception::database($e->getMessage());
         }
         $this->auto();
+        if ($db instanceof Mongo) {
+            $res = $db->collection('i18n')->where(fn($cond) => $cond->equalTo('unique_key', $uniqueKey))->one();
+        } elseif ($db instanceof Mysql) {
+            $res = $db->table('i18n')->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->one();
+        } elseif ($db instanceof Pgsql) {
+            $res = $db->schemas('public')->table('i18n')->where(fn(Pw $cond) => $cond->equalTo('unique_key', $uniqueKey))->one();
+        } else {
+            $res = (object)[];
+        }
+        return $res;
     }
 
 }
