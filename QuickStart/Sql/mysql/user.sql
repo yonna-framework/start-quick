@@ -95,12 +95,3 @@ values ('region', 'integer', 1, 'cascader_region');
 
 insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('address', 'string', 1, 'input_string');
-
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('work', 'integer[]', 1, 'checkbox_multiple:db.default:data_work.name');
-
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('hobby', 'integer[]', 1, 'checkbox_multiple:db.default:data_hobby.name');
-
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('speciality', 'integer[]', 1, 'checkbox_multiple:db.default:data_speciality.name');

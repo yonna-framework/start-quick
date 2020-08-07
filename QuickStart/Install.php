@@ -9,6 +9,7 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
+use Yonna\QuickStart\Scope\Essay\EssayCategory;
 use Yonna\QuickStart\Scope\Sdk\Wxmp;
 use Yonna\QuickStart\Scope\User\AdminFetch;
 use Yonna\QuickStart\Scope\User\Login;
@@ -122,6 +123,25 @@ class Install
                             Config::post('category', Meta::class, 'category');
                             Config::post('categoryAdd', Meta::class, 'addCategory');
                         });
+                    });
+                });
+            }
+        );
+    }
+
+    public static function essay(): void
+    {
+        Config::middleware([Limiter::class],
+            function () {
+                Config::group(['essay'], function () {
+
+                    Config::group(['category'], function () {
+                        Config::post('list', EssayCategory::class, 'multi');
+                        Config::post('page', EssayCategory::class, 'page');
+                    });
+
+                    Config::middleware([Logging::class], function () {
+
                     });
                 });
             }

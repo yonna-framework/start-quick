@@ -73,9 +73,8 @@ class DatabaseLog
                 $prism->getKey() && $cond->equalTo('key', $prism->getKey());
                 $prism->getType() && $cond->equalTo('type', $prism->getType());
                 $prism->getRecordTimestamp() && $cond->between('record_timestamp', $prism->getRecordTimestamp());
-                $cond->or(fn($cond) => $cond->equalTo('key', 1)->equalTo('key', 2));
             });
-            $res = $obj->fetchQuery()->page($prism->getCurrent(), $prism->getPer());
+            $res = $obj->page($prism->getCurrent(), $prism->getPer());
         } catch (Throwable $e) {
             Log::file()->throwable($e, 'log_db');
         }

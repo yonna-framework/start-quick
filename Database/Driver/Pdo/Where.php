@@ -265,37 +265,6 @@ class Where
     }
 
     /**
-     * @param array $set
-     * @param array $data
-     * @return $this
-     */
-    public function complex(array $set, array $data)
-    {
-        foreach ($set as $target => $actions) {
-            $this->searchTable($target);
-            foreach ($actions as $action) {
-                foreach ($set as $field) {
-                    if (!isset($whereData[$field]) || $data[$field] === null) {
-                        continue;
-                    }
-                    if ($data[$field] !== null) {
-                        switch ($action) {
-                            case 'like':
-                                $this->$action('%' . $data[$field] . '%');
-                                break;
-                            default:
-                                $this->$action($data[$field]);
-                                break;
-                        }
-                        $this->$action($data[$field]);
-                    }
-                }
-            }
-        }
-        return $this;
-    }
-
-    /**
      * 字符串搜索where
      * @param string $where
      * @return $this

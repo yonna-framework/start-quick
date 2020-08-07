@@ -63,6 +63,8 @@ class Config
                     }
                     return $Scope->$action();
                 };
+            } else {
+                Exception::throw('no class:' . $call);
             }
         }
         // if call instanceof Closure, combine the before and after

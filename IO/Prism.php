@@ -15,7 +15,6 @@ class Prism
     /**
      * Prism constructor.
      * @param Request $request
-     * @throws ReflectionException
      */
     public function __construct(Request $request)
     {

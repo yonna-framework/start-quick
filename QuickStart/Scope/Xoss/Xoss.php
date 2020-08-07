@@ -115,7 +115,7 @@ class Xoss extends AbstractScope
         $saveData['hash'] = $hash;
         $saveData['key'] = $hash; // 这个key用于访问资源，默认是hash
         $saveData['md5_name'] = $md5;
-        $saveData['path'] = $this->request()->getCargo()->getRoot() . '/Uploads/' . date('Y-m-d') . "/" . date('H') . "/";
+        $saveData['path'] = $this->request()->getCargo()->getRoot() . '/uploads/' . date('Y-m-d') . "/" . date('H') . "/";
         $saveData['uri'] = $saveData['path'] . $md5 . '.' . $fd['suffix'];
         if (!System::dirCheck($saveData['path'], true)) {
             return $this->false('invalid dir');

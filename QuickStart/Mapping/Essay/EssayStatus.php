@@ -4,7 +4,7 @@ namespace Yonna\QuickStart\Mapping\Essay;
 
 use Yonna\Mapping\Mapping;
 
-class Status extends Mapping
+class EssayStatus extends Mapping
 {
 
     const DISABLED = -1;
