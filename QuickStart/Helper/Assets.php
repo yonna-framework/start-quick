@@ -3,6 +3,8 @@
 namespace Yonna\QuickStart\Helper;
 
 
+use Yonna\QuickStart\Scope\Xoss\Xoss;
+
 class Assets extends AbstractHelper
 {
 
@@ -198,19 +200,38 @@ class Assets extends AbstractHelper
     }
 
     /**
+     * 跟据MIME获取二进制数据的后缀名
+     * @param $mime
+     * @return null
+     */
+    public static function getSuffixByMime($mime)
+    {
+        if (!$mime) return null;
+        $ext = array();
+        foreach (self::$mimes as $e => $m) {
+            if (is_string($m) && $m === $mime) {
+                $ext[] = $e;
+            } else if (is_array($m) && in_array($mime, $m)) {
+                $ext[] = $e;
+            }
+        }
+        return $ext ? current($ext) : null;
+    }
+
+    /**
      * 根据 html string dataSource 获得媒体
      * @param $html
-     * @return array
+     * @return array|null ?array
      */
-    public static function getHtmlSource($html)
+    public static function getHtmlSource($html): ?array
     {
         if (!$html) {
-            return $html;
+            return null;
         }
-        $html = str_replace('src =', 'src=', $html);
-        $html = explode('src=', $html);
-        $src = array();
-        foreach ($html as $k => $v) {
+        $srcs = str_replace('src =', 'src=', $html);
+        $srcs = explode('src=', $srcs);
+        $src = [];
+        foreach ($srcs as $k => $v) {
             if (strpos($v, 'http') !== false || strpos($v, 'base64') !== false) {
                 $v = str_replace('"', "'", $v);
                 $v = explode("'", $v);
@@ -222,7 +243,7 @@ class Assets extends AbstractHelper
             }
         }
         $src = array_unique($src);
-        $new = array();
+        $newSrc = [];
         foreach ($src as $v) {
             if (strpos($v, 'http') === 0 || strpos($v, 'base64') === false) {
                 continue;
@@ -232,19 +253,17 @@ class Assets extends AbstractHelper
                 $type = $data[0];
                 $type = str_replace(['data:', ';base64'], '', $type);
                 $data = base64_decode($data[1]);
-                list($width, $height) = getimagesize($v);
-                $source = imagecreatefromstring($data);
-                $new[$v] = array(
-                    'ext' => $this->getExtByMime($type),
+                $suffix = self::getSuffixByMime($type);
+                $newSrc[$v] = [
+                    'name' => 'base64.' . microtime(true) . rand(1000, 9999) . '.' . $suffix,
+                    'suffix' => $suffix,
                     'type' => $type,
                     'data' => $data,
-                    'width' => $width,
-                    'height' => $height,
-                    'source' => $source
-                );
+                    'size' => strlen($v),
+                ];
             }
         }
-        return $new;
+        return $newSrc;
     }
 
 }

@@ -63,7 +63,7 @@ class Essay extends AbstractScope
         ArrayValidator::required($this->input(), ['title', 'category_id'], function ($error) {
             Exception::throw($error);
         });
-        $content = Assets::getHtmlSource($this->input('content') ?? '');
+        $content = $this->xoss($this->input('content') ?? '');
         $data = [
             'user_id' => $this->request()->getLoggingId(),
             'title' => $this->input('title'),
@@ -86,7 +86,7 @@ class Essay extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        $content = Assets::getHtmlSource($this->input('content') ?? null);
+        $content = $this->xoss($this->input('content') ?? null);
         $data = [
             'title' => $this->input('title'),
             'category_id' => $this->input('category_id'),

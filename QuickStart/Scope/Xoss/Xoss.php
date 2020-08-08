@@ -92,16 +92,19 @@ class Xoss extends AbstractScope
      * @param $fd
      * @return bool
      */
-    private function saveFile($fd)
+    public function saveFile($fd)
     {
         $size = $fd['size'];
-        if ($size > 0) {
-            $data = file_get_contents($fd['tmp_name']);
-            if (!$data) {
-                return $this->false('invalid tmp data');
+        $data = $fd['data'] ?? null;
+        if (!$data) {
+            if ($size > 0) {
+                $data = file_get_contents($fd['tmp_name']);
+                if (!$data) {
+                    return $this->false('invalid tmp data');
+                }
+            } else {
+                $data = '';
             }
-        } else {
-            $data = '';
         }
         $saveData = [
             'name' => $fd['name'],
