@@ -140,6 +140,8 @@ class Install
                     Config::middleware([Logging::class], function () {
 
                         Config::post('add', Essay::class, 'insert');
+                        Config::post('list', Essay::class, 'multi');
+                        Config::post('page', Essay::class, 'page');
 
                         Config::group(['category'], function () {
                             Config::post('add', EssayCategory::class, 'insert');
