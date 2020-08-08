@@ -11,7 +11,7 @@ use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
 /**
- * Class Category
+ * Class EssayCategory
  * @package Yonna\QuickStart\Scope\Essay
  */
 class EssayCategory extends AbstractScope

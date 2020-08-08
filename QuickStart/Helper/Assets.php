@@ -202,7 +202,7 @@ class Assets extends AbstractHelper
      * @param $html
      * @return array
      */
-    public function getHtmlSource($html)
+    public static function getHtmlSource($html)
     {
         if (!$html) {
             return $html;

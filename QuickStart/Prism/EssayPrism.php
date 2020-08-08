@@ -5,12 +5,13 @@ namespace Yonna\QuickStart\Prism;
 
 use Yonna\IO\Prism;
 
-class EssayCategoryPrism extends Prism
+class EssayPrism extends Prism
 {
 
     protected int $current = 1;
     protected int $per = 10;
     protected ?int $id = null;
+    protected ?int $category_id = null;
     protected ?string $name = null;
     protected ?int $status = null;
 
@@ -60,6 +61,22 @@ class EssayCategoryPrism extends Prism
     public function setId(?int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCategoryId(): ?int
+    {
+        return $this->category_id;
+    }
+
+    /**
+     * @param int|null $category_id
+     */
+    public function setCategoryId(?int $category_id): void
+    {
+        $this->category_id = $category_id;
     }
 
     /**
