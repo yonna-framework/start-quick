@@ -2,7 +2,6 @@
 
 namespace Yonna\QuickStart\Scope\Essay;
 
-use Yonna\QuickStart\Helper\Assets;
 use Yonna\QuickStart\Mapping\Essay\EssayCategoryStatus;
 use Yonna\QuickStart\Prism\EssayPrism;
 use Yonna\QuickStart\Scope\AbstractScope;
@@ -19,6 +18,20 @@ class Essay extends AbstractScope
 {
 
     const TABLE = 'essay';
+
+    /**
+     * @return mixed
+     * @throws Exception\DatabaseException
+     */
+    public function one(): array
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->one();
+    }
 
     /**
      * @return mixed
@@ -102,6 +115,20 @@ class Essay extends AbstractScope
                 ->update($data);
         }
         return true;
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function delete()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->delete();
     }
 
 }

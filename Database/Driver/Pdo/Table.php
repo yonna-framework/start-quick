@@ -521,11 +521,9 @@ class Table extends AbstractPDO
         $ft = $this->getFieldType($table);
         $set = [];
         foreach ($data as $key => $val) {
-            if (!empty($ft[$table . '_' . $key])) { // 根据表字段过滤无效key
+            if (!empty($ft[$table . '_' . $key]) || is_null($val)) { // 根据表字段过滤无效key 和 null值修改
                 if (is_array($val) && !empty($val[0]) && 'exp' == $val[0]) {
                     $set[] = $this->parseKey($key) . '=' . $val[1];
-                } elseif (is_null($val)) {
-                    $set[] = $this->parseKey($key) . '= NULL';
                 } elseif (is_array($val) || is_scalar($val)) { // 过滤非标量数据
                     // 跟据表字段处理数据
                     if (is_array($val) && strpos($ft[$table . '_' . $key], 'char') !== false) { // 字符串型数组
