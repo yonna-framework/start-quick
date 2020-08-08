@@ -106,7 +106,7 @@ class IO
         try {
             $responses = $this->scopes($scopes, $request);
         } catch (Exception\ThrowException $e) {
-            return Response::abort($e->getMessage());
+            return Response::throwable($e);
         }
         // response
         $response = $responses[0];
