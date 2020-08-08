@@ -26,7 +26,7 @@ class Meta extends AbstractScope
         return DB::connect()->table('user_meta_category')
             ->field('key,value_format,value_default')
             ->where(fn(Where $w) => $w->equalTo('status', Boolean::true))
-            ->orderBy('ordering', 'desc')
+            ->orderBy('sort', 'desc')
             ->multi();
     }
 
@@ -44,7 +44,7 @@ class Meta extends AbstractScope
             'value_format' => $this->input('value_format'),
             'value_default' => $this->input('value_default') ?? '',
             'status' => $this->input('status') ?? Boolean::false,
-            'ordering' => $this->input('ordering') ?? 0,
+            'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table('user_meta_category')->insert($add);
     }

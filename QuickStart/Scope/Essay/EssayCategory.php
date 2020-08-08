@@ -31,7 +31,7 @@ class EssayCategory extends AbstractScope
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
-            ->orderBy('ordering', 'desc')
+            ->orderBy('sort', 'desc')
             ->multi();
     }
 
@@ -47,7 +47,7 @@ class EssayCategory extends AbstractScope
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
-            ->orderBy('ordering', 'desc')
+            ->orderBy('sort', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
     }
 
@@ -65,7 +65,7 @@ class EssayCategory extends AbstractScope
             'upper_id' => $this->input('upper_id') ?? 0,
             'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
             'level' => $this->input('level') ?? 1,
-            'ordering' => $this->input('ordering') ?? 0,
+            'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
     }

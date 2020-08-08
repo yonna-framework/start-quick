@@ -5,7 +5,7 @@ create table `essay_category`
     `name`     char(255)                      not null default '' comment '分类名称',
     `level`    bigint unsigned                not null default 1 comment '分类等级',
     `status`   tinyint                        not null default 1 comment '状态[-1审核驳回,1待审核,2审核通过]',
-    `ordering` int                            not null default 0 comment '排序[降序]',
+    `sort`     int                            not null default 0 comment '排序[降序]',
     primary key (`id`),
     unique key (`upper_id`, `name`),
     index (`level`),
@@ -20,8 +20,9 @@ create table `essay`
     `status`      tinyint                        not null default 1 comment '状态[-1无效,1有效]',
     `likes`       bigint unsigned                not null default 0 comment '点赞量',
     `views`       bigint unsigned                not null default 0 comment '浏览量',
+    `title`       char(255)                      not null default '' comment '文章标题',
     `content`     text                           not null comment '文章内容',
-    `ordering`    int                            not null default 0 comment '排序[降序]',
+    `sort`        int                            not null default 0 comment '排序[降序]',
     primary key (`id`),
     index (`user_id`, `category_id`, `status`)
 ) engine = innodb comment '文章';

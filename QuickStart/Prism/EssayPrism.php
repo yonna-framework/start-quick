@@ -12,7 +12,7 @@ class EssayPrism extends Prism
     protected int $per = 10;
     protected ?int $id = null;
     protected ?int $category_id = null;
-    protected ?string $name = null;
+    protected ?string $title = null;
     protected ?int $status = null;
 
     /**
@@ -82,17 +82,17 @@ class EssayPrism extends Prism
     /**
      * @return string|null
      */
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * @param string|null $name
+     * @param string|null $title
      */
-    public function setName(?string $name): void
+    public function setTitle(?string $title): void
     {
-        $this->name = $name;
+        $this->title = $title;
     }
 
     /**

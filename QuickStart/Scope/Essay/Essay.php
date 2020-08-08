@@ -29,11 +29,11 @@ class Essay extends AbstractScope
         $prism = new EssayPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
-                $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
+                $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
             })
-            ->orderBy('ordering', 'desc')
+            ->orderBy('sort', 'desc')
             ->multi();
     }
 
@@ -46,11 +46,11 @@ class Essay extends AbstractScope
         $prism = new EssayPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
-                $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
+                $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
             })
-            ->orderBy('ordering', 'desc')
+            ->orderBy('sort', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
     }
 
@@ -60,19 +60,19 @@ class Essay extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['name', 'category_id'], function ($error) {
+        ArrayValidator::required($this->input(), ['title', 'category_id'], function ($error) {
             Exception::throw($error);
         });
         $content = Assets::getHtmlSource($this->input('content') ?? '');
         $data = [
             'user_id' => $this->request()->getLoggingId(),
-            'name' => $this->input('name'),
+            'title' => $this->input('title'),
             'category_id' => $this->input('category_id') ?? 0,
             'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
             'likes' => $this->input('likes') ?? 0,
             'views' => $this->input('views') ?? 0,
             'content' => $content,
-            'ordering' => $this->input('ordering') ?? 0,
+            'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($data);
     }
@@ -88,13 +88,13 @@ class Essay extends AbstractScope
         });
         $content = Assets::getHtmlSource($this->input('content') ?? null);
         $data = [
-            'name' => $this->input('name'),
+            'title' => $this->input('title'),
             'category_id' => $this->input('category_id'),
             'status' => $this->input('status'),
             'likes' => $this->input('likes'),
             'views' => $this->input('views'),
             'content' => $content,
-            'ordering' => $this->input('ordering'),
+            'sort' => $this->input('sort'),
         ];
         if ($data) {
             return DB::connect()->table(self::TABLE)

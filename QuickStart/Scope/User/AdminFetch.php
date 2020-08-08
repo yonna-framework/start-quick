@@ -58,7 +58,7 @@ class AdminFetch extends AbstractScope
     }
 
     /**
-     * 获取当前登陆用户详情
+     * 获取当前登录用户详情
      * @return array
      * @throws Exception\ThrowException|Exception\DatabaseException
      */
