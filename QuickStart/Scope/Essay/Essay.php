@@ -28,9 +28,11 @@ class Essay extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        return DB::connect()->table(self::TABLE)
+        $info = DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->one();
+        $info['essay_content'] = $this->xoss_load($info['essay_content']);
+        return $info;
     }
 
     /**
@@ -40,7 +42,7 @@ class Essay extends AbstractScope
     public function multi(): array
     {
         $prism = new EssayPrism($this->request());
-        return DB::connect()->table(self::TABLE)
+        $list = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
@@ -48,6 +50,10 @@ class Essay extends AbstractScope
             })
             ->orderBy('sort', 'desc')
             ->multi();
+        foreach ($list as $lk => &$l) {
+            $l['essay_content'] = $this->xoss_load($l['essay_content']);
+        }
+        return $list;
     }
 
     /**
@@ -57,7 +63,7 @@ class Essay extends AbstractScope
     public function page(): array
     {
         $prism = new EssayPrism($this->request());
-        return DB::connect()->table(self::TABLE)
+        $page = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
@@ -65,6 +71,10 @@ class Essay extends AbstractScope
             })
             ->orderBy('sort', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
+        foreach ($page['list'] as $lk => &$l) {
+            $l['essay_content'] = $this->xoss_load($l['essay_content']);
+        }
+        return $page;
     }
 
     /**
@@ -76,7 +86,7 @@ class Essay extends AbstractScope
         ArrayValidator::required($this->input(), ['title', 'category_id'], function ($error) {
             Exception::throw($error);
         });
-        $content = $this->xoss($this->input('content') ?? '');
+        $content = $this->xoss_save($this->input('content') ?? '');
         $data = [
             'user_id' => $this->request()->getLoggingId(),
             'title' => $this->input('title'),
@@ -85,6 +95,8 @@ class Essay extends AbstractScope
             'likes' => $this->input('likes') ?? 0,
             'views' => $this->input('views') ?? 0,
             'content' => $content,
+            'author' => $this->input('author') ?? 0,
+            'publish_time' => $this->input('publish_time') ?? time(),
             'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($data);
@@ -99,7 +111,7 @@ class Essay extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        $content = $this->xoss($this->input('content') ?? null);
+        $content = $this->xoss_save($this->input('content') ?? null);
         $data = [
             'title' => $this->input('title'),
             'category_id' => $this->input('category_id'),
@@ -107,6 +119,8 @@ class Essay extends AbstractScope
             'likes' => $this->input('likes'),
             'views' => $this->input('views'),
             'content' => $content,
+            'author' => $this->input('author'),
+            'publish_time' => $this->input('publish_time'),
             'sort' => $this->input('sort'),
         ];
         if ($data) {

@@ -35,6 +35,14 @@ class Mssql extends AbstractPDO
     }
 
     /**
+     * @return mixed
+     */
+    public function unix_timestamp()
+    {
+        return parent::unix_timestamp();
+    }
+
+    /**
      * 哪个模式
      *
      * @param string $schemas

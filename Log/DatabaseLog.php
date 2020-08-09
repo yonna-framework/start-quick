@@ -65,14 +65,14 @@ class DatabaseLog
             } else {
                 throw new Exception('Set Database for Support Driver.');
             }
-            $obj->orderBy('record_timestamp', 'desc');
+            $obj->orderBy('record_time', 'desc');
             $obj->where(function ($cond) use ($prism) {
                 /**
                  * @var \Yonna\Database\Driver\Pdo\Where|\Yonna\Database\Driver\Mdo\Where $cond
                  */
                 $prism->getKey() && $cond->equalTo('key', $prism->getKey());
                 $prism->getType() && $cond->equalTo('type', $prism->getType());
-                $prism->getRecordTimestamp() && $cond->between('record_timestamp', $prism->getRecordTimestamp());
+                $prism->getRecordTime() && $cond->between('record_time', $prism->getRecordTime());
             });
             $res = $obj->page($prism->getCurrent(), $prism->getPer());
         } catch (Throwable $e) {
@@ -96,7 +96,7 @@ class DatabaseLog
         $logData = [
             'key' => $key,
             'type' => $type,
-            'record_timestamp' => time(),
+            'record_time' => time(),
             'data' => $data,
         ];
         try {

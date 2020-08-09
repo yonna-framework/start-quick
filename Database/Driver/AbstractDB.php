@@ -419,10 +419,37 @@ abstract class AbstractDB
                 $now = ['exp', "GETDATE()"];
                 break;
             case Type::SQLITE:
-                $now = ['exp', "select datetime(CURRENT_TIMESTAMP,'localtime')"];
+                $now = ['exp', "datetime(CURRENT_TIMESTAMP,'localtime')"];
                 break;
             default:
                 $now = date('Y-m-d H:i:s', time());
+                break;
+        }
+        return $now;
+    }
+
+    /**
+     * 当前时间戳,精确到秒（只能用于insert 和 update）
+     * @return mixed
+     */
+    protected function unix_timestamp()
+    {
+        $now = null;
+        switch ($this->options['db_type']) {
+            case Type::MYSQL:
+                $now = ['exp', 'unix_timestamp(now())'];
+                break;
+            case Type::PGSQL:
+                $now = ['exp', 'floor(extract(epoch from now()))'];
+                break;
+            case Type::MSSQL:
+                $now = ['exp', "DATEDIFF(s, '19700101',GETDATE())"];
+                break;
+            case Type::SQLITE:
+                $now = ['exp', "strftime('%s','now')"];
+                break;
+            default:
+                $now = time();
                 break;
         }
         return $now;

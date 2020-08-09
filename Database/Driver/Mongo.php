@@ -28,6 +28,14 @@ class Mongo extends AbstractMDO
     }
 
     /**
+     * @return mixed
+     */
+    public function unix_timestamp()
+    {
+        return parent::unix_timestamp();
+    }
+
+    /**
      * @param string $collection
      * @return Collection count
      * @throws Exception\DatabaseException

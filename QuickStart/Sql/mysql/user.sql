@@ -1,10 +1,10 @@
 create table `user`
 (
-    `id`                bigint unsigned auto_increment not null comment '用户id',
-    `status`            tinyint                        not null default 1 comment '状态[-10注销,-3冻结,-2审核驳回,1待审核,2审核通过]',
-    `password`          char(255)                      not null default '' comment '登录密码，不一定有，如通过微信登录的就没有',
-    `inviter_user_id`   bigint                         not null default 0 comment '邀请用户id[y_user_id]',
-    `register_datetime` datetime                       not null default '1970-01-01 00:00:00' comment '注册时间',
+    `id`              bigint unsigned auto_increment not null comment '用户id',
+    `status`          tinyint                        not null default 1 comment '状态[-10注销,-3冻结,-2审核驳回,1待审核,2审核通过]',
+    `password`        char(255)                      not null default '' comment '登录密码，不一定有，如通过微信登录的就没有',
+    `inviter_user_id` bigint                         not null default 0 comment '邀请用户id[y_user_id]',
+    `register_time`   bigint                         not null comment '注册时间戳',
     primary key (`id`),
     index (`status`)
 ) engine = innodb comment '用户核心数据';
@@ -55,10 +55,10 @@ create table `license`
 
 create table `user_license`
 (
-    `user_id`        bigint unsigned not null comment 'user_id',
-    `license_id`     char(255)       not null default '' comment 'license_id',
-    `start_datetime` datetime        not null default '1970-01-01 00:00:00' comment '起效时间',
-    `end_datetime`   datetime        not null default '1970-01-01 00:00:00' comment '过期时间',
+    `user_id`    bigint unsigned not null comment 'user_id',
+    `license_id` char(255)       not null default '' comment 'license_id',
+    `start_time` bigint          not null comment '起效时间戳',
+    `end_time`   bigint          not null comment '过期时间戳',
     index (`user_id`)
 ) engine = innodb comment '用户许可证数据';
 
@@ -66,11 +66,11 @@ create table `user_license`
 insert into `license` (`name`, `upper_id`, `allow_scope`)
 values ('超级管理员', 0, ',,,all');
 
-insert into `user` (`password`, `status`, `register_datetime`)
-values ('faa9a6ddddf57436961bf2d2bf4338df', 2, now());
+insert into `user` (`password`, `status`, `register_time`)
+values ('faa9a6ddddf57436961bf2d2bf4338df', 2, unix_timestamp(now()));
 
-insert into `user_license` (`user_id`, `license_id`, `start_datetime`, `end_datetime`)
-values (1, 1, now(), '2099-12-31 23:59:59');
+insert into `user_license` (`user_id`, `license_id`, `start_time`, `end_time`)
+values (1, 1, unix_timestamp(now()), 4102415999);
 
 insert into `user_account` (`user_id`, `type`, `string`, `allow_login`)
 values (1, 'name', 'admin', 1);
@@ -82,7 +82,7 @@ insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('nickname', 'string', 1, 'input_string');
 
 insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('birth_date', 'datetime', 1, 'input_string');
+values ('birth_date', 'date', 1, 'picker_date');
 
 insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('age', 'integer', 1, 'input_integer');

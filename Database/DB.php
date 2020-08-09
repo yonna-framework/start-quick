@@ -105,6 +105,16 @@ class DB
         return self::connect($conf)->now();
     }
 
+    /**
+     * 当前时间戳,精确到秒（只能用于insert 和 update）
+     * @param string $conf
+     * @return array
+     */
+    public static function unix_timestamp($conf = 'default')
+    {
+        return self::connect($conf)->unix_timestamp();
+    }
+
     // connector
 
     /**

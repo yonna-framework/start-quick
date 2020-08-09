@@ -3,6 +3,7 @@
 namespace Yonna\QuickStart\Helper;
 
 
+use Yonna\Foundation\Curl;
 use Yonna\QuickStart\Scope\Xoss\Xoss;
 
 class Assets extends AbstractHelper
@@ -230,40 +231,71 @@ class Assets extends AbstractHelper
         }
         $srcs = str_replace('src =', 'src=', $html);
         $srcs = explode('src=', $srcs);
-        $src = [];
+        $src = [
+            'http' => [],
+            'base64' => [],
+            'xoss' => [],
+            'save' => [],
+            'http2xoss' => [],
+        ];
         foreach ($srcs as $k => $v) {
-            if (strpos($v, 'http') !== false || strpos($v, 'base64') !== false) {
+            if (strpos($v, 'http') !== false
+                || strpos($v, 'base64') !== false
+                || strpos($v, 'xoss://') !== false) {
                 $v = str_replace('"', "'", $v);
                 $v = explode("'", $v);
                 foreach ($v as $vk => $vv) {
-                    if (strpos($vv, 'http') !== false || strpos($vv, 'base64') !== false) {
-                        $src[] = $vv;
+                    if (!in_array($vv, $src['xoss']) && strpos($vv, 'xoss://') !== false) {
+                        $src['xoss'][] = $vv;
+                    }
+                    if (!in_array($vv, $src['xoss']) && strpos($vv, 'base64') !== false) {
+                        $src['base64'][] = $vv;
+                    }
+                    if (!in_array($vv, $src['xoss']) && strpos($vv, 'http') !== false) {
+                        $src['http'][] = $vv;
                     }
                 }
             }
         }
-        $src = array_unique($src);
-        $newSrc = [];
-        foreach ($src as $v) {
-            if (strpos($v, 'http') === 0 || strpos($v, 'base64') === false) {
-                continue;
-            }
-            $data = explode(',', $v);
-            if (count($data) === 2) {
-                $type = $data[0];
-                $type = str_replace(['data:', ';base64'], '', $type);
-                $data = base64_decode($data[1]);
-                $suffix = self::getSuffixByMime($type);
-                $newSrc[$v] = [
-                    'name' => 'base64.' . microtime(true) . rand(1000, 9999) . '.' . $suffix,
-                    'suffix' => $suffix,
-                    'type' => $type,
-                    'data' => $data,
-                    'size' => strlen($v),
-                ];
+        foreach ($src as $k => $s) {
+            foreach ($s as $v) {
+                if (!empty($src['save'][$v])) {
+                    continue;
+                }
+                if ($k === 'base64') {
+                    $data = explode(',', $v);
+                    if (count($data) === 2) {
+                        $type = $data[0];
+                        $type = str_replace(['data:', ';base64'], '', $type);
+                        $data = base64_decode($data[1]);
+                        $suffix = self::getSuffixByMime($type);
+                        $src['save'][$v] = [
+                            'name' => 'base64.' . microtime(true) . rand(1000, 9999) . '.' . $suffix,
+                            'suffix' => $suffix,
+                            'type' => $type,
+                            'data' => $data,
+                            'size' => strlen($data),
+                        ];
+                    }
+                } else if ($k === 'http' && strpos($v, 'xoss_download') === false) {
+                    $data = Curl::get($v, 1);
+                    if ($data) {
+                        $suffix = self::getSuffix($v);
+                        $src['save'][$v] = [
+                            'name' => 'http.' . microtime(true) . rand(1000, 9999) . '.' . $suffix,
+                            'suffix' => $suffix,
+                            'type' => self::$mimes[$suffix],
+                            'data' => $data,
+                            'size' => strlen($data),
+                        ];
+                    }
+                } else if ($k === 'http' && strpos($v, 'xoss_download') !== false) {
+                    $v2 = explode('k=', $v);
+                    $src['http2xoss'][$v] = array_pop($v2);
+                }
             }
         }
-        return $newSrc;
+        return $src;
     }
 
 }

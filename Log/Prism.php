@@ -8,9 +8,9 @@ class Prism extends \Yonna\IO\Prism
 
     protected int $current = 1;
     protected int $per = 10;
-    protected $key = null;
-    protected $type = null;
-    protected $record_timestamp = null;
+    protected ?string $key = null;
+    protected ?string $type = null;
+    protected ?int $record_time = null;
 
     /**
      * @return int
@@ -29,28 +29,27 @@ class Prism extends \Yonna\IO\Prism
     }
 
     /**
-     * @return null
+     * @return string|null
      */
-    public function getKey()
+    public function getKey(): ?string
     {
         return $this->key;
     }
 
     /**
-     * @return null
+     * @return string|null
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
     /**
-     * @return null
+     * @return int|null
      */
-    public function getRecordTimestamp()
+    public function getRecordTime(): ?int
     {
-        return $this->record_timestamp;
+        return $this->record_time;
     }
-
 
 }

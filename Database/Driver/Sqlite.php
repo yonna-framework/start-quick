@@ -35,6 +35,14 @@ class Sqlite extends AbstractPDO
     }
 
     /**
+     * @return mixed
+     */
+    public function unix_timestamp()
+    {
+        return parent::unix_timestamp();
+    }
+
+    /**
      * 哪个表
      *
      * @param string $table

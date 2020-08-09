@@ -28,6 +28,14 @@ class Mysql extends AbstractPDO
     }
 
     /**
+     * @return mixed
+     */
+    public function unix_timestamp()
+    {
+        return parent::unix_timestamp();
+    }
+
+    /**
      * @param $table
      * @return Table|null
      */
