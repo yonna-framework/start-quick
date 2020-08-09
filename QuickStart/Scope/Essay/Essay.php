@@ -44,6 +44,7 @@ class Essay extends AbstractScope
         $prism = new EssayPrism($this->request());
         $list = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
@@ -65,6 +66,7 @@ class Essay extends AbstractScope
         $prism = new EssayPrism($this->request());
         $page = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
