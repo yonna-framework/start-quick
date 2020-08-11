@@ -50,6 +50,7 @@ class Essay extends AbstractScope
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
             })
             ->orderBy('sort', 'desc')
+            ->orderBy('id', 'desc')
             ->multi();
         foreach ($list as $lk => &$l) {
             $l['essay_content'] = $this->xoss_load($l['essay_content']);
@@ -72,6 +73,7 @@ class Essay extends AbstractScope
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
             })
             ->orderBy('sort', 'desc')
+            ->orderBy('id', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
         foreach ($page['list'] as $lk => &$l) {
             $l['essay_content'] = $this->xoss_load($l['essay_content']);
