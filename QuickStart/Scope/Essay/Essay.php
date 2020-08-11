@@ -2,7 +2,7 @@
 
 namespace Yonna\QuickStart\Scope\Essay;
 
-use Yonna\QuickStart\Mapping\Essay\EssayCategoryStatus;
+use Yonna\QuickStart\Mapping\Essay\EssayStatus;
 use Yonna\QuickStart\Prism\EssayPrism;
 use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Database\DB;
@@ -93,7 +93,7 @@ class Essay extends AbstractScope
             'user_id' => $this->request()->getLoggingId(),
             'title' => $this->input('title'),
             'category_id' => $this->input('category_id') ?? 0,
-            'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
+            'status' => $this->input('status') ?? EssayStatus::DISABLED,
             'likes' => $this->input('likes') ?? 0,
             'views' => $this->input('views') ?? 0,
             'content' => $content,
