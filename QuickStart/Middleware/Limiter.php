@@ -12,7 +12,7 @@ class Limiter extends Before
 
     const REDIS_KEY = 'limiter:';
     const TIMEOUT = 3;
-    const LIMIT = 30;
+    const LIMIT = 100;
 
     /**
      * IP N秒内请求限制器
