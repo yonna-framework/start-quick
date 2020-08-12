@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope\Essay;
 
+use Yonna\QuickStart\Helper\Assets;
 use Yonna\QuickStart\Mapping\Essay\EssayStatus;
 use Yonna\QuickStart\Prism\EssayPrism;
 use Yonna\QuickStart\Scope\AbstractScope;
@@ -56,6 +57,40 @@ class Essay extends AbstractScope
             $l['essay_content'] = $this->xoss_load($l['essay_content']);
         }
         return $list;
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception\DatabaseException
+     */
+    public function pic(): array
+    {
+        $pic = [];
+        $list = $this->multi();
+        foreach ($list as $v) {
+            if (!isset($pic[$v['essay_category_id']])) {
+                $pic[$v['essay_category_id']] = [];
+            }
+            $essay_content = $v['essay_content'];
+            preg_match_all('/<img(.*?)src="(.*?)"(.*?)>/', $essay_content, $imgs);
+            if ($imgs[2]) {
+                foreach ($imgs[2] as $img) {
+                    if (in_array($img, [
+                        // 跳过一些不好看的图片
+                        'http://pcenter-pio.local.cn:3001?scope=xoss_download&k=1ebc6cdeaffea83a142d7d790db9a201ad564d729d98c0f63e6ff85ac7301c576f255776',
+                        'http://pcenter-pio.local.cn:3001?scope=xoss_download&k=2da5d23cc0205c3af8d7713623f26a4bb00f9e848f01e7c5a6967e7411638727755453bb',
+                    ])) {
+                        continue;
+                    }
+                    $pic[$v['essay_category_id']][] = $img;
+                }
+            }
+        }
+        foreach ($pic as &$p) {
+            $p = array_unique($p);
+            sort($p);
+        }
+        return $pic;
     }
 
     /**
@@ -147,6 +182,38 @@ class Essay extends AbstractScope
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->delete();
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function views()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update([
+                'views' => ['exp', '`views`+1']
+            ]);
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function likes()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update([
+                'likes' => ['exp', '`likes`+1']
+            ]);
     }
 
 }

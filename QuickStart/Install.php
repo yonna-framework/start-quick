@@ -136,6 +136,10 @@ class Install
             function () {
                 Config::group(['essay'], function () {
 
+                    Config::post('pic', Essay::class, 'pic');
+                    Config::post('list', Essay::class, 'multi');
+                    Config::post('views', Essay::class, 'views');
+                    Config::post('likes', Essay::class, 'likes');
 
                     Config::middleware([Logging::class], function () {
 
@@ -143,7 +147,6 @@ class Install
                         Config::post('edit', Essay::class, 'update');
                         Config::post('del', Essay::class, 'delete');
                         Config::post('info', Essay::class, 'one');
-                        Config::post('list', Essay::class, 'multi');
                         Config::post('page', Essay::class, 'page');
 
                         Config::group(['category'], function () {

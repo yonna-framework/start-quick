@@ -86,6 +86,7 @@ class Assets extends AbstractHelper
         'jpg' => 'image/jpeg',
         'jpe' => 'image/jpeg',
         'png' => 'image/png',
+        'webp' => 'image/webp',
         'tiff' => 'image/tiff',
         'tif' => 'image/tiff',
         'eml' => 'message/rfc822',
@@ -117,7 +118,7 @@ class Assets extends AbstractHelper
         'txt', 'pdf', 'wps', 'tif', 'tiff',
         'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'csv',
         'rar', '7z', 'zip',
-        'gif', 'jpeg', 'jpg', 'bmp', 'png', 'psd',
+        'gif', 'jpeg', 'jpg', 'bmp', 'png', 'psd', 'webp',
         'pem',
     ];
 
@@ -126,7 +127,7 @@ class Assets extends AbstractHelper
      * @param $url
      * @return array
      */
-    public function getHeaderByUrl($url)
+    public static function getHeaderByUrl($url)
     {
         if (!$url) return array();
         $header = get_headers($url);
@@ -269,25 +270,34 @@ class Assets extends AbstractHelper
                         $type = str_replace(['data:', ';base64'], '', $type);
                         $data = base64_decode($data[1]);
                         $suffix = self::getSuffixByMime($type);
-                        $src['save'][$v] = [
-                            'name' => 'base64.' . microtime(true) . rand(1000, 9999) . '.' . $suffix,
-                            'suffix' => $suffix,
-                            'type' => $type,
-                            'data' => $data,
-                            'size' => strlen($data),
-                        ];
+                        if (in_array($suffix, self::$allow_mimes)) {
+                            $src['save'][$v] = [
+                                'name' => 'base64.' . microtime(true) . rand(1000, 9999) . '.' . $suffix,
+                                'suffix' => $suffix,
+                                'type' => $type,
+                                'data' => $data,
+                                'size' => strlen($data),
+                            ];
+                        }
                     }
                 } else if ($k === 'http' && strpos($v, 'xoss_download') === false) {
-                    $data = Curl::get($v, 1);
-                    if ($data) {
-                        $suffix = self::getSuffix($v);
-                        $src['save'][$v] = [
-                            'name' => 'http.' . microtime(true) . rand(1000, 9999) . '.' . $suffix,
-                            'suffix' => $suffix,
-                            'type' => self::$mimes[$suffix],
-                            'data' => $data,
-                            'size' => strlen($data),
-                        ];
+                    $header = self::getHeaderByUrl($v);
+                    if (!empty($header['CONTENT-TYPE'])) {
+                        $suffix = self::getSuffix(null, $header['CONTENT-TYPE']);
+                        if (in_array($suffix, self::$allow_mimes)) {
+                            $size = $header['CONTENT-LENGTH'] ?? 0;
+                            $name = $header['FILE_NAME'] ?? 'http.' . microtime(true) . rand(1000, 9999) . '.' . $suffix;
+                            $data = Curl::get($v, 1);
+                            if ($data) {
+                                $src['save'][$v] = [
+                                    'name' => $name,
+                                    'suffix' => $suffix,
+                                    'type' => self::$mimes[$suffix],
+                                    'data' => $data,
+                                    'size' => $size,
+                                ];
+                            }
+                        }
                     }
                 } else if ($k === 'http' && strpos($v, 'xoss_download') !== false) {
                     $v2 = explode('k=', $v);
