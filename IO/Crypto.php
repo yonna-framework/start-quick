@@ -65,14 +65,24 @@ class Crypto
             $request->setClientId($raw['client_id']);
             unset($raw['client_id']);
         }
+        $scopes = [];
         if (isset($raw['scopes'])) {
-            $request->setScopes($raw['scopes']);
+            $scopes = $raw['scopes'];
             unset($raw['scopes']);
         } else if (isset($raw['scope'])) {
-            $s = $raw['scope'];
+            $scopes = [$raw['scope'] => $raw];
             unset($raw['scope']);
-            $request->setScopes([$s => $raw]);
         }
+        if (empty($scopes)) {
+            $request_uri = $request->getRequestUri();
+            if ($request_uri) {
+                $rArr = explode('/', $request_uri);
+                $rArr = array_filter($rArr);
+                $s = array_shift($rArr);
+                $scopes = [$s => ['params' => $rArr]];
+            }
+        }
+        $request->setScopes($scopes);
         unset($raw);
         return $request;
     }

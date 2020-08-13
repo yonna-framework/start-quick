@@ -6,7 +6,7 @@ use Exception;
 use Yonna\Foundation\Str;
 use Yonna\Foundation\System;
 
-class Package extends Console
+class PackageEncrypt extends Console
 {
 
     private string $root_path;
@@ -68,8 +68,8 @@ class Package extends Console
                         $newDir = $distDir . str_replace(realpath($removeDir), '', $dir) . '/';
                         System::dirCheck($newDir, true);
                         $newDir = realpath($newDir);
-                        echo("[PHP] => {$newDir}/{$fileName}.php\n");
-                        file_put_contents("{$newDir}/{$fileName}.php", php_strip_whitespace($filePath));
+                        echo("[PHP] => {$newDir}/{$fileName}.jar\n");
+                        file_put_contents("{$newDir}/{$fileName}.jar", System::execEncode(php_strip_whitespace($filePath)));
                     } elseif ($fileExt == 'json') {
                         $newDir = $distDir . str_replace(realpath($removeDir), '', $dir) . '/';
                         System::dirCheck($newDir, true);
@@ -112,13 +112,21 @@ class Package extends Console
                 $contents = array_filter($contents);
                 $content = implode(PHP_EOL, $contents);
             } elseif (strpos($source, 'index.php')) {
-                $autoload = php_strip_whitespace(__DIR__ . '/PackageAutoload.php');
+                $steam = php_strip_whitespace(__DIR__ . '/PackageStream.php');
                 $content = php_strip_whitespace($source);
-                $content = $autoload . str_replace('<?php', '', $content);
+                $content = $steam . str_replace('<?php', '', $content);
                 $content = str_replace('.env.' . $this->options['e'], '.env.prod', $content);
                 $content = preg_replace("/require(.*?)vendor(.*?)autoload.php(.*?);/", '', $content);
                 file_put_contents($dest . '.temp', $content);
-                $content = php_strip_whitespace($dest . '.temp');
+                $eval = str_replace('<?php', '', php_strip_whitespace($dest . '.temp'));
+                $content = '<?php /*';
+                for ($i = 0; $i < 10; $i++) {
+                    $content .= System::execEncode(Str::random(500));
+                }
+                $content .= '***/eval(base64_decode(str_replace("�","J",\'' . str_replace('J', '�', base64_encode($eval)) . '\')));//';
+                for ($i = 0; $i < 10; $i++) {
+                    $content .= System::execEncode(Str::random(500));
+                }
                 unlink($dest . '.temp');
             } elseif ($ext == 'php') {
                 $content = php_strip_whitespace($source);
@@ -127,7 +135,7 @@ class Package extends Console
                 return;
             }
         } elseif (is_string($source)) {
-            $content = $source;
+            $content = System::execEncode($source);
         }
         $content && file_put_contents($dest, $content);
         return;
@@ -143,8 +151,25 @@ class Package extends Console
         // 构建必要的 dist 目录
         mkdir($distDir, 0777);
         $distDir = realpath($distDir) . DIRECTORY_SEPARATOR;
-        mkdir($distDir . '/public', 0777);
-
+        mkdir($distDir . '/boot', 0777);
+        // 烟幕弹
+        $smokeBomb = [
+            'foundation', 'business', 'maven', 'common', 'system', 'config',
+            'bootstrap', 'crypto', 'stream', 'bus', 'sleuth', 'cli',
+            'cluster', 'console', 'task', 'worker', 'netflix', 'dubbo',
+            'lang', 'stringBuffer', 'stringBuilder', 'runtime', 'gc', 'gc++',
+            'util', 'resource', 'interface', 'bonjour', 'message', 'effective ',
+            'global', 'main', 'token', 'boot', 'fastjson', 'guava', 'jackson',
+            'joda', 'timer', 'spring', 'jdbc', 'hibernate', 'log4j', 'index', 'enter',
+            'jasper', 'junit', 'jit', 'poi', 'initialization', 'entrance',
+        ];
+        foreach ($smokeBomb as $b) {
+            $gunpowder = Str::random(2000 * strlen($b));
+            $this->simplify(
+                $gunpowder,
+                "{$distDir}boot/{$b}.jar"
+            );
+        }
         // 打包 env配置
         $this->simplify(
             $rootDir . '.env.' . $this->options['e'],
@@ -153,7 +178,7 @@ class Package extends Console
         // 打包 index
         $this->simplify(
             $rootDir . 'public/index.php',
-            $distDir . 'public/index.php',
+            $distDir . 'boot/inlet.jar',
         );
         // 打包 composer-vendor-yonna
         $this->mutilate($this->root_path . '/vendor/yonna/yonna', 'YONNA');

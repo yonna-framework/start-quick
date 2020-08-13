@@ -21,6 +21,7 @@ class Exec
         array('key' => ['die', 'exit'], 'options' => '', 'desc' => 'exit exec'),
         array('key' => ['-h', 'help'], 'options' => '', 'desc' => 'get command list'),
         array('key' => ['pkg'], 'options' => ' -e [ENV]', 'desc' => 'package project'),
+        array('key' => ['pkgc'], 'options' => ' -e [ENV]', 'desc' => 'package project with encrypt'),
         array('key' => ['swh'], 'options' => '-p [PORT] -e [ENV]', 'desc' => 'start a swoole http server'),
         array('key' => ['swws'], 'options' => '-p [PORT] -e [ENV]', 'desc' => 'start a swoole websocket server'),
         array('key' => ['swt'], 'options' => '-p [PORT] -e [ENV]', 'desc' => 'start a swoole tcp server'),
@@ -126,6 +127,9 @@ class Exec
                         break;
                     case 'pkg':
                         Core::get(Package::class, $root_path, $options)->run();
+                        break;
+                    case 'pkgc':
+                        Core::get(PackageEncrypt::class, $root_path, $options)->run();
                         break;
                     case 'cls':
                     case 'clear':

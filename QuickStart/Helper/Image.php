@@ -51,14 +51,14 @@ class Image extends AbstractHelper
             $imageHeight = imagesy($srcSource);
             $resizeWidth = floor(
                 strpos($params[0], '%') === false ? $params[0]
-                    : $imageWidth * 0.01 * substr($params[0], 0, strlen($params[0]) - 2)
+                    : $imageWidth * 0.01 * substr($params[0], 0, strlen($params[0]) - 1)
             );
             if (!isset($params[1])) {
                 $resizeHeight = floor($imageHeight * $resizeWidth / $imageWidth);
             } else {
                 $resizeHeight = floor(
                     strpos($params[1], '%') === false ? $params[1]
-                        : $imageHeight * 0.01 * substr($params[1], 0, strlen($params[1]) - 2)
+                        : $imageHeight * 0.01 * substr($params[1], 0, strlen($params[1]) - 1)
                 );
             }
             $tempSource = imagecreatetruecolor($resizeWidth, $resizeHeight);

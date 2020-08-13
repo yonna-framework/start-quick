@@ -4,7 +4,6 @@ namespace Yonna\QuickStart\Helper;
 
 
 use Yonna\Foundation\Curl;
-use Yonna\QuickStart\Scope\Xoss\Xoss;
 
 class Assets extends AbstractHelper
 {
@@ -235,24 +234,17 @@ class Assets extends AbstractHelper
         $src = [
             'http' => [],
             'base64' => [],
-            'xoss' => [],
             'save' => [],
-            'http2xoss' => [],
         ];
         foreach ($srcs as $k => $v) {
-            if (strpos($v, 'http') !== false
-                || strpos($v, 'base64') !== false
-                || strpos($v, 'xoss://') !== false) {
+            if (strpos($v, 'http') !== false || strpos($v, 'base64') !== false) {
                 $v = str_replace('"', "'", $v);
                 $v = explode("'", $v);
                 foreach ($v as $vk => $vv) {
-                    if (!in_array($vv, $src['xoss']) && strpos($vv, 'xoss://') !== false) {
-                        $src['xoss'][] = $vv;
-                    }
-                    if (!in_array($vv, $src['xoss']) && strpos($vv, 'base64') !== false) {
+                    if (!in_array($vv, $src['base64']) && strpos($vv, 'base64') !== false) {
                         $src['base64'][] = $vv;
                     }
-                    if (!in_array($vv, $src['xoss']) && strpos($vv, 'http') !== false) {
+                    if (!in_array($vv, $src['http']) && strpos($vv, 'http') !== false) {
                         $src['http'][] = $vv;
                     }
                 }
@@ -280,14 +272,14 @@ class Assets extends AbstractHelper
                             ];
                         }
                     }
-                } else if ($k === 'http' && strpos($v, 'xoss_download') === false) {
+                } else if ($k === 'http') {
                     $header = self::getHeaderByUrl($v);
                     if (!empty($header['CONTENT-TYPE'])) {
                         $suffix = self::getSuffix(null, $header['CONTENT-TYPE']);
                         if (in_array($suffix, self::$allow_mimes)) {
                             $size = $header['CONTENT-LENGTH'] ?? 0;
                             $name = $header['FILE_NAME'] ?? 'http.' . microtime(true) . rand(1000, 9999) . '.' . $suffix;
-                            $data = Curl::get($v, 1);
+                            $data = Curl::get($v, 10);
                             if ($data) {
                                 $src['save'][$v] = [
                                     'name' => $name,
@@ -299,9 +291,6 @@ class Assets extends AbstractHelper
                             }
                         }
                     }
-                } else if ($k === 'http' && strpos($v, 'xoss_download') !== false) {
-                    $v2 = explode('k=', $v);
-                    $src['http2xoss'][$v] = array_pop($v2);
                 }
             }
         }
