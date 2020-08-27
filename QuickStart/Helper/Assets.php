@@ -230,21 +230,26 @@ class Assets extends AbstractHelper
             return null;
         }
         $srcs = str_replace('src =', 'src=', $html);
-        $srcs = explode('src=', $srcs);
         $src = [
             'http' => [],
             'base64' => [],
             'save' => [],
         ];
+        preg_match_all("/src='(.*?)'/", $srcs, $s1);
+        preg_match_all('/src="(.*?)"/', $srcs, $s2);
+        $s1 = $s1[1];
+        $s2 = $s2[1];
+        $srcs = array_merge($s1, $s2);
+        $srcs = array_unique($srcs);
         foreach ($srcs as $k => $v) {
             if (strpos($v, 'http') !== false || strpos($v, 'base64') !== false) {
                 $v = str_replace('"', "'", $v);
                 $v = explode("'", $v);
                 foreach ($v as $vk => $vv) {
-                    if (!in_array($vv, $src['base64']) && strpos($vv, 'base64') !== false) {
+                    if (strpos($vv, 'base64') !== false) {
                         $src['base64'][] = $vv;
                     }
-                    if (!in_array($vv, $src['http']) && strpos($vv, 'http') !== false) {
+                    if (strpos($vv, 'http') === 0) {
                         $src['http'][] = $vv;
                     }
                 }
