@@ -3,6 +3,7 @@
 namespace Yonna\Database;
 
 use Exception;
+use Yonna\Database\Driver\Cache;
 use Yonna\Database\Driver\Type;
 use Yonna\Foundation\System;
 
@@ -78,7 +79,9 @@ class Config
         }
         // auto_cache
         if ($auto_cache === 'true' || $auto_cache === 'false') {
-            $auto_cache = $auto_cache === 'true';
+            $auto_cache = Cache::TEN_MINUTE; // default 10 minutes
+        } elseif ($auto_cache === 'false') {
+            $auto_cache = false;
         } elseif (is_numeric($auto_cache)) {
             $auto_cache = (int)$auto_cache;
         }
