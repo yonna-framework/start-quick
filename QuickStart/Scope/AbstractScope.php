@@ -9,6 +9,10 @@ use Yonna\Scope\Scope;
 abstract class AbstractScope extends Scope
 {
 
+    public function __construct(object $request)
+    {
+        parent::__construct($request);
+    }
 
     protected function xoss_save($content)
     {

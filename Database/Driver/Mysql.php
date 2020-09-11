@@ -22,6 +22,14 @@ class Mysql extends AbstractPDO
     /**
      * @return mixed
      */
+    public function null()
+    {
+        return parent::null();
+    }
+
+    /**
+     * @return mixed
+     */
     public function now()
     {
         return parent::now();

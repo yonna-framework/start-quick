@@ -404,6 +404,27 @@ abstract class AbstractDB
     }
 
     /**
+     * NULL值设定
+     * @return mixed
+     */
+    protected function null()
+    {
+        $val = null;
+        switch ($this->options['db_type']) {
+            case Type::MYSQL:
+            case Type::PGSQL:
+            case Type::MSSQL:
+            case Type::SQLITE:
+                $val = ['exp', 'NULL'];
+                break;
+            default:
+                $val = '';
+                break;
+        }
+        return $val;
+    }
+
+    /**
      * 当前时间（只能用于insert 和 update）
      * @return mixed
      */

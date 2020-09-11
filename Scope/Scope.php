@@ -12,6 +12,11 @@ use Yonna\Throwable\Exception;
 abstract class Scope extends Kernel
 {
 
+    public function __construct(object $request)
+    {
+        parent::__construct($request);
+    }
+
     /**
      * @param string $call
      * @param string $action

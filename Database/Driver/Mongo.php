@@ -22,6 +22,14 @@ class Mongo extends AbstractMDO
     /**
      * @return mixed
      */
+    public function null()
+    {
+        return parent::null();
+    }
+
+    /**
+     * @return mixed
+     */
     public function now()
     {
         return parent::now();

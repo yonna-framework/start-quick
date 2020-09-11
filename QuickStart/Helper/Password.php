@@ -8,7 +8,7 @@ class Password extends AbstractHelper
     const PWD_MIX = '|_hun!@#$++$!Zsig_1124'; //faa9a6ddddf57436961bf2d2bf4338df
 
     /**
-     * 安全码加密
+     * 密码加密
      * @param $pwd
      * @return string
      */
@@ -18,26 +18,26 @@ class Password extends AbstractHelper
     }
 
     /**
-     * 检查安全码安全性
+     * 检查密码安全性
      * @param $pwd
      * @return bool
      */
     public static function check($pwd)
     {
-        if (!$pwd) return self::false('请输入安全码');
+        if (!$pwd) return self::false('Please fill in the password');
         $length = strlen($pwd);
         // $haveNum = (preg_match('/\d+/', $pwd)) ? true : false;
         // $haveUpper = (preg_match('/[A-Z]+/', $pwd)) ? true : false;
         // $haveLower = (preg_match('/[a-z]+/', $pwd)) ? true : false;
         $haveBlank = (preg_match('/\s+/', $pwd)) ? true : false;
-        if ($length < 4) return self::false('安全码不能小于4位');
-        if ($length > 16) return self::false('安全码不能大于16位');
-        if ($haveBlank) return self::false('安全码不得包含空格');
+        if ($length < 4) return self::false('Password cannot be less than 4 digits');
+        if ($length > 16) return self::false('Password cannot be greater than 16 digits');
+        if ($haveBlank) return self::false('Password must not contain spaces');
         return true;
     }
 
     /**
-     * 检测安全码等级
+     * 检测密码等级
      * 无码0级 一般的1-5级
      * @param $pwd
      * @return integer
@@ -59,7 +59,7 @@ class Password extends AbstractHelper
     }
 
     /**
-     * 获取安全码强度等级名称
+     * 获取密码强度等级名称
      * @param int $level 1-5的数字
      * @return string
      */
@@ -70,7 +70,7 @@ class Password extends AbstractHelper
     }
 
     /**
-     * 获取安全码等级色槽
+     * 获取密码等级色槽
      * @param null $safeLevel
      * @param int $LEVELS
      * @return array
