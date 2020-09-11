@@ -23,11 +23,27 @@ class EssayCategory extends AbstractScope
      * @return mixed
      * @throws Exception\DatabaseException
      */
+    public function one(): array
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->one();
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception\DatabaseException
+     */
     public function multi(): array
     {
         $prism = new EssayCategoryPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getUpperId() && $w->equalTo('upper_id', $prism->getUpperId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
@@ -44,6 +60,8 @@ class EssayCategory extends AbstractScope
         $prism = new EssayCategoryPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getUpperId() && $w->equalTo('upper_id', $prism->getUpperId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
@@ -55,7 +73,7 @@ class EssayCategory extends AbstractScope
      * @return int
      * @throws Exception\DatabaseException
      */
-    public function add()
+    public function insert()
     {
         ArrayValidator::required($this->input(), ['name'], function ($error) {
             Exception::throw($error);
@@ -64,10 +82,74 @@ class EssayCategory extends AbstractScope
             'name' => $this->input('name'),
             'upper_id' => $this->input('upper_id') ?? 0,
             'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
-            'level' => $this->input('level') ?? 1,
             'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function update()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        $data = [
+            'name' => $this->input('name'),
+            'upper_id' => $this->input('upper_id'),
+            'status' => $this->input('status'),
+            'sort' => $this->input('sort'),
+        ];
+        if ($data) {
+            return DB::connect()->table(self::TABLE)
+                ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+                ->update($data);
+        }
+        return true;
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function delete()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->delete();
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function multiDelete()
+    {
+        ArrayValidator::required($this->input(), ['ids'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->delete();
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function multiStatus()
+    {
+        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->update(["status" => $this->input('status')]);
     }
 
 }

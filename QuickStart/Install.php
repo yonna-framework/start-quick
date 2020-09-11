@@ -134,13 +134,19 @@ class Install
 
                         Config::post('add', Essay::class, 'insert');
                         Config::post('edit', Essay::class, 'update');
-                        Config::post('mdel', Essay::class, 'deleteMulti');
                         Config::post('del', Essay::class, 'delete');
+                        Config::post('mDel', Essay::class, 'multiDelete');
+                        Config::post('mStatus', Essay::class, 'multiStatus');
                         Config::post('info', Essay::class, 'one');
                         Config::post('page', Essay::class, 'page');
 
                         Config::group(['category'], function () {
                             Config::post('add', EssayCategory::class, 'insert');
+                            Config::post('edit', EssayCategory::class, 'update');
+                            Config::post('del', EssayCategory::class, 'delete');
+                            Config::post('mDel', EssayCategory::class, 'multiDelete');
+                            Config::post('mStatus', EssayCategory::class, 'multiStatus');
+                            Config::post('info', EssayCategory::class, 'one');
                             Config::post('list', EssayCategory::class, 'multi');
                             Config::post('page', EssayCategory::class, 'page');
                         });

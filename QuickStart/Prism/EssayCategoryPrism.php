@@ -11,6 +11,8 @@ class EssayCategoryPrism extends Prism
     protected int $current = 1;
     protected int $per = 10;
     protected ?int $id = null;
+    protected ?int $upper_id = null;
+    protected ?array $ids = null;
     protected ?string $name = null;
     protected ?int $status = null;
 
@@ -92,6 +94,38 @@ class EssayCategoryPrism extends Prism
     public function setStatus(?int $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUpperId(): ?int
+    {
+        return $this->upper_id;
+    }
+
+    /**
+     * @param int|null $upper_id
+     */
+    public function setUpperId(?int $upper_id): void
+    {
+        $this->upper_id = $upper_id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getIds(): ?array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * @param array|null $ids
+     */
+    public function setIds(?array $ids): void
+    {
+        $this->ids = $ids;
     }
 
 }
