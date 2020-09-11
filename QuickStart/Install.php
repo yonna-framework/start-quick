@@ -134,6 +134,7 @@ class Install
 
                         Config::post('add', Essay::class, 'insert');
                         Config::post('edit', Essay::class, 'update');
+                        Config::post('mdel', Essay::class, 'deleteMulti');
                         Config::post('del', Essay::class, 'delete');
                         Config::post('info', Essay::class, 'one');
                         Config::post('page', Essay::class, 'page');

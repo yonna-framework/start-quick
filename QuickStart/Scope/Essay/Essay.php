@@ -178,6 +178,20 @@ class Essay extends AbstractScope
      * @return int
      * @throws Exception\DatabaseException
      */
+    public function deleteMulti()
+    {
+        ArrayValidator::required($this->input(), ['ids'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->delete();
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
     public function views()
     {
         ArrayValidator::required($this->input(), ['id'], function ($error) {
