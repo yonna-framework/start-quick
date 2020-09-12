@@ -50,6 +50,22 @@ class MetaCategory extends AbstractScope
     }
 
     /**
+     * @return mixed
+     * @throws Exception\DatabaseException
+     */
+    public function page(): array
+    {
+        $prism = new UserMetaCategoryPrism($this->request());
+        return DB::connect()->table(self::TABLE)
+            ->where(function (Where $w) use ($prism) {
+                $prism->getKey() && $w->equalTo('key', $prism->getKey());
+                $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+            })
+            ->orderBy('sort', 'desc')
+            ->page($prism->getCurrent(), $prism->getPer());
+    }
+
+    /**
      * @return int
      * @throws Exception\DatabaseException
      */
@@ -104,6 +120,20 @@ class MetaCategory extends AbstractScope
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->delete();
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function multiStatus()
+    {
+        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->update(["status" => $this->input('status')]);
     }
 
 }

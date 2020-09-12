@@ -196,13 +196,16 @@ class Install
         );
     }
 
-    public static function userMeta(): void
+    public static function userMetaCategory(): void
     {
         Config::middleware([Limiter::class, Logging::class],
             function () {
-                Config::group(['user', 'meta'], function () {
+                Config::group(['user', 'meta', 'category'], function () {
                     Config::post('page', MetaCategory::class, 'page');
                     Config::post('add', MetaCategory::class, 'insert');
+                    Config::post('edit', MetaCategory::class, 'update');
+                    Config::post('del', MetaCategory::class, 'delete');
+                    Config::post('mStatus', MetaCategory::class, 'multiStatus');
                 });
             }
         );
