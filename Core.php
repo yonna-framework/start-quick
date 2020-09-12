@@ -65,7 +65,7 @@ class Core
      * @param array $params
      * @return object
      */
-    public static function get($class, ...$params): object
+    public static function get(string $class, ...$params): object
     {
         return Glue::paste($class, $params);
     }

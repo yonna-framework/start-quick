@@ -15,7 +15,7 @@ use Yonna\QuickStart\Scope\Sdk\Wxmp;
 use Yonna\QuickStart\Scope\User\User;
 use Yonna\QuickStart\Scope\User\Me;
 use Yonna\QuickStart\Scope\User\Login;
-use Yonna\QuickStart\Scope\User\Meta;
+use Yonna\QuickStart\Scope\User\MetaCategory;
 use Yonna\QuickStart\Scope\User\Stat;
 use Yonna\QuickStart\Scope\Xoss\Xoss;
 use Yonna\Scope\Config;
@@ -185,18 +185,24 @@ class Install
                     Config::post('login', Login::class, 'in');
                     Config::post('logging', Login::class, 'isLogging');
                     Config::post('logout', Login::class, 'out');
-                    Config::middleware([Logging::class], function () {
-                        Config::group(['meta'], function () {
-                            Config::post('category', Meta::class, 'category');
-                            Config::post('categoryAdd', Meta::class, 'addCategory');
-                        });
-                    });
                 });
                 Config::group(['me'], function () {
                     Config::middleware([Logging::class], function () {
                         Config::post('info', Me::class, 'one');
                         Config::post('edit', Me::class, 'update');
                     });
+                });
+            }
+        );
+    }
+
+    public static function userMeta(): void
+    {
+        Config::middleware([Limiter::class, Logging::class],
+            function () {
+                Config::group(['user', 'meta'], function () {
+                    Config::post('page', MetaCategory::class, 'page');
+                    Config::post('add', MetaCategory::class, 'insert');
                 });
             }
         );
