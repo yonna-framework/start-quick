@@ -34,6 +34,14 @@ class Me extends AbstractScope
                 case MetaValueFormat::INTEGER:
                     $v = $v ? (int)$v : 0;
                     break;
+                case MetaValueFormat::INTEGER_ARRAY:
+                    if (is_string($v)) {
+                        $v = explode(',', $v);
+                    }
+                    foreach ($v as &$vv) {
+                        $vv = (int)$vv;
+                    }
+                    break;
                 case MetaValueFormat::FLOAT1:
                     $v = $v ? round($v, 1) : 0.0;
                     break;

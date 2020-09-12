@@ -19,16 +19,17 @@ create table `user_account`
 
 create table `user_meta_category`
 (
-    `key`           char(255) not null default '' comment 'meta key',
-    `value_format`  char(255) not null default 'string' comment '数据格式化类型',
-    `value_default` char(255) not null default '' comment '默认值',
-    `component`     char(255) not null default '' comment '前端组件',
-    `status`        tinyint   not null default -1 comment '状态[-1无效,1有效]',
-    `sort`          int       not null default 0 comment '排序[降序]',
+    `key`            char(255) not null default '' comment 'meta key',
+    `value_format`   char(255) not null default 'string' comment '数据格式化类型',
+    `value_default`  char(255) not null default '' comment '默认值',
+    `component`      char(255) not null default '' comment '前端组件',
+    `component_data` char(255) not null default '' comment '前端组件数据源',
+    `status`         tinyint   not null default -1 comment '状态[-1无效,1有效]',
+    `sort`           int       not null default 0 comment '排序[降序]',
     primary key (`key`),
     unique key `uk_key` (`key`),
     index (`value_format`),
-    index (`value_default`),
+    index (`component`),
     index (`status`)
 ) engine = innodb comment '用户可变自定义字段';
 
@@ -87,8 +88,8 @@ values ('birth_date', 'date', 1, 'picker_date');
 insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('age', 'integer', 1, 'input_integer');
 
-insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`, `component`)
-values ('sex', 'integer', '-1', 1, 'select:mapping:Yonna_QuickStart_Mapping_User_Sex');
+insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`, `component`, `component_data`)
+values ('sex', 'integer', '-1', 1, 'select', 'mapping:Yonna_QuickStart_Mapping_User_Sex');
 
 insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('region', 'integer', 1, 'cascader_region');

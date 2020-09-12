@@ -11,7 +11,7 @@ use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
 /**
- * Class Meta
+ * Class MetaCategory
  * @package Yonna\QuickStart\Scope\User
  */
 class MetaCategory extends AbstractScope
@@ -25,11 +25,11 @@ class MetaCategory extends AbstractScope
      */
     public function one(): array
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['key'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
             ->one();
     }
 
@@ -71,13 +71,15 @@ class MetaCategory extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['key', 'value_format'], function ($error) {
+        ArrayValidator::required($this->input(), ['key', 'value_format', 'component'], function ($error) {
             Exception::throw($error);
         });
         $add = [
             'key' => $this->input('key'),
             'value_format' => $this->input('value_format'),
             'value_default' => $this->input('value_default') ?? '',
+            'component' => $this->input('component'),
+            'component_data' => $this->input('component_data') ?? '',
             'status' => $this->input('status') ?? Boolean::false,
             'sort' => $this->input('sort') ?? 0,
         ];
@@ -96,6 +98,8 @@ class MetaCategory extends AbstractScope
         $data = [
             'value_format' => $this->input('value_format'),
             'value_default' => $this->input('value_default'),
+            'component' => $this->input('component'),
+            'component_data' => $this->input('component_data'),
             'status' => $this->input('status'),
             'sort' => $this->input('sort'),
         ];
