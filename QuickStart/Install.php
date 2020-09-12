@@ -9,6 +9,9 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
+use Yonna\QuickStart\Scope\Data\Hobby;
+use Yonna\QuickStart\Scope\Data\Speciality;
+use Yonna\QuickStart\Scope\Data\Work;
 use Yonna\QuickStart\Scope\Essay\Essay;
 use Yonna\QuickStart\Scope\Essay\EssayCategory;
 use Yonna\QuickStart\Scope\Sdk\Wxmp;
@@ -207,6 +210,44 @@ class Install
                     Config::post('edit', MetaCategory::class, 'update');
                     Config::post('del', MetaCategory::class, 'delete');
                     Config::post('mStatus', MetaCategory::class, 'multiStatus');
+                });
+            }
+        );
+    }
+
+    public static function data(): void
+    {
+        Config::middleware([Limiter::class, Logging::class],
+            function () {
+                Config::group(['data', 'hobby'], function () {
+                    Config::post('info', Hobby::class, 'one');
+                    Config::post('list', Hobby::class, 'multi');
+                    Config::post('page', Hobby::class, 'page');
+                    Config::post('add', Hobby::class, 'insert');
+                    Config::post('edit', Hobby::class, 'update');
+                    Config::post('del', Hobby::class, 'delete');
+                    Config::post('mDel', Hobby::class, 'multiDelete');
+                    Config::post('mStatus', Hobby::class, 'multiStatus');
+                });
+                Config::group(['data', 'speciality'], function () {
+                    Config::post('info', Speciality::class, 'one');
+                    Config::post('list', Speciality::class, 'multi');
+                    Config::post('page', Speciality::class, 'page');
+                    Config::post('add', Speciality::class, 'insert');
+                    Config::post('edit', Speciality::class, 'update');
+                    Config::post('del', Speciality::class, 'delete');
+                    Config::post('mDel', Speciality::class, 'multiDelete');
+                    Config::post('mStatus', Speciality::class, 'multiStatus');
+                });
+                Config::group(['data', 'work'], function () {
+                    Config::post('info', Work::class, 'one');
+                    Config::post('list', Work::class, 'multi');
+                    Config::post('page', Work::class, 'page');
+                    Config::post('add', Work::class, 'insert');
+                    Config::post('edit', Work::class, 'update');
+                    Config::post('del', Work::class, 'delete');
+                    Config::post('mDel', Work::class, 'multiDelete');
+                    Config::post('mStatus', Work::class, 'multiStatus');
                 });
             }
         );
