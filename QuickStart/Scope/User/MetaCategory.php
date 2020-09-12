@@ -90,11 +90,10 @@ class MetaCategory extends AbstractScope
      */
     public function update()
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['key'], function ($error) {
             Exception::throw($error);
         });
         $data = [
-            'title' => $this->input('title'),
             'value_format' => $this->input('value_format'),
             'value_default' => $this->input('value_default'),
             'status' => $this->input('status'),
@@ -102,7 +101,7 @@ class MetaCategory extends AbstractScope
         ];
         if ($data) {
             return DB::connect()->table(self::TABLE)
-                ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+                ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
                 ->update($data);
         }
         return true;
@@ -114,11 +113,11 @@ class MetaCategory extends AbstractScope
      */
     public function delete()
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['key'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
             ->delete();
     }
 
@@ -128,11 +127,11 @@ class MetaCategory extends AbstractScope
      */
     public function multiStatus()
     {
-        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
+        ArrayValidator::required($this->input(), ['keys', 'status'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->where(fn(Where $w) => $w->in('key', $this->input('keys')))
             ->update(["status" => $this->input('status')]);
     }
 

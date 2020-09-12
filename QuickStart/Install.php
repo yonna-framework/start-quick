@@ -201,7 +201,7 @@ class Install
         Config::middleware([Limiter::class, Logging::class],
             function () {
                 Config::group(['user', 'meta', 'category'], function () {
-                    Config::post('page', MetaCategory::class, 'page');
+                    Config::post('list', MetaCategory::class, 'multi');
                     Config::post('add', MetaCategory::class, 'insert');
                     Config::post('edit', MetaCategory::class, 'update');
                     Config::post('del', MetaCategory::class, 'delete');
