@@ -1,12 +1,10 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\User;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\Database\DB;
 use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Mapping\User\UserStatus;
-use Yonna\QuickStart\Scope\AbstractScope;
-use Yonna\QuickStart\Scope\User\Stat as UserStat;
 use Yonna\Throwable\Exception\DatabaseException;
 
 class Stat extends AbstractScope

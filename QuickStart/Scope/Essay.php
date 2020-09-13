@@ -1,19 +1,17 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\Essay;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\QuickStart\Mapping\Essay\EssayStatus;
 use Yonna\QuickStart\Prism\EssayPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
-use Yonna\QuickStart\Scope\Xoss\Xoss;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
 /**
  * Class Essay
- * @package Yonna\QuickStart\Scope\Essay
+ * @package Yonna\QuickStart\Scope
  */
 class Essay extends AbstractScope
 {

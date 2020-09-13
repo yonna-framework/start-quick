@@ -1,10 +1,9 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\Data;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\QuickStart\Mapping\Data\DataStatus;
 use Yonna\QuickStart\Prism\DataPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
@@ -12,9 +11,9 @@ use Yonna\Validator\ArrayValidator;
 
 /**
  * Class Hobby
- * @package Yonna\QuickStart\Scope\Data
+ * @package Yonna\QuickStart\Scope
  */
-class Hobby extends AbstractScope
+class DataHobby extends AbstractScope
 {
 
     const TABLE = 'data_hobby';

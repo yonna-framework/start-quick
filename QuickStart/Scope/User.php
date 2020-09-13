@@ -1,14 +1,12 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\User;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\QuickStart\Mapping\User\UserStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Prism\UserPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Throwable\Exception;
-use Yonna\Validator\ArrayValidator;
 
 class User extends AbstractScope
 {

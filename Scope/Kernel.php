@@ -51,7 +51,7 @@ abstract class Kernel implements Interfaces\Kernel
         if (empty($key)) {
             return array_merge($input, $this->input);
         }
-        return $input[$key] ?? $this->input[$key] ?? null;
+        return $this->input[$key] ?? $input[$key] ?? null;
     }
 
 }

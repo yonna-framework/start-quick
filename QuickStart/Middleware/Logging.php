@@ -4,7 +4,7 @@ namespace Yonna\QuickStart\Middleware;
 
 use Yonna\IO\Request;
 use Yonna\Middleware\Before;
-use Yonna\QuickStart\Scope\User\Login;
+use Yonna\QuickStart\Scope\UserLogin;
 use Yonna\Throwable\Exception;
 
 class Logging extends Before
@@ -17,12 +17,12 @@ class Logging extends Before
      */
     public function handle(): Request
     {
-        $isLogin = $this->scope(Login::class, 'isLogging');
+        $isLogin = $this->scope(UserLogin::class, 'isLogging');
         if ($isLogin !== true) {
             Exception::notLogging('UN_LOGIN');
         }
         $request = $this->request();
-        $request->setLoggingId($this->scope(Login::class, 'getLoggingId'));
+        $request->setLoggingId($this->scope(UserLogin::class, 'getLoggingId'));
         return $request;
     }
 }

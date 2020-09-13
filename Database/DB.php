@@ -48,18 +48,21 @@ class DB
     /**
      * trans start
      * @param Closure $call
+     * @return mixed|null
      * @throws Throwable
      */
     public static function transTrace(Closure $call)
     {
+        $result = null;
         try {
             Transaction::begin();
-            $call();
+            $result = $call();
             Transaction::commit();
         } catch (Throwable $e) {
             Transaction::rollback();
             Exception::origin($e);
         }
+        return $result;
     }
 
     /**

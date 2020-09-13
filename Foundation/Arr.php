@@ -64,7 +64,7 @@ class Arr
     {
         if (is_array($array)) {
             $_sort_array = [];
-            foreach ($array AS $_key => $_value) {
+            foreach ($array as $_key => $_value) {
                 $_sort_array[$_key] = (array)$_value[$key];
             }
             array_multisort($_sort_array, $sort ? SORT_DESC : SORT_ASC, $array);
@@ -781,6 +781,37 @@ class Arr
     public static function wrap($value)
     {
         return !is_array($value) ? [$value] : $value;
+    }
+
+    /**
+     * 将数组变为树状结构，可自定义子key
+     *
+     * @param $array
+     * @param mixed $root 根值
+     * @param string $primaryKey 主键key
+     * @param string $upperKey 关系键key
+     * @param string $childName 包含名称
+     * @param bool $childShowEmpty children没数据时是否写入
+     * @return array
+     */
+    public static function tree($array, $root = 0, $primaryKey = 'id', $upperKey = 'upper_id', $childName = "children", $childShowEmpty = false)
+    {
+        $arr = [];
+        foreach ($array as $v) {
+            if (!isset($v[$upperKey])) {
+                continue;
+            }
+            if ($v[$upperKey] == $root) {
+                $child = self::tree($array, $v[$primaryKey], $primaryKey, $upperKey, $childName, $childShowEmpty);
+                if (empty($child)) {
+                    if ($childShowEmpty) $v[$childName] = $child;
+                } else {
+                    $v[$childName] = $child;
+                }
+                $arr[] = $v;
+            }
+        }
+        return $arr;
     }
 }
 

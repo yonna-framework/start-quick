@@ -65,7 +65,7 @@ create table `user_license`
 
 
 insert into `license` (`name`, `upper_id`, `allow_scope`)
-values ('超级管理员', 0, ',,,all');
+values ('ROOT', 0, ',,,all');
 
 insert into `user` (`password`, `status`, `register_time`)
 values ('faa9a6ddddf57436961bf2d2bf4338df', 2, unix_timestamp(now()));

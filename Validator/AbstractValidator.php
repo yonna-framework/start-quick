@@ -25,7 +25,9 @@ abstract class AbstractValidator
      */
     protected function error(string $error): void
     {
-        $error && $this->error[] = $error;
+        if ($error) {
+            $this->error[] = $error;
+        }
     }
 
     /**

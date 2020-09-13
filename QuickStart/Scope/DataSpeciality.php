@@ -1,23 +1,22 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\User;
+namespace Yonna\QuickStart\Scope;
 
-use Yonna\QuickStart\Mapping\Common\Boolean;
-use Yonna\QuickStart\Prism\UserMetaCategoryPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
+use Yonna\QuickStart\Mapping\Data\DataStatus;
+use Yonna\QuickStart\Prism\DataPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
 /**
- * Class MetaCategory
- * @package Yonna\QuickStart\Scope\User
+ * Class Speciality
+ * @package Yonna\QuickStart\Scope
  */
-class MetaCategory extends AbstractScope
+class DataSpeciality extends AbstractScope
 {
 
-    const TABLE = 'user_meta_category';
+    const TABLE = 'data_speciality';
 
     /**
      * @return mixed
@@ -25,11 +24,11 @@ class MetaCategory extends AbstractScope
      */
     public function one(): array
     {
-        ArrayValidator::required($this->input(), ['key'], function ($error) {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->one();
     }
 
@@ -39,11 +38,12 @@ class MetaCategory extends AbstractScope
      */
     public function multi(): array
     {
-        $prism = new UserMetaCategoryPrism($this->request());
+        $prism = new DataPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
-                $prism->getKey() && $w->equalTo('key', $prism->getKey());
+                $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
             })
             ->orderBy('sort', 'desc')
             ->multi();
@@ -55,11 +55,12 @@ class MetaCategory extends AbstractScope
      */
     public function page(): array
     {
-        $prism = new UserMetaCategoryPrism($this->request());
+        $prism = new DataPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
-                $prism->getKey() && $w->equalTo('key', $prism->getKey());
+                $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
             })
             ->orderBy('sort', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
@@ -71,16 +72,12 @@ class MetaCategory extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['key', 'value_format', 'component'], function ($error) {
+        ArrayValidator::required($this->input(), ['name'], function ($error) {
             Exception::throw($error);
         });
         $add = [
-            'key' => $this->input('key'),
-            'value_format' => $this->input('value_format'),
-            'value_default' => $this->input('value_default') ?? '',
-            'component' => $this->input('component'),
-            'component_data' => $this->input('component_data') ?? '',
-            'status' => $this->input('status') ?? Boolean::false,
+            'name' => $this->input('name'),
+            'status' => $this->input('status') ?? DataStatus::DISABLED,
             'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
@@ -92,20 +89,17 @@ class MetaCategory extends AbstractScope
      */
     public function update()
     {
-        ArrayValidator::required($this->input(), ['key'], function ($error) {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
         $data = [
-            'value_format' => $this->input('value_format'),
-            'value_default' => $this->input('value_default'),
-            'component' => $this->input('component'),
-            'component_data' => $this->input('component_data'),
+            'name' => $this->input('name'),
             'status' => $this->input('status'),
             'sort' => $this->input('sort'),
         ];
         if ($data) {
             return DB::connect()->table(self::TABLE)
-                ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
+                ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
                 ->update($data);
         }
         return true;
@@ -117,11 +111,25 @@ class MetaCategory extends AbstractScope
      */
     public function delete()
     {
-        ArrayValidator::required($this->input(), ['key'], function ($error) {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->delete();
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function multiDelete()
+    {
+        ArrayValidator::required($this->input(), ['ids'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
             ->delete();
     }
 
@@ -131,11 +139,11 @@ class MetaCategory extends AbstractScope
      */
     public function multiStatus()
     {
-        ArrayValidator::required($this->input(), ['keys', 'status'], function ($error) {
+        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->in('key', $this->input('keys')))
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
             ->update(["status" => $this->input('status')]);
     }
 

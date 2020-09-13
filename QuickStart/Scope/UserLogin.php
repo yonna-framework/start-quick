@@ -1,12 +1,12 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\User;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\QuickStart\Helper\Password;
+
 use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Mapping\User\UserStatus;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Throwable;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -15,9 +15,9 @@ use Yonna\Throwable\Exception;
 
 /**
  * Class Login
- * @package Yonna\QuickStart\Scope\User
+ * @package Yonna\QuickStart\Scope
  */
-class Login extends AbstractScope
+class UserLogin extends AbstractScope
 {
 
     const ONLINE_KEEP_TIME = 86400;

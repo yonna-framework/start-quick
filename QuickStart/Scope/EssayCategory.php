@@ -1,23 +1,22 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\Data;
+namespace Yonna\QuickStart\Scope;
 
-use Yonna\QuickStart\Mapping\Data\DataStatus;
-use Yonna\QuickStart\Prism\DataPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
+use Yonna\QuickStart\Mapping\Essay\EssayCategoryStatus;
+use Yonna\QuickStart\Prism\EssayCategoryPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
 /**
- * Class Work
- * @package Yonna\QuickStart\Scope\Data
+ * Class EssayCategory
+ * @package Yonna\QuickStart\Scope
  */
-class Work extends AbstractScope
+class EssayCategory extends AbstractScope
 {
 
-    const TABLE = 'data_work';
+    const TABLE = 'essay_category';
 
     /**
      * @return mixed
@@ -39,12 +38,13 @@ class Work extends AbstractScope
      */
     public function multi(): array
     {
-        $prism = new DataPrism($this->request());
+        $prism = new EssayCategoryPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
-                $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getUpperId() && $w->equalTo('upper_id', $prism->getUpperId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
+                $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
             ->orderBy('sort', 'desc')
             ->multi();
@@ -56,12 +56,13 @@ class Work extends AbstractScope
      */
     public function page(): array
     {
-        $prism = new DataPrism($this->request());
+        $prism = new EssayCategoryPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
-                $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getUpperId() && $w->equalTo('upper_id', $prism->getUpperId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
+                $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
             ->orderBy('sort', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
@@ -78,7 +79,8 @@ class Work extends AbstractScope
         });
         $add = [
             'name' => $this->input('name'),
-            'status' => $this->input('status') ?? DataStatus::DISABLED,
+            'upper_id' => $this->input('upper_id') ?? 0,
+            'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
             'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
@@ -95,6 +97,7 @@ class Work extends AbstractScope
         });
         $data = [
             'name' => $this->input('name'),
+            'upper_id' => $this->input('upper_id'),
             'status' => $this->input('status'),
             'sort' => $this->input('sort'),
         ];

@@ -9,18 +9,19 @@ use Yonna\Log\Prism;
 use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
-use Yonna\QuickStart\Scope\Data\Hobby;
-use Yonna\QuickStart\Scope\Data\Speciality;
-use Yonna\QuickStart\Scope\Data\Work;
-use Yonna\QuickStart\Scope\Essay\Essay;
-use Yonna\QuickStart\Scope\Essay\EssayCategory;
-use Yonna\QuickStart\Scope\Sdk\Wxmp;
-use Yonna\QuickStart\Scope\User\User;
-use Yonna\QuickStart\Scope\User\Me;
-use Yonna\QuickStart\Scope\User\Login;
-use Yonna\QuickStart\Scope\User\MetaCategory;
-use Yonna\QuickStart\Scope\User\Stat;
-use Yonna\QuickStart\Scope\Xoss\Xoss;
+use Yonna\QuickStart\Scope\DataHobby;
+use Yonna\QuickStart\Scope\License;
+use Yonna\QuickStart\Scope\DataSpeciality;
+use Yonna\QuickStart\Scope\DataWork;
+use Yonna\QuickStart\Scope\Essay;
+use Yonna\QuickStart\Scope\EssayCategory;
+use Yonna\QuickStart\Scope\SdkWxmp;
+use Yonna\QuickStart\Scope\User;
+use Yonna\QuickStart\Scope\UserMe;
+use Yonna\QuickStart\Scope\UserLogin;
+use Yonna\QuickStart\Scope\UserMetaCategory;
+use Yonna\QuickStart\Scope\Stat;
+use Yonna\QuickStart\Scope\Xoss;
 use Yonna\Scope\Config;
 use Yonna\Throwable\Exception\DatabaseException;
 use Yonna\Throwable\Exception\ParamsException;
@@ -167,14 +168,24 @@ class Install
                 Config::group(['sdk'], function () {
 
                     Config::group(['wxmp'], function () {
-                        Config::post('login', Wxmp::class, 'in');
+                        Config::post('login', SdkWxmp::class, 'in');
                     });
 
-                    Config::middleware([Logging::class],
-                        function () {
+                });
+            }
+        );
+    }
 
-                        }
-                    );
+    public static function license(): void
+    {
+        Config::middleware([Limiter::class, Logging::class],
+            function () {
+                Config::group(['license'], function () {
+                    Config::post('tree', License::class, 'tree');
+                    Config::post('info', License::class, 'one');
+                    Config::post('add', License::class, 'insert');
+                    Config::post('edit', License::class, 'update');
+                    Config::post('del', License::class, 'delete');
                 });
             }
         );
@@ -185,14 +196,14 @@ class Install
         Config::middleware([Limiter::class],
             function () {
                 Config::group(['user'], function () {
-                    Config::post('login', Login::class, 'in');
-                    Config::post('logging', Login::class, 'isLogging');
-                    Config::post('logout', Login::class, 'out');
+                    Config::post('login', UserLogin::class, 'in');
+                    Config::post('logging', UserLogin::class, 'isLogging');
+                    Config::post('logout', UserLogin::class, 'out');
                 });
-                Config::group(['me'], function () {
-                    Config::middleware([Logging::class], function () {
-                        Config::post('info', Me::class, 'one');
-                        Config::post('edit', Me::class, 'update');
+                Config::middleware([Logging::class], function () {
+                    Config::group(['me'], function () {
+                        Config::post('info', UserMe::class, 'one');
+                        Config::post('edit', UserMe::class, 'update');
                     });
                 });
             }
@@ -204,12 +215,12 @@ class Install
         Config::middleware([Limiter::class, Logging::class],
             function () {
                 Config::group(['user', 'meta', 'category'], function () {
-                    Config::post('info', MetaCategory::class, 'one');
-                    Config::post('list', MetaCategory::class, 'multi');
-                    Config::post('add', MetaCategory::class, 'insert');
-                    Config::post('edit', MetaCategory::class, 'update');
-                    Config::post('del', MetaCategory::class, 'delete');
-                    Config::post('mStatus', MetaCategory::class, 'multiStatus');
+                    Config::post('info', UserMetaCategory::class, 'one');
+                    Config::post('list', UserMetaCategory::class, 'multi');
+                    Config::post('add', UserMetaCategory::class, 'insert');
+                    Config::post('edit', UserMetaCategory::class, 'update');
+                    Config::post('del', UserMetaCategory::class, 'delete');
+                    Config::post('mStatus', UserMetaCategory::class, 'multiStatus');
                 });
             }
         );
@@ -220,34 +231,34 @@ class Install
         Config::middleware([Limiter::class, Logging::class],
             function () {
                 Config::group(['data', 'hobby'], function () {
-                    Config::post('info', Hobby::class, 'one');
-                    Config::post('list', Hobby::class, 'multi');
-                    Config::post('page', Hobby::class, 'page');
-                    Config::post('add', Hobby::class, 'insert');
-                    Config::post('edit', Hobby::class, 'update');
-                    Config::post('del', Hobby::class, 'delete');
-                    Config::post('mDel', Hobby::class, 'multiDelete');
-                    Config::post('mStatus', Hobby::class, 'multiStatus');
+                    Config::post('info', DataHobby::class, 'one');
+                    Config::post('list', DataHobby::class, 'multi');
+                    Config::post('page', DataHobby::class, 'page');
+                    Config::post('add', DataHobby::class, 'insert');
+                    Config::post('edit', DataHobby::class, 'update');
+                    Config::post('del', DataHobby::class, 'delete');
+                    Config::post('mDel', DataHobby::class, 'multiDelete');
+                    Config::post('mStatus', DataHobby::class, 'multiStatus');
                 });
                 Config::group(['data', 'speciality'], function () {
-                    Config::post('info', Speciality::class, 'one');
-                    Config::post('list', Speciality::class, 'multi');
-                    Config::post('page', Speciality::class, 'page');
-                    Config::post('add', Speciality::class, 'insert');
-                    Config::post('edit', Speciality::class, 'update');
-                    Config::post('del', Speciality::class, 'delete');
-                    Config::post('mDel', Speciality::class, 'multiDelete');
-                    Config::post('mStatus', Speciality::class, 'multiStatus');
+                    Config::post('info', DataSpeciality::class, 'one');
+                    Config::post('list', DataSpeciality::class, 'multi');
+                    Config::post('page', DataSpeciality::class, 'page');
+                    Config::post('add', DataSpeciality::class, 'insert');
+                    Config::post('edit', DataSpeciality::class, 'update');
+                    Config::post('del', DataSpeciality::class, 'delete');
+                    Config::post('mDel', DataSpeciality::class, 'multiDelete');
+                    Config::post('mStatus', DataSpeciality::class, 'multiStatus');
                 });
                 Config::group(['data', 'work'], function () {
-                    Config::post('info', Work::class, 'one');
-                    Config::post('list', Work::class, 'multi');
-                    Config::post('page', Work::class, 'page');
-                    Config::post('add', Work::class, 'insert');
-                    Config::post('edit', Work::class, 'update');
-                    Config::post('del', Work::class, 'delete');
-                    Config::post('mDel', Work::class, 'multiDelete');
-                    Config::post('mStatus', Work::class, 'multiStatus');
+                    Config::post('info', DataWork::class, 'one');
+                    Config::post('list', DataWork::class, 'multi');
+                    Config::post('page', DataWork::class, 'page');
+                    Config::post('add', DataWork::class, 'insert');
+                    Config::post('edit', DataWork::class, 'update');
+                    Config::post('del', DataWork::class, 'delete');
+                    Config::post('mDel', DataWork::class, 'multiDelete');
+                    Config::post('mStatus', DataWork::class, 'multiStatus');
                 });
             }
         );

@@ -1,23 +1,22 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\Essay;
+namespace Yonna\QuickStart\Scope;
 
-use Yonna\QuickStart\Mapping\Essay\EssayCategoryStatus;
-use Yonna\QuickStart\Prism\EssayCategoryPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
+use Yonna\QuickStart\Mapping\Common\Boolean;
+use Yonna\QuickStart\Prism\UserMetaCategoryPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
 /**
- * Class EssayCategory
- * @package Yonna\QuickStart\Scope\Essay
+ * Class MetaCategory
+ * @package Yonna\QuickStart\Scope
  */
-class EssayCategory extends AbstractScope
+class UserMetaCategory extends AbstractScope
 {
 
-    const TABLE = 'essay_category';
+    const TABLE = 'user_meta_category';
 
     /**
      * @return mixed
@@ -25,11 +24,11 @@ class EssayCategory extends AbstractScope
      */
     public function one(): array
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['key'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
             ->one();
     }
 
@@ -39,12 +38,10 @@ class EssayCategory extends AbstractScope
      */
     public function multi(): array
     {
-        $prism = new EssayCategoryPrism($this->request());
+        $prism = new UserMetaCategoryPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
-                $prism->getId() && $w->equalTo('id', $prism->getId());
-                $prism->getUpperId() && $w->equalTo('upper_id', $prism->getUpperId());
-                $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
+                $prism->getKey() && $w->equalTo('key', $prism->getKey());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
             ->orderBy('sort', 'desc')
@@ -57,12 +54,10 @@ class EssayCategory extends AbstractScope
      */
     public function page(): array
     {
-        $prism = new EssayCategoryPrism($this->request());
+        $prism = new UserMetaCategoryPrism($this->request());
         return DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
-                $prism->getId() && $w->equalTo('id', $prism->getId());
-                $prism->getUpperId() && $w->equalTo('upper_id', $prism->getUpperId());
-                $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
+                $prism->getKey() && $w->equalTo('key', $prism->getKey());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
             ->orderBy('sort', 'desc')
@@ -75,13 +70,16 @@ class EssayCategory extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['name'], function ($error) {
+        ArrayValidator::required($this->input(), ['key', 'value_format', 'component'], function ($error) {
             Exception::throw($error);
         });
         $add = [
-            'name' => $this->input('name'),
-            'upper_id' => $this->input('upper_id') ?? 0,
-            'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
+            'key' => $this->input('key'),
+            'value_format' => $this->input('value_format'),
+            'value_default' => $this->input('value_default') ?? '',
+            'component' => $this->input('component'),
+            'component_data' => $this->input('component_data') ?? '',
+            'status' => $this->input('status') ?? Boolean::false,
             'sort' => $this->input('sort') ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
@@ -93,18 +91,20 @@ class EssayCategory extends AbstractScope
      */
     public function update()
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['key'], function ($error) {
             Exception::throw($error);
         });
         $data = [
-            'name' => $this->input('name'),
-            'upper_id' => $this->input('upper_id'),
+            'value_format' => $this->input('value_format'),
+            'value_default' => $this->input('value_default'),
+            'component' => $this->input('component'),
+            'component_data' => $this->input('component_data'),
             'status' => $this->input('status'),
             'sort' => $this->input('sort'),
         ];
         if ($data) {
             return DB::connect()->table(self::TABLE)
-                ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+                ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
                 ->update($data);
         }
         return true;
@@ -116,25 +116,11 @@ class EssayCategory extends AbstractScope
      */
     public function delete()
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['key'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->delete();
-    }
-
-    /**
-     * @return int
-     * @throws Exception\DatabaseException
-     */
-    public function multiDelete()
-    {
-        ArrayValidator::required($this->input(), ['ids'], function ($error) {
-            Exception::throw($error);
-        });
-        return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->where(fn(Where $w) => $w->equalTo('key', $this->input('key')))
             ->delete();
     }
 
@@ -144,11 +130,11 @@ class EssayCategory extends AbstractScope
      */
     public function multiStatus()
     {
-        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
+        ArrayValidator::required($this->input(), ['keys', 'status'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->where(fn(Where $w) => $w->in('key', $this->input('keys')))
             ->update(["status" => $this->input('status')]);
     }
 

@@ -1,18 +1,17 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\Xoss;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\System;
 use Yonna\QuickStart\Helper\Assets;
 use Yonna\QuickStart\Helper\Image;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Response\Consequent\File;
 
 /**
  * Class Xoss
- * @package Yonna\QuickStart\Scope\User
+ * @package Yonna\QuickStart\Scope
  */
 class Xoss extends AbstractScope
 {

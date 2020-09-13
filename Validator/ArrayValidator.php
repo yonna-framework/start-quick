@@ -30,6 +30,32 @@ class ArrayValidator extends AbstractValidator
     }
 
     /**
+     * check params is set (One of them is fine)
+     * @param array $data check witch data
+     * @param array $keys
+     * @param Closure $failCallback
+     */
+    public static function anyone(array $data, array $keys, Closure $failCallback): void
+    {
+        if (empty($keys)) return;
+        $checker = self::createChecker();
+        if (empty($data)) {
+            $checker->error('data is empty for check');
+        }
+        $pass = false;
+        foreach ($keys as $k) {
+            if (Arr::get($data, $k)) {
+                $pass = true;
+                break;
+            }
+        }
+        if (!$pass) {
+            $checker->error("all keys unset");
+        }
+        $checker->callback($failCallback);
+    }
+
+    /**
      * check params is numeric
      * @param array $data check witch data
      * @param array $keys

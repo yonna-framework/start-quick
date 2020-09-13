@@ -1,16 +1,15 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\User;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Helper\Password;
 use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Mapping\User\MetaValueFormat;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Throwable\Exception;
 
-class Me extends AbstractScope
+class UserMe extends AbstractScope
 {
 
     const TABLE = 'user';
@@ -22,8 +21,8 @@ class Me extends AbstractScope
      */
     public function one(): array
     {
-        $values = $this->scope(Meta::class, 'multi', ['user_id' => $this->request()->getLoggingId()]);
-        $category = $this->scope(MetaCategory::class, 'multi', ['status' => Boolean::true]);
+        $values = $this->scope(UserMeta::class, 'multi', ['user_id' => $this->request()->getLoggingId()]);
+        $category = $this->scope(UserMetaCategory::class, 'multi', ['status' => Boolean::true]);
         $info = [
             'user_id' => $this->request()->getLoggingId(),
         ];

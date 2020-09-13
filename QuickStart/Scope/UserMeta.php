@@ -1,11 +1,8 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\User;
+namespace Yonna\QuickStart\Scope;
 
-use Yonna\QuickStart\Mapping\Common\Boolean;
-use Yonna\QuickStart\Mapping\User\MetaValueFormat;
 use Yonna\QuickStart\Prism\UserMetaPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
@@ -15,7 +12,7 @@ use Yonna\Validator\ArrayValidator;
  * Class Meta
  * @package Yonna\QuickStart\Scope\User
  */
-class Meta extends AbstractScope
+class UserMeta extends AbstractScope
 {
 
     const TABLE = 'user_meta';

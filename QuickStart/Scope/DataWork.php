@@ -1,23 +1,22 @@
 <?php
 
-namespace Yonna\QuickStart\Scope\Data;
+namespace Yonna\QuickStart\Scope;
 
 use Yonna\QuickStart\Mapping\Data\DataStatus;
 use Yonna\QuickStart\Prism\DataPrism;
-use Yonna\QuickStart\Scope\AbstractScope;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
 /**
- * Class Speciality
- * @package Yonna\QuickStart\Scope\Data
+ * Class Work
+ * @package Yonna\QuickStart\Scope
  */
-class Speciality extends AbstractScope
+class DataWork extends AbstractScope
 {
 
-    const TABLE = 'data_speciality';
+    const TABLE = 'data_work';
 
     /**
      * @return mixed

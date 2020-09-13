@@ -3,7 +3,6 @@
 namespace Yonna\QuickStart\Scope;
 
 use Yonna\QuickStart\Helper\Assets;
-use Yonna\QuickStart\Scope\Xoss\Xoss;
 use Yonna\Scope\Scope;
 
 abstract class AbstractScope extends Scope
