@@ -125,6 +125,7 @@
     "ID": "身份证件",
     "ID UNSET": "ID未设置",
     "IMPORT": "导入",
+    "IN USE AND CANNOT BE DELETED": "已被使用不能被删除",
     "INDEX": "首页",
     "INPUT": "输入",
     "INTEGER": "整数",

@@ -125,6 +125,7 @@
     "ID": "ID",
     "ID UNSET": "アンセット",
     "IMPORT": "輸入",
+    "IN USE AND CANNOT BE DELETED": "を使用してを削除することはできません",
     "INDEX": "インデックス",
     "INPUT": "入力",
     "INTEGER": "整数",

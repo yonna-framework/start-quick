@@ -125,6 +125,7 @@
     "ID": "id",
     "ID UNSET": "id unset",
     "IMPORT": "Import",
+    "IN USE AND CANNOT BE DELETED": "in use and cannot be deleted",
     "INDEX": "Index",
     "INPUT": "input",
     "INTEGER": "integer",

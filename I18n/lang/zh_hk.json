@@ -125,6 +125,7 @@
     "ID": "身份證件",
     "ID UNSET": "ID未設定",
     "IMPORT": "進口",
+    "IN USE AND CANNOT BE DELETED": "已被使用不能被删除",
     "INDEX": "索引",
     "INPUT": "輸入",
     "INTEGER": "整數",

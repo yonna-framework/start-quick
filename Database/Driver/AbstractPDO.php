@@ -448,7 +448,7 @@ abstract class AbstractPDO extends AbstractDB
                 }
                 $arr = $this->mysqlFindInSetSep . implode(',', $arr);
             } else {
-                $arr = null;
+                $arr = ',,,';
             }
         }
         return $arr;

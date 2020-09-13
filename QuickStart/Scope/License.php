@@ -82,12 +82,25 @@ class License extends AbstractScope
     /**
      * @return int
      * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function insert()
     {
         ArrayValidator::required($this->input(), ['name', 'upper_id'], function ($error) {
             Exception::throw($error);
         });
+        $upper = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('upper_id')))
+            ->one();
+        if (!$upper) {
+            Exception::params('The upper level does not exist');
+        }
+        $same = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('name', $this->input('name')))
+            ->one();
+        if ($same) {
+            Exception::params('Name already exists');
+        }
         $add = [
             'name' => $this->input('name'),
             'upper_id' => $this->input('upper_id'),
@@ -97,18 +110,26 @@ class License extends AbstractScope
     }
 
     /**
-     * @return int
+     * @return bool|int
      * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function update()
     {
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
+        if ($this->input('name')) {
+            $same = DB::connect()->table(self::TABLE)
+                ->where(fn(Where $w) => $w->equalTo('name', $this->input('name')))
+                ->one();
+            if ($same && $same['license_id'] !== $this->input('id')) {
+                Exception::params('Name already exists');
+            }
+        }
         $data = [
             'name' => $this->input('name'),
-            'status' => $this->input('status'),
-            'sort' => $this->input('sort'),
+            'allow_scope' => $this->input('allow_scope'),
         ];
         if ($data) {
             return DB::connect()->table(self::TABLE)
@@ -132,7 +153,7 @@ class License extends AbstractScope
             $count = $this->scope(UserLicense::class, 'count', ['license_id' => $prism->getId()]);
             if ($count > 0) {
                 if ($prism->isForce() !== true) {
-                    Exception::throw('In use and cannot be deleted');
+                    Exception::params('In use and cannot be deleted');
                 }
                 $this->scope(UserLicense::class, 'delete', ['license_id' => $prism->getId()]);
             }

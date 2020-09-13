@@ -49,10 +49,10 @@ class UserLicense extends AbstractScope
     }
 
     /**
-     * @return mixed
+     * @return int
      * @throws Exception\DatabaseException
      */
-    public function count(): array
+    public function count(): int
     {
         $prism = new UserLicensePrism($this->request());
         return DB::connect()->table(self::TABLE)
