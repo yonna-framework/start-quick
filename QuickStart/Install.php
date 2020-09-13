@@ -182,6 +182,7 @@ class Install
             function () {
                 Config::group(['license'], function () {
                     Config::post('tree', License::class, 'tree');
+                    Config::post('scopes', License::class, 'scopes');
                     Config::post('info', License::class, 'one');
                     Config::post('add', License::class, 'insert');
                     Config::post('edit', License::class, 'update');

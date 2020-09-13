@@ -66,7 +66,7 @@ class IO
                 if (is_array($response)) {
                     foreach ($sv as $vKey => $vVal) {
                         $data = isset($response['list']) ? $response['list'] : $response;
-                        if ($vKey === '*') {
+                        if ($vKey === '*' && Arr::isAssoc($data) === false) {
                             foreach ($data as &$l) {
                                 $l['_'] = $this->scopes($vVal, $request, $l)[0];
                             }

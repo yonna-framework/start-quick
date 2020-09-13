@@ -7,6 +7,7 @@ use Yonna\QuickStart\Mapping\Data\DataStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Prism\LicensePrism;
+use Yonna\Scope\Config as ScopeConfig;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
@@ -44,18 +45,53 @@ class License extends AbstractScope
     }
 
     /**
+     * @return mixed
+     * @throws Exception\DatabaseException
+     */
+    public function scopes(): array
+    {
+        $id = $this->input('id');
+        $scopes = [];
+        if ($id) {
+            $res = DB::connect()->table(self::TABLE)
+                ->field('allow_scope')
+                ->where(fn(Where $w) => $w->equalTo('id', $id))
+                ->one();
+            $scopes = $res['license_allow_scope'];
+            if (in_array('all', $scopes)) {
+                $scopes = [];
+                $sc = ScopeConfig::fetch();
+                foreach ($sc as $k => $v) {
+                    foreach ($v as $kk => $vv) {
+                        $scopes[] = "{$k}.{$kk}";
+                    }
+                }
+            }
+        } else {
+            $sc = ScopeConfig::fetch();
+            foreach ($sc as $k => $v) {
+                foreach ($v as $kk => $vv) {
+                    $scopes[] = "{$k}.{$kk}";
+                }
+            }
+        }
+        sort($scopes);
+        return $scopes;
+    }
+
+    /**
      * @return int
      * @throws Exception\DatabaseException
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['name'], function ($error) {
+        ArrayValidator::required($this->input(), ['name', 'upper_id'], function ($error) {
             Exception::throw($error);
         });
         $add = [
             'name' => $this->input('name'),
-            'status' => $this->input('status') ?? DataStatus::DISABLED,
-            'sort' => $this->input('sort') ?? 0,
+            'upper_id' => $this->input('upper_id'),
+            'allow_scope' => $this->input('allow_scope') ?? [],
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
     }
