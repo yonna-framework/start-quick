@@ -10,7 +10,9 @@ class UserPrism extends Prism
 
     protected int $current = 1;
     protected int $per = 10;
+    protected ?string $order_by = null;
     protected ?int $id = null;
+    protected ?array $ids = null;
     protected ?int $status = null;
     protected ?int $inviter_user_id = null;
     protected array $register_time = [];
@@ -48,6 +50,22 @@ class UserPrism extends Prism
     }
 
     /**
+     * @return string|null
+     */
+    public function getOrderBy(): ?string
+    {
+        return $this->order_by;
+    }
+
+    /**
+     * @param string|null $order_by
+     */
+    public function setOrderBy(?string $order_by): void
+    {
+        $this->order_by = $order_by;
+    }
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -61,6 +79,22 @@ class UserPrism extends Prism
     public function setId(?int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getIds(): ?array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * @param array|null $ids
+     */
+    public function setIds(?array $ids): void
+    {
+        $this->ids = $ids;
     }
 
     /**

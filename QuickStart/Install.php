@@ -200,11 +200,21 @@ class Install
                     Config::post('login', UserLogin::class, 'in');
                     Config::post('logging', UserLogin::class, 'isLogging');
                     Config::post('logout', UserLogin::class, 'out');
-                });
-                Config::middleware([Logging::class], function () {
-                    Config::group(['me'], function () {
-                        Config::post('info', UserMe::class, 'one');
-                        Config::post('edit', UserMe::class, 'update');
+
+                    Config::middleware([Logging::class], function () {
+
+                        Config::post('info', User::class, 'one');
+                        Config::post('list', User::class, 'multi');
+                        Config::post('page', User::class, 'page');
+                        Config::post('add', User::class, 'insert');
+                        Config::post('edit', User::class, 'update');
+                        Config::post('del', User::class, 'delete');
+                        Config::post('mStatus', User::class, 'multiStatus');
+
+                        Config::group(['me'], function () {
+                            Config::post('info', UserMe::class, 'one');
+                            Config::post('edit', UserMe::class, 'update');
+                        });
                     });
                 });
             }

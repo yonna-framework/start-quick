@@ -5,14 +5,15 @@ namespace Yonna\QuickStart\Prism;
 
 use Yonna\IO\Prism;
 
-class UserMetaPrism extends Prism
+class UserAccountPrism extends Prism
 {
 
     protected int $current = 1;
     protected int $per = 10;
     protected ?int $user_id = null;
-    protected ?string $key = null;
-    protected ?string $value = null;
+    protected ?string $type = null;
+    protected ?string $string = null;
+    protected ?int $allow_login = null;
     protected ?array $attach = null;
 
     /**
@@ -48,22 +49,6 @@ class UserMetaPrism extends Prism
     }
 
     /**
-     * @return string|null
-     */
-    public function getKey(): ?string
-    {
-        return $this->key;
-    }
-
-    /**
-     * @param string|null $key
-     */
-    public function setKey(?string $key): void
-    {
-        $this->key = $key;
-    }
-
-    /**
      * @return int|null
      */
     public function getUserId(): ?int
@@ -82,17 +67,49 @@ class UserMetaPrism extends Prism
     /**
      * @return string|null
      */
-    public function getValue(): ?string
+    public function getType(): ?string
     {
-        return $this->value;
+        return $this->type;
     }
 
     /**
-     * @param string|null $value
+     * @param string|null $type
      */
-    public function setValue(?string $value): void
+    public function setType(?string $type): void
     {
-        $this->value = $value;
+        $this->type = $type;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getString(): ?string
+    {
+        return $this->string;
+    }
+
+    /**
+     * @param string|null $string
+     */
+    public function setString(?string $string): void
+    {
+        $this->string = $string;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getAllowLogin(): ?int
+    {
+        return $this->allow_login;
+    }
+
+    /**
+     * @param int|null $allow_login
+     */
+    public function setAllowLogin(?int $allow_login): void
+    {
+        $this->allow_login = $allow_login;
     }
 
     /**
