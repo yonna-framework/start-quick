@@ -15,12 +15,6 @@ abstract class Kernel implements Interfaces\Kernel
     private $request = null;
 
     /**
-     * @var array $options
-     */
-    private array $input;
-
-
-    /**
      * abstractScope constructor.
      * bind the Request
      * @param object $request
@@ -28,8 +22,8 @@ abstract class Kernel implements Interfaces\Kernel
      */
     public function __construct(object $request, array $input = [])
     {
+        $request->setInput(array_merge($request->getInput(), $input));
         $this->request = $request;
-        $this->input = $input;
         return $this;
     }
 
@@ -49,9 +43,9 @@ abstract class Kernel implements Interfaces\Kernel
     {
         $input = $this->request()->getInput();
         if (empty($key)) {
-            return array_merge($input, $this->input);
+            return $input;
         }
-        return $this->input[$key] ?? $input[$key] ?? null;
+        return $input[$key] ?? null;
     }
 
 }
