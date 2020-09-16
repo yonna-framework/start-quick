@@ -52,17 +52,16 @@ create table `license`
     primary key (`id`),
     unique key (`name`),
     index (`upper_id`)
-) engine = innodb comment '用户许可关系';
+) engine = innodb comment '许可证关系';
 
 create table `user_license`
 (
     `user_id`    bigint unsigned not null comment 'user_id',
     `license_id` char(255)       not null default '' comment 'license_id',
-    `start_time` bigint          not null comment '起效时间戳',
-    `end_time`   bigint          not null comment '过期时间戳',
-    index (`user_id`)
-) engine = innodb comment '用户许可证数据';
-
+    unique key (`user_id`, `license_id`),
+    index (`user_id`),
+    index (`license_id`)
+) engine = innodb comment '用户许可证关联';
 
 insert into `license` (`name`, `upper_id`, `allow_scope`)
 values ('ROOT', 0, ',,,all');
@@ -70,8 +69,8 @@ values ('ROOT', 0, ',,,all');
 insert into `user` (`password`, `status`, `register_time`)
 values ('faa9a6ddddf57436961bf2d2bf4338df', 2, unix_timestamp(now()));
 
-insert into `user_license` (`user_id`, `license_id`, `start_time`, `end_time`)
-values (1, 1, unix_timestamp(now()), 4102415999);
+insert into `user_license` (`user_id`, `license_id`)
+values (1, 1);
 
 insert into `user_account` (`user_id`, `type`, `string`, `allow_login`)
 values (1, 'name', 'admin', 1);
