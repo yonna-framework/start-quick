@@ -86,7 +86,7 @@ class UserMe extends AbstractScope
      * @throws Exception\DatabaseException
      * @throws Exception\ParamsException
      */
-    public function update()
+    public function password()
     {
         $pwd = $this->input('password');
         if ($pwd) {
@@ -95,10 +95,7 @@ class UserMe extends AbstractScope
             }
             $pwd = Password::parse($pwd);
         }
-        $data = [
-            'password' => $pwd,
-            'inviter_user_id' => $this->input('inviter_user_id'),
-        ];
+        $data = ['password' => $pwd];
         if ($data) {
             return DB::connect()->table(self::TABLE)
                 ->where(fn(Where $w) => $w->equalTo('id', $this->request()->getLoggingId()))

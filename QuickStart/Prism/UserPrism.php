@@ -14,8 +14,11 @@ class UserPrism extends Prism
     protected ?int $id = null;
     protected ?array $ids = null;
     protected ?int $status = null;
+    protected ?string $password = null;
     protected ?int $inviter_user_id = null;
     protected array $register_time = [];
+
+    protected ?int $license_id = null;
 
     /**
      * @return int
@@ -114,6 +117,22 @@ class UserPrism extends Prism
     }
 
     /**
+     * @return string|null
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string|null $password
+     */
+    public function setPassword(?string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
      * @return int|null
      */
     public function getInviterUserId(): ?int
@@ -143,6 +162,22 @@ class UserPrism extends Prism
     public function setRegisterTime(array $register_time): void
     {
         $this->register_time = $register_time;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLicenseId(): ?int
+    {
+        return $this->license_id;
+    }
+
+    /**
+     * @param int|null $license_id
+     */
+    public function setLicenseId(?int $license_id): void
+    {
+        $this->license_id = $license_id;
     }
 
 }

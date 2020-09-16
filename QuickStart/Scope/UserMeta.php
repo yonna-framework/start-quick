@@ -58,9 +58,6 @@ class UserMeta extends AbstractScope
     {
         $prism = new UserMetaPrism($this->request());
         $data = $prism->getAttach();
-        if (!$data) {
-            return [];
-        }
         $isPage = isset($data['page']);
         $isOne = Arr::isAssoc($data);
         if ($isPage) {
@@ -69,6 +66,9 @@ class UserMeta extends AbstractScope
             $tmp = [$data];
         } else {
             $tmp = $data;
+        }
+        if (!$tmp) {
+            return [];
         }
         $ids = array_column($tmp, 'user_id');
         $category = $this->scope(UserMetaCategory::class, 'multi', ['status' => Boolean::true]);

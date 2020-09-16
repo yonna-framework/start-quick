@@ -3,10 +3,14 @@
 namespace Yonna\QuickStart\Scope;
 
 use Yonna\Foundation\Arr;
+use Yonna\QuickStart\Helper\Password;
+use Yonna\QuickStart\Mapping\Common\Boolean;
+use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\UserAccountPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
+use Yonna\Validator\ArrayValidator;
 
 /**
  * Class Meta
@@ -18,6 +22,46 @@ class UserAccount extends AbstractScope
     const TABLE = 'user_account';
 
     /**
+     * @return bool
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
+     * @throws \Throwable
+     */
+    public function cover()
+    {
+        ArrayValidator::required($this->input(), ['user_id', 'accounts'], function ($error) {
+            Exception::throw($error);
+        });
+        $user_id = $this->input('user_id');
+        $accounts = $this->input('accounts');
+        $accKeys = array_keys($accounts);
+        $accCount = DB::connect()->table(self::TABLE)->where(fn(Where $w) => $w->in('string', $accKeys))->count();
+        if ($accCount > 0) {
+            Exception::params('Account already exists');
+        }
+        $add = [];
+        foreach ($accounts as $account => $type) {
+            $allow_login = Boolean::false;
+            if (in_array($type, [AccountType::PHONE, AccountType::EMAIL, AccountType::NAME])) {
+                $allow_login = Boolean::true;
+            }
+            $add[] = [
+                'user_id' => $user_id,
+                'type' => AccountType::PHONE,
+                'string' => $account,
+                'allow_login' => $allow_login,
+            ];
+        }
+        DB::transTrace(function () use ($user_id, $add) {
+            DB::connect()->table(self::TABLE)->where(fn(Where $w) => $w->equalTo('user_id', $user_id))->delete();
+            if ($add) {
+                DB::connect()->table(self::TABLE)->insertAll($add);
+            }
+        });
+        return true;
+    }
+
+    /**
      * @return array
      * @throws Exception\DatabaseException
      */
@@ -25,9 +69,6 @@ class UserAccount extends AbstractScope
     {
         $prism = new UserAccountPrism($this->request());
         $data = $prism->getAttach();
-        if (!$data) {
-            return [];
-        }
         $isPage = isset($data['page']);
         $isOne = Arr::isAssoc($data);
         if ($isPage) {
@@ -36,6 +77,9 @@ class UserAccount extends AbstractScope
             $tmp = [$data];
         } else {
             $tmp = $data;
+        }
+        if (!$tmp) {
+            return [];
         }
         $ids = array_column($tmp, 'user_id');
         $values = DB::connect()->table(self::TABLE)

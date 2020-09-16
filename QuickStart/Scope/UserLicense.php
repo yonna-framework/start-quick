@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\UserLicensePrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -81,6 +82,33 @@ class UserLicense extends AbstractScope
                 $prism->getLicenseId() && $w->equalTo('license_id', $prism->getLicenseId());
             })
             ->delete();
+    }
+
+    /**
+     * @return bool
+     * @throws \Throwable
+     */
+    public function cover()
+    {
+        ArrayValidator::required($this->input(), ['user_id', 'licenses'], function ($error) {
+            Exception::throw($error);
+        });
+        $user_id = $this->input('user_id');
+        $licenses = $this->input('licenses');
+        $add = [];
+        foreach ($licenses as $license_id) {
+            $add[] = [
+                'user_id' => $user_id,
+                'license_id' => $license_id,
+            ];
+        }
+        DB::transTrace(function () use ($user_id, $add) {
+            DB::connect()->table(self::TABLE)->where(fn(Where $w) => $w->equalTo('user_id', $user_id))->delete();
+            if ($add) {
+                DB::connect()->table(self::TABLE)->insertAll($add);
+            }
+        });
+        return true;
     }
 
 }

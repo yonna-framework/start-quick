@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Yonna\QuickStart\Helper\Password;
 use Yonna\QuickStart\Mapping\User\UserStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -25,7 +26,7 @@ class User extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        $result = DB::connect()->table('user')->field('id,status,inviter_user_id,register_time')
+        $result = DB::connect()->table(self::TABLE)->field('id,status,inviter_user_id,register_time')
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->one();
         $result = $this->scope(UserMeta::class, 'attach', ['attach' => $result]);
@@ -43,7 +44,7 @@ class User extends AbstractScope
         $prism = new UserPrism($this->request());
 
         $db = DB::connect()
-            ->table('user')
+            ->table(self::TABLE)
             ->field('id,status,inviter_user_id,register_time')
             ->where(function (Where $w) use ($prism) {
                 $w->notEqualTo('status', UserStatus::DELETE);
@@ -73,7 +74,7 @@ class User extends AbstractScope
     {
         $prism = new UserPrism($this->request());
         $db = DB::connect()
-            ->table('user')
+            ->table(self::TABLE)
             ->field('id,status,inviter_user_id,register_time')
             ->where(function (Where $w) use ($prism) {
                 $w->notEqualTo('status', UserStatus::DELETE);
@@ -83,6 +84,10 @@ class User extends AbstractScope
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getRegisterTime() && $w->between('register_time', $prism->getRegisterTime());
             });
+        if ($prism->getLicenseId()) {
+            $db->join(self::TABLE, 'user_license', ['id' => 'user_id'])
+                ->where(fn(Where $w) => $w->searchTable('user_license')->equalTo('license_id', $prism->getLicenseId()));
+        }
         if ($prism->getOrderBy()) {
             $db->orderByStr($prism->getOrderBy());
         } else {
@@ -95,58 +100,70 @@ class User extends AbstractScope
     }
 
     /**
-     * @return int
-     * @throws Exception\DatabaseException
+     * @return bool
+     * @throws Exception\ParamsException
+     * @throws \Throwable
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['name'], function ($error) {
+        ArrayValidator::required($this->input(), ['password', 'accounts'], function ($error) {
             Exception::throw($error);
         });
+        $pwd = $this->input('password');
+        if (!Password::check($pwd)) {
+            Exception::params(Password::getFalseMsg());
+        }
+        $pwd = Password::parse($pwd);
         $add = [
-            'name' => $this->input('name'),
-            'upper_id' => $this->input('upper_id') ?? 0,
+            'password' => $pwd,
             'status' => $this->input('status') ?? UserStatus::PENDING,
-            'sort' => $this->input('sort') ?? 0,
+            'inviter_user_id' => $this->input('inviter_user_id') ?? 0,
+            'register_time' => time(),
         ];
-        return DB::connect()->table(self::TABLE)->insert($add);
+        $accounts = $this->input('accounts');
+        $licenses = $this->input('licenses');
+        DB::transTrace(function () use ($add, $accounts, $licenses) {
+            $user_id = DB::connect()->table(self::TABLE)->insert($add);
+            $this->scope(UserAccount::class, 'cover', [
+                'user_id' => $user_id,
+                'accounts' => $accounts,
+            ]);
+            if ($licenses) {
+                $this->scope(UserLicense::class, 'cover', [
+                    'user_id' => $user_id,
+                    'licenses' => $licenses,
+                ]);
+            }
+        });
+        return true;
     }
 
     /**
-     * @return int
+     * @return false|int
      * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function update()
     {
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        $data = [
-            'name' => $this->input('name'),
-            'upper_id' => $this->input('upper_id'),
-            'status' => $this->input('status'),
-            'sort' => $this->input('sort'),
-        ];
-        if ($data) {
-            return DB::connect()->table(self::TABLE)
-                ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-                ->update($data);
+        $pwd = $this->input('password');
+        if ($pwd) {
+            if (!Password::check($pwd)) {
+                Exception::params(Password::getFalseMsg());
+            }
+            $pwd = Password::parse($pwd);
         }
-        return true;
-    }
-
-    /**
-     * @return int
-     * @throws Exception\DatabaseException
-     */
-    public function delete()
-    {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
-            Exception::throw($error);
-        });
+        $edit = [
+            'password' => $pwd,
+            'status' => $this->input('status'),
+            'inviter_user_id' => $this->input('inviter_user_id'),
+        ];
+        $user_id = $this->input('id');
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->delete();
+            ->where(fn(Where $w) => $w->equalTo('id', $user_id))
+            ->update($edit);
     }
 
     /**

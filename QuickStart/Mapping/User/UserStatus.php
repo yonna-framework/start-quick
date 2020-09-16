@@ -15,8 +15,8 @@ class UserStatus extends Mapping
 
     public function __construct()
     {
-        self::setLabel(self::DELETE, '已注销');
-        self::setLabel(self::FREEZE, '被冻结');
+        self::setLabel(self::DELETE, '注销');
+        self::setLabel(self::FREEZE, '冻结');
         self::setLabel(self::REJECTION, '审核驳回');
         self::setLabel(self::PENDING, '待审核');
         self::setLabel(self::APPROVED, '审核通过');

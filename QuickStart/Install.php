@@ -208,12 +208,11 @@ class Install
                         Config::post('page', User::class, 'page');
                         Config::post('add', User::class, 'insert');
                         Config::post('edit', User::class, 'update');
-                        Config::post('del', User::class, 'delete');
                         Config::post('mStatus', User::class, 'multiStatus');
 
                         Config::group(['me'], function () {
                             Config::post('info', UserMe::class, 'one');
-                            Config::post('edit', UserMe::class, 'update');
+                            Config::post('password', UserMe::class, 'password');
                         });
                     });
                 });
