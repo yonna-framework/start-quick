@@ -1167,7 +1167,11 @@ abstract class AbstractPDO extends AbstractDB
                 if ($this->auto_cache === Cache::FOREVER) {
                     Cache::clear($table);
                 }
-                $result = $this->PDOStatement->rowCount();
+                $rowCount = $this->PDOStatement->rowCount();
+                if ($rowCount === 1 && $this->statement === 'insert') {
+                    return $this->pdo()->lastInsertId();
+                }
+                $result = $rowCount;
             }
             parent::query($query);
         }

@@ -257,7 +257,11 @@ class Table extends AbstractPDO
     {
         $where = new Where();
         $condition($where);
-        $this->options['where'] = $where->getClosure();
+        if (empty($this->options['where'])) {
+            $this->options['where'] = $where->getClosure();
+        } else {
+            $this->options['where'][] = ['type' => 'closure', 'cond' => 'and', 'value' => $where];
+        }
         return $this;
     }
 
