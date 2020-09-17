@@ -19,6 +19,7 @@ class UserPrism extends Prism
     protected array $register_time = [];
 
     protected ?int $license_id = null;
+    protected ?string $account = null;
 
     /**
      * @return int
@@ -179,5 +180,23 @@ class UserPrism extends Prism
     {
         $this->license_id = $license_id;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getAccount(): ?string
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param string|null $account
+     */
+    public function setAccount(?string $account): void
+    {
+        $this->account = $account;
+    }
+
+
 
 }

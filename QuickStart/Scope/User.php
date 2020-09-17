@@ -88,6 +88,10 @@ class User extends AbstractScope
             $db->join(self::TABLE, 'user_license', ['id' => 'user_id'])
                 ->where(fn(Where $w) => $w->searchTable('user_license')->equalTo('license_id', $prism->getLicenseId()));
         }
+        if ($prism->getAccount()) {
+            $db->join(self::TABLE, 'user_account', ['id' => 'user_id'])
+                ->where(fn(Where $w) => $w->searchTable('user_account')->like('string', "%" . $prism->getAccount() . "%"));
+        }
         if ($prism->getOrderBy()) {
             $db->orderByStr($prism->getOrderBy());
         } else {

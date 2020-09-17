@@ -186,6 +186,7 @@
     "NO_TIPS": "いいえヒント",
     "ONE DECIMAL PLACE": "小数点以下1桁まで保留する",
     "ONE_LIST": "ワンリスト",
+    "ONLY ALLOW WECHAT LOGIN, AND AUTOMATICALLY GENERATE A 16-DIGIT DYNAMIC RANDOM STRING PASSWORD": "WeChatログインのみを許可し、16桁の動的ランダム文字列パスワードを自動的に生成します",
     "OPERATE": "操作する",
     "OPERATION": "操作",
     "OPERATION_NOT_PERMISSION": "いくつかの操作はなし特権および操作を持って中止",

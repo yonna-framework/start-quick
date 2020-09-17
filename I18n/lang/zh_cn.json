@@ -186,6 +186,7 @@
     "NO_TIPS": "后台很懒什么提示都没有写",
     "ONE DECIMAL PLACE": "小数点后一位",
     "ONE_LIST": "一个列表",
+    "ONLY ALLOW WECHAT LOGIN, AND AUTOMATICALLY GENERATE A 16-DIGIT DYNAMIC RANDOM STRING PASSWORD": "仅允许微信登录,自动生成16位动态随机字符串密码",
     "OPERATE": "操作",
     "OPERATION": "操作",
     "OPERATION_NOT_PERMISSION": "部分操作没有权限，操作已被中止 ^_^",
