@@ -2,7 +2,6 @@
 
 namespace Yonna\QuickStart\Scope;
 
-use Yonna\Mapping\Mapping;
 use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Mapping\User\MetaValueFormat;
 use Yonna\QuickStart\Prism\UserMetaCategoryPrism;
@@ -29,54 +28,34 @@ class UserMetaCategory extends AbstractScope
     {
         switch ($format) {
             case MetaValueFormat::INTEGER:
-                $value = $value ? (int)$value : null;
-                break;
-            case MetaValueFormat::INTEGER_ARRAY:
+            case MetaValueFormat::DATE:
+            case MetaValueFormat::TIME:
+            case MetaValueFormat::DATETIME:
                 if ($value) {
-                    if (is_string($value)) {
-                        $value = explode(',', $value);
-                        $value = array_filter($value);
+                    if (is_array($value)) {
+                        foreach ($value as &$vv) {
+                            $vv = (int)$vv;
+                        }
+                    } else {
+                        $value = (int)$value;
                     }
-                    foreach ($value as &$vv) {
-                        $vv = (int)$vv;
-                    }
-                } else {
-                    $value = [];
                 }
                 break;
             case MetaValueFormat::FLOAT1:
-                $value = $value ? round($value, 1) : null;
-                break;
             case MetaValueFormat::FLOAT2:
-                $value = $value ? round($value, 2) : null;
-                break;
             case MetaValueFormat::FLOAT3:
-                $value = $value ? round($value, 3) : null;
-                break;
-            case MetaValueFormat::DATE:
-                if (is_numeric($value)) {
-                    $value = date('Y-m-d', $value);
-                } else {
-                    $value = $value ? $value : null;
+                if ($value) {
+                    $precision = (int)substr($format, -1, 1);
+                    if (is_array($value)) {
+                        foreach ($value as &$vv) {
+                            $vv = round($vv, $precision);
+                        }
+                    } else {
+                        $value = round($value, $precision);
+                    }
                 }
                 break;
-            case MetaValueFormat::TIME:
-                if (is_numeric($value)) {
-                    $value = date('H:i:s', $value);
-                } else {
-                    $value = $value ? $value : null;
-                }
-                break;
-            case MetaValueFormat::DATETIME:
-                if (is_numeric($value)) {
-                    $value = date('Y-m-d H:i:s', $value);
-                } else {
-                    $value = $value ? $value : null;
-                }
-                break;
-            case MetaValueFormat::STRING:
             default:
-                $value = $value ? (string)$value : null;
                 break;
         }
         return $value;

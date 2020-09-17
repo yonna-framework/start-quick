@@ -42,9 +42,7 @@ create table `user_meta`
     `user_id` bigint unsigned not null default 0 comment 'user_id',
     `key`     char(255)       not null default '' comment 'meta key',
     `value`   varchar(1024)   not null default '' comment 'meta value',
-    primary key (`user_id`),
-    unique key `uk_user_key` (`user_id`, `key`),
-    index (`key`)
+    unique key `uk_user_key` (`user_id`, `key`)
 ) engine = innodb comment '用户可变自定义详细信息';
 
 create table `license`

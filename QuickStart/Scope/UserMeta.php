@@ -4,7 +4,7 @@ namespace Yonna\QuickStart\Scope;
 
 use Yonna\Foundation\Arr;
 use Yonna\QuickStart\Mapping\Common\Boolean;
-use Yonna\QuickStart\Mapping\User\MetaValueFormat;
+use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\UserMetaPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -50,6 +50,34 @@ class UserMeta extends AbstractScope
     }
 
     /**
+     * @return bool
+     * @throws \Throwable
+     */
+    public function insertAll()
+    {
+        ArrayValidator::required($this->input(), ['user_id', 'metas'], function ($error) {
+            Exception::throw($error);
+        });
+        $user_id = $this->input('user_id');
+        $metas = $this->input('metas');
+        $add = [];
+        foreach ($metas as $k => $v) {
+            $add[] = [
+                'user_id' => $user_id,
+                'key' => $k,
+                'value' => $v,
+            ];
+        }
+        DB::transTrace(function () use ($user_id, $add) {
+            DB::connect()->table(self::TABLE)->where(fn(Where $w) => $w->equalTo('user_id', $user_id))->delete();
+            if ($add) {
+                DB::connect()->table(self::TABLE)->insertAll($add);
+            }
+        });
+        return true;
+    }
+
+    /**
      * @return array
      * @throws Exception\ThrowException
      * @throws Exception\DatabaseException
@@ -80,7 +108,7 @@ class UserMeta extends AbstractScope
             if (!isset($meta[$v['user_meta_user_id']])) {
                 $meta[$v['user_meta_user_id']] = [];
             }
-            $meta[$v['user_meta_user_id']][$v['user_meta_user_key']] = $v['user_meta_user_value'];
+            $meta[$v['user_meta_user_id']][$v['user_meta_key']] = $v['user_meta_value'];
         }
         unset($values);
         foreach ($category as $c) {

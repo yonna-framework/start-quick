@@ -29,54 +29,7 @@ class UserMe extends AbstractScope
         foreach ($category as $c) {
             $k = $c['user_meta_category_key'];
             $v = $values[$k] ?? $c['user_meta_category_value_default'];
-            switch ($c['user_meta_category_value_format']) {
-                case MetaValueFormat::INTEGER:
-                    $v = $v ? (int)$v : 0;
-                    break;
-                case MetaValueFormat::INTEGER_ARRAY:
-                    if (is_string($v)) {
-                        $v = explode(',', $v);
-                    }
-                    foreach ($v as &$vv) {
-                        $vv = (int)$vv;
-                    }
-                    break;
-                case MetaValueFormat::FLOAT1:
-                    $v = $v ? round($v, 1) : 0.0;
-                    break;
-                case MetaValueFormat::FLOAT2:
-                    $v = $v ? round($v, 2) : 0.00;
-                    break;
-                case MetaValueFormat::FLOAT3:
-                    $v = $v ? round($v, 3) : 0.000;
-                    break;
-                case MetaValueFormat::DATE:
-                    if (is_numeric($v)) {
-                        $v = date('Y-m-d', $v);
-                    } else {
-                        $v = $v ? $v : '1970-01-01';
-                    }
-                    break;
-                case MetaValueFormat::TIME:
-                    if (is_numeric($v)) {
-                        $v = date('H:i:s', $v);
-                    } else {
-                        $v = $v ? $v : '00:00:00';
-                    }
-                    break;
-                case MetaValueFormat::DATETIME:
-                    if (is_numeric($v)) {
-                        $v = date('Y-m-d H:i:s', $v);
-                    } else {
-                        $v = $v ? $v : '1970-01-01 00:00:00';
-                    }
-                    break;
-                case MetaValueFormat::STRING:
-                default:
-                    $v = $v ? (string)$v : '';
-                    break;
-            }
-            $info['user_meta_' . $k] = $v;
+            $info['user_meta_' . $k] = UserMetaCategory::valueFormat($v, $c['user_meta_category_value_format']);
         }
         return $info;
     }

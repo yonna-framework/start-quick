@@ -14,6 +14,7 @@ class UserMetaPrism extends Prism
     protected ?string $key = null;
     protected ?string $value = null;
     protected ?array $attach = null;
+    protected ?array $metas = null;
 
     /**
      * @return int
@@ -109,6 +110,22 @@ class UserMetaPrism extends Prism
     public function setAttach(?array $attach): void
     {
         $this->attach = $attach;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getMetas(): ?array
+    {
+        return $this->metas;
+    }
+
+    /**
+     * @param array|null $metas
+     */
+    public function setMetas(?array $metas): void
+    {
+        $this->metas = $metas;
     }
 
 }

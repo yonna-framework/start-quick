@@ -9,7 +9,6 @@ class MetaValueFormat extends Mapping
 
     const STRING = 'string';
     const INTEGER = 'integer';
-    const INTEGER_ARRAY = 'integer[]';
     const FLOAT1 = 'float1';
     const FLOAT2 = 'float2';
     const FLOAT3 = 'float3';
@@ -21,7 +20,6 @@ class MetaValueFormat extends Mapping
     {
         self::setLabel(self::STRING, 'String');
         self::setLabel(self::INTEGER, 'Integer');
-        self::setLabel(self::INTEGER_ARRAY, 'Integer array');
         self::setLabel(self::FLOAT1, 'One decimal place');
         self::setLabel(self::FLOAT2, 'Two decimal places');
         self::setLabel(self::FLOAT3, 'Three decimal places');
