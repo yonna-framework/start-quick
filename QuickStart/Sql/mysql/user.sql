@@ -23,6 +23,7 @@ create table `user_account`
 create table `user_meta_category`
 (
     `key`            char(255) not null default '' comment 'meta key',
+    `label`          char(255) not null default '' comment '显示文本,建议i18n原型',
     `value_format`   char(255) not null default 'string' comment '数据格式化类型',
     `value_default`  char(255) not null default '' comment '默认值',
     `component`      char(255) not null default '' comment '前端组件',
@@ -78,23 +79,24 @@ values (1, 1);
 insert into `user_account` (`user_id`, `string`, `type`, `allow_login`)
 values (1, 'admin', 'name', 1);
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('name', 'string', 1, 'input_string');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
+values ('name', 'name2', 'string', 1, 'input_string');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('nickname', 'string', 1, 'input_string');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
+values ('nickname', 'nickname', 'string', 1, 'input_string');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('birth_date', 'date', 1, 'picker_date');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
+values ('birth_date', 'birth date', 'date', 1, 'picker_date');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('age', 'integer', 1, 'input_integer');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
+values ('age', 'age', 'integer', 1, 'input_integer');
 
-insert into `user_meta_category` (`key`, `value_format`, `value_default`, `status`, `component`, `component_data`)
-values ('sex', 'integer', '-1', 1, 'select', 'mapping:Yonna_QuickStart_Mapping_User_Sex');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `value_default`, `status`, `component`,
+                                  `component_data`)
+values ('sex', 'sex', 'integer', '-1', 1, 'select', 'mapping:Yonna_QuickStart_Mapping_User_Sex');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('region', 'integer', 1, 'cascader_region');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
+values ('region', 'residential region', 'integer', 1, 'cascader_region');
 
-insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
-values ('address', 'string', 1, 'input_string');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
+values ('address', 'residential address', 'string', 1, 'input_string');
