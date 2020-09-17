@@ -53,7 +53,7 @@ class UserMeta extends AbstractScope
      * @return bool
      * @throws \Throwable
      */
-    public function insertAll()
+    public function cover()
     {
         ArrayValidator::required($this->input(), ['user_id', 'metas'], function ($error) {
             Exception::throw($error);

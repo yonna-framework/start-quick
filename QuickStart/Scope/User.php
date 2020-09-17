@@ -140,7 +140,7 @@ class User extends AbstractScope
                 ]);
             }
             if ($metas) {
-                $this->scope(UserMeta::class, 'insertAll', [
+                $this->scope(UserMeta::class, 'cover', [
                     'user_id' => $user_id,
                     'metas' => $metas,
                 ]);
@@ -172,9 +172,19 @@ class User extends AbstractScope
             'inviter_user_id' => $this->input('inviter_user_id'),
         ];
         $user_id = $this->input('id');
-        return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $user_id))
-            ->update($edit);
+        $metas = $this->input('metas');
+        DB::transTrace(function () use ($user_id, $edit, $metas) {
+            DB::connect()->table(self::TABLE)
+                ->where(fn(Where $w) => $w->equalTo('id', $user_id))
+                ->update($edit);
+            if ($metas) {
+                $this->scope(UserMeta::class, 'cover', [
+                    'user_id' => $user_id,
+                    'metas' => $metas,
+                ]);
+            }
+        });
+        return true;
     }
 
     /**
