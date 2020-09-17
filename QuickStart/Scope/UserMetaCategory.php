@@ -2,7 +2,9 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Yonna\Mapping\Mapping;
 use Yonna\QuickStart\Mapping\Common\Boolean;
+use Yonna\QuickStart\Mapping\User\MetaValueFormat;
 use Yonna\QuickStart\Prism\UserMetaCategoryPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -17,6 +19,68 @@ class UserMetaCategory extends AbstractScope
 {
 
     const TABLE = 'user_meta_category';
+
+    /**
+     * @param $value
+     * @param $format
+     * @return mixed
+     */
+    public static function valueFormat($value, $format)
+    {
+        switch ($format) {
+            case MetaValueFormat::INTEGER:
+                $value = $value ? (int)$value : null;
+                break;
+            case MetaValueFormat::INTEGER_ARRAY:
+                if ($value) {
+                    if (is_string($value)) {
+                        $value = explode(',', $value);
+                        $value = array_filter($value);
+                    }
+                    foreach ($value as &$vv) {
+                        $vv = (int)$vv;
+                    }
+                } else {
+                    $value = [];
+                }
+                break;
+            case MetaValueFormat::FLOAT1:
+                $value = $value ? round($value, 1) : null;
+                break;
+            case MetaValueFormat::FLOAT2:
+                $value = $value ? round($value, 2) : null;
+                break;
+            case MetaValueFormat::FLOAT3:
+                $value = $value ? round($value, 3) : null;
+                break;
+            case MetaValueFormat::DATE:
+                if (is_numeric($value)) {
+                    $value = date('Y-m-d', $value);
+                } else {
+                    $value = $value ? $value : null;
+                }
+                break;
+            case MetaValueFormat::TIME:
+                if (is_numeric($value)) {
+                    $value = date('H:i:s', $value);
+                } else {
+                    $value = $value ? $value : null;
+                }
+                break;
+            case MetaValueFormat::DATETIME:
+                if (is_numeric($value)) {
+                    $value = date('Y-m-d H:i:s', $value);
+                } else {
+                    $value = $value ? $value : null;
+                }
+                break;
+            case MetaValueFormat::STRING:
+            default:
+                $value = $value ? (string)$value : null;
+                break;
+        }
+        return $value;
+    }
 
     /**
      * @return mixed
@@ -39,13 +103,58 @@ class UserMetaCategory extends AbstractScope
     public function multi(): array
     {
         $prism = new UserMetaCategoryPrism($this->request());
-        return DB::connect()->table(self::TABLE)
+        $res = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getKey() && $w->equalTo('key', $prism->getKey());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
             ->orderBy('sort', 'desc')
             ->multi();
+        foreach ($res as $k => $v) {
+            if ($v['user_meta_category_value_default']) {
+                $res[$k]['user_meta_category_value_default'] = UserMetaCategory::valueFormat(
+                    $v['user_meta_category_value_default'],
+                    $v['user_meta_category_value_format']
+                );
+            }
+        }
+        if ($prism->isBindData()) {
+            foreach ($res as $k => $v) {
+                $d = $v['user_meta_category_component_data'];
+                if (empty($d)) {
+                    $d = null;
+                } elseif (is_array($d)) {
+                    $nd = [];
+                    foreach ($d as $dd) {
+                        $nd[] = ['value' => $dd, 'label' => $dd];
+                    }
+                    $d = $nd;
+                } elseif (is_string($d)) {
+                    $dk = explode(':', $d);
+                    switch ($dk[0]) {
+                        case 'mapping':
+                            $m = str_replace('_', "\\", $dk[1]);
+                            $d = class_exists($m) ? $m::toAntd() : [];
+                            break;
+                        case 'db':
+                            $dsn = explode('.', $dk[1]);
+                            $conf = $dsn[0];//哪个库
+                            $table = $dsn[1];//哪个表
+                            $field = $dsn[2];//哪个字段（主键固定为id）
+                            $list = DB::connect($conf)->table($table)->field("id")->field($field)->multi();
+                            $d = [];
+                            foreach ($list as $l) {
+                                $d[] = ['value' => $l["{$table}_id"], 'label' => $l["{$table}_{$field}"]];
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                $res[$k]['user_meta_category_component_data'] = $d;
+            }
+        }
+        return $res;
     }
 
     /**

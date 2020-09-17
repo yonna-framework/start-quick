@@ -2,7 +2,6 @@
 
 namespace Yonna\Mapping;
 
-use Exception;
 use ReflectionClass;
 
 abstract class Mapping

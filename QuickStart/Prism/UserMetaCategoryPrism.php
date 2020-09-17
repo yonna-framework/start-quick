@@ -18,6 +18,8 @@ class UserMetaCategoryPrism extends Prism
     protected ?int $status = null;
     protected ?int $sort = null;
 
+    protected bool $bind_data = false;
+
     /**
      * @return int
      */
@@ -161,5 +163,22 @@ class UserMetaCategoryPrism extends Prism
     {
         $this->sort = $sort;
     }
+
+    /**
+     * @return bool
+     */
+    public function isBindData(): bool
+    {
+        return $this->bind_data;
+    }
+
+    /**
+     * @param bool $bind_data
+     */
+    public function setBindData(bool $bind_data): void
+    {
+        $this->bind_data = $bind_data;
+    }
+
 
 }

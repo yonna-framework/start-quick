@@ -79,24 +79,24 @@ values (1, 1);
 insert into `user_account` (`user_id`, `string`, `type`, `allow_login`)
 values (1, 'admin', 'name', 1);
 
-insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
-values ('name', 'name2', 'string', 1, 'input_string');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
+values ('name', 'name2', 'string', 1, 'input_string', 9);
 
-insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
-values ('nickname', 'nickname', 'string', 1, 'input_string');
-
-insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
-values ('birth_date', 'birth date', 'date', 1, 'picker_date');
-
-insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
-values ('age', 'age', 'integer', 1, 'input_integer');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
+values ('nickname', 'nickname', 'string', 1, 'input_string', 8);
 
 insert into `user_meta_category` (`key`, `label`, `value_format`, `value_default`, `status`, `component`,
-                                  `component_data`)
-values ('sex', 'sex', 'integer', '-1', 1, 'select', 'mapping:Yonna_QuickStart_Mapping_User_Sex');
+                                  `component_data`, `sort`)
+values ('sex', 'sex', 'integer', '-1', 1, 'select', 'mapping:Yonna_QuickStart_Mapping_User_Sex', 7);
 
-insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
-values ('region', 'residential region', 'integer', 1, 'cascader_region');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
+values ('birth_date', 'birth date', 'date', 1, 'picker_date', 6);
 
-insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`)
-values ('address', 'residential address', 'string', 1, 'input_string');
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
+values ('age', 'age', 'integer', 1, 'input_number', 6);
+
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
+values ('region', 'residential region', 'integer', 1, 'cascader_region', 5);
+
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
+values ('address', 'residential address', 'string', 1, 'input_string', 4);

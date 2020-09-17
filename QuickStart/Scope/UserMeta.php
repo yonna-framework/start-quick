@@ -91,59 +91,7 @@ class UserMeta extends AbstractScope
                 } else {
                     $val = $c['user_meta_category_value_default'];
                 }
-                switch ($c['user_meta_category_value_format']) {
-                    case MetaValueFormat::INTEGER:
-                        $val = $val ? (int)$val : null;
-                        break;
-                    case MetaValueFormat::INTEGER_ARRAY:
-                        if ($val) {
-                            if (is_string($val)) {
-                                $val = explode(',', $val);
-                                $val = array_filter($val);
-                            }
-                            foreach ($val as &$vv) {
-                                $vv = (int)$vv;
-                            }
-                        } else {
-                            $val = [];
-                        }
-                        break;
-                    case MetaValueFormat::FLOAT1:
-                        $val = $val ? round($val, 1) : null;
-                        break;
-                    case MetaValueFormat::FLOAT2:
-                        $val = $val ? round($val, 2) : null;
-                        break;
-                    case MetaValueFormat::FLOAT3:
-                        $val = $val ? round($val, 3) : null;
-                        break;
-                    case MetaValueFormat::DATE:
-                        if (is_numeric($val)) {
-                            $val = date('Y-m-d', $val);
-                        } else {
-                            $val = $val ? $val : null;
-                        }
-                        break;
-                    case MetaValueFormat::TIME:
-                        if (is_numeric($val)) {
-                            $val = date('H:i:s', $val);
-                        } else {
-                            $val = $val ? $val : null;
-                        }
-                        break;
-                    case MetaValueFormat::DATETIME:
-                        if (is_numeric($val)) {
-                            $val = date('Y-m-d H:i:s', $val);
-                        } else {
-                            $val = $val ? $val : null;
-                        }
-                        break;
-                    case MetaValueFormat::STRING:
-                    default:
-                        $val = $val ? (string)$val : null;
-                        break;
-                }
-                $tmp[$uk]['user_meta_' . $key] = $val;
+                $tmp[$uk]['user_meta_' . $key] = UserMetaCategory::valueFormat($val, $c['user_meta_category_value_format']);
             }
         }
         if ($isPage) {
