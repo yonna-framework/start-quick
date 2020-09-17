@@ -17,7 +17,7 @@ create table `user_account`
     `type`        char(255)                      not null default '' comment '账号类型[name|phone|email|wx_open_id|wx_union_id]',
     `allow_login` tinyint                        not null default -1 comment '是否允许登录',
     primary key (`id`),
-    index (`string`)
+    unique key (`string`)
 ) engine = innodb comment '用户账号数据';
 
 create table `user_meta_category`

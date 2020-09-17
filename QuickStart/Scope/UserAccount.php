@@ -38,20 +38,30 @@ class UserAccount extends AbstractScope
     /**
      * @return false|int
      * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function update()
     {
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
+        $id = $this->input('id');
+        $string = $this->input('string');
+        if ($string) {
+            $one = DB::connect()->table(self::TABLE)
+                ->where(fn(Where $w) => $w->equalTo('string', $string))
+                ->one();
+            if ($one && $one['user_account_id'] !== $id) {
+                Exception::params('Account already used');
+            }
+        }
         $edit = [
             'type' => $this->input('type'),
-            'string' => $this->input('string'),
+            'string' => $string,
             'allow_login' => $this->input('allow_login'),
         ];
-        $user_id = $this->input('id');
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $user_id))
+            ->where(fn(Where $w) => $w->equalTo('id', $id))
             ->update($edit);
     }
 
