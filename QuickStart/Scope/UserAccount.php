@@ -3,7 +3,6 @@
 namespace Yonna\QuickStart\Scope;
 
 use Yonna\Foundation\Arr;
-use Yonna\QuickStart\Helper\Password;
 use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\UserAccountPrism;
@@ -22,12 +21,47 @@ class UserAccount extends AbstractScope
     const TABLE = 'user_account';
 
     /**
+     * 获取详情
+     * @return array
+     * @throws Exception\DatabaseException
+     */
+    public function one(): array
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->one();
+    }
+
+    /**
+     * @return false|int
+     * @throws Exception\DatabaseException
+     */
+    public function update()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        $edit = [
+            'type' => $this->input('type'),
+            'string' => $this->input('string'),
+            'allow_login' => $this->input('allow_login'),
+        ];
+        $user_id = $this->input('id');
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $user_id))
+            ->update($edit);
+    }
+
+    /**
      * @return bool
      * @throws Exception\DatabaseException
      * @throws Exception\ParamsException
      * @throws \Throwable
      */
-    public function cover()
+    public function insertAll()
     {
         ArrayValidator::required($this->input(), ['user_id', 'accounts'], function ($error) {
             Exception::throw($error);

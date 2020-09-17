@@ -11,10 +11,13 @@ create table `user`
 
 create table `user_account`
 (
-    `user_id`     bigint unsigned not null comment 'user_id',
-    `type`        char(255)       not null default '' comment '账号类型[name|phone|email|wx_open_id|wx_union_id]',
-    `string`      char(255)       not null default '' comment '账号字串值',
-    `allow_login` tinyint         not null default -1 comment '是否允许登录'
+    `id`          bigint unsigned auto_increment not null comment '用户id',
+    `user_id`     bigint unsigned                not null comment 'user_id',
+    `string`      char(255)                      not null default '' comment '账号字串值',
+    `type`        char(255)                      not null default '' comment '账号类型[name|phone|email|wx_open_id|wx_union_id]',
+    `allow_login` tinyint                        not null default -1 comment '是否允许登录',
+    primary key (`id`),
+    index (`string`)
 ) engine = innodb comment '用户账号数据';
 
 create table `user_meta_category`
@@ -72,8 +75,8 @@ values ('faa9a6ddddf57436961bf2d2bf4338df', 2, unix_timestamp(now()));
 insert into `user_license` (`user_id`, `license_id`)
 values (1, 1);
 
-insert into `user_account` (`user_id`, `type`, `string`, `allow_login`)
-values (1, 'name', 'admin', 1);
+insert into `user_account` (`user_id`, `string`, `type`, `allow_login`)
+values (1, 'admin', 'name', 1);
 
 insert into `user_meta_category` (`key`, `value_format`, `status`, `component`)
 values ('name', 'string', 1, 'input_string');

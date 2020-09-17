@@ -17,6 +17,7 @@ use Yonna\QuickStart\Scope\Essay;
 use Yonna\QuickStart\Scope\EssayCategory;
 use Yonna\QuickStart\Scope\SdkWxmp;
 use Yonna\QuickStart\Scope\User;
+use Yonna\QuickStart\Scope\UserAccount;
 use Yonna\QuickStart\Scope\UserMe;
 use Yonna\QuickStart\Scope\UserLogin;
 use Yonna\QuickStart\Scope\UserMetaCategory;
@@ -209,6 +210,11 @@ class Install
                         Config::post('add', User::class, 'insert');
                         Config::post('edit', User::class, 'update');
                         Config::post('mStatus', User::class, 'multiStatus');
+
+                        Config::group(['account'], function () {
+                            Config::post('info', UserAccount::class, 'one');
+                            Config::post('edit', UserAccount::class, 'update');
+                        });
 
                         Config::group(['me'], function () {
                             Config::post('info', UserMe::class, 'one');

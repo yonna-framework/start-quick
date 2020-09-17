@@ -124,7 +124,7 @@ class User extends AbstractScope
         $licenses = $this->input('licenses');
         DB::transTrace(function () use ($add, $accounts, $licenses) {
             $user_id = DB::connect()->table(self::TABLE)->insert($add);
-            $this->scope(UserAccount::class, 'cover', [
+            $this->scope(UserAccount::class, 'insertAll', [
                 'user_id' => $user_id,
                 'accounts' => $accounts,
             ]);

@@ -10,6 +10,7 @@ class UserAccountPrism extends Prism
 
     protected int $current = 1;
     protected int $per = 10;
+    protected ?int $id = null;
     protected ?int $user_id = null;
     protected ?string $type = null;
     protected ?string $string = null;
@@ -46,6 +47,22 @@ class UserAccountPrism extends Prism
     public function setPer(int $per): void
     {
         $this->per = $per;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
