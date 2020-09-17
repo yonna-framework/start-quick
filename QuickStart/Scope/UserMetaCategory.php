@@ -27,6 +27,17 @@ class UserMetaCategory extends AbstractScope
     public static function valueFormat($value, $format)
     {
         switch ($format) {
+            case MetaValueFormat::STRING:
+                if ($value) {
+                    if (is_array($value)) {
+                        foreach ($value as &$vv) {
+                            $vv = (string)$vv;
+                        }
+                    } else {
+                        $value = (string)$value;
+                    }
+                }
+                break;
             case MetaValueFormat::INTEGER:
             case MetaValueFormat::DATE:
             case MetaValueFormat::TIME:

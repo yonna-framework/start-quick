@@ -94,7 +94,7 @@ insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `com
 values ('age', 'age', 'integer', 1, 'input_number', 6);
 
 insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
-values ('region', 'residential region', 'integer', 1, 'cascader_region', 5);
+values ('region', 'residential region', 'string', 1, 'cascader_region', 5);
 
 insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
 values ('address', 'residential address', 'string', 1, 'input_string', 4);
