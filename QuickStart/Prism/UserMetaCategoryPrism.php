@@ -11,6 +11,7 @@ class UserMetaCategoryPrism extends Prism
     protected int $current = 1;
     protected int $per = 10;
     protected ?string $key = null;
+    protected ?string $label = null;
     protected ?string $value_format = null;
     protected ?string $value_default = null;
     protected ?string $component = null;
@@ -63,6 +64,22 @@ class UserMetaCategoryPrism extends Prism
     public function setKey(?string $key): void
     {
         $this->key = $key;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string|null $label
+     */
+    public function setLabel(?string $label): void
+    {
+        $this->label = $label;
     }
 
     /**

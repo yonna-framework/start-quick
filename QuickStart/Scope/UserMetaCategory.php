@@ -75,6 +75,7 @@ class UserMetaCategory extends AbstractScope
         });
         $add = [
             'key' => $this->input('key'),
+            'label' => $this->input('label') ?? $this->input('key'),
             'value_format' => $this->input('value_format'),
             'value_default' => $this->input('value_default') ?? '',
             'component' => $this->input('component'),
@@ -95,6 +96,7 @@ class UserMetaCategory extends AbstractScope
             Exception::throw($error);
         });
         $data = [
+            'label' => $this->input('label'),
             'value_format' => $this->input('value_format'),
             'value_default' => $this->input('value_default'),
             'component' => $this->input('component'),
