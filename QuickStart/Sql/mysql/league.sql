@@ -33,6 +33,8 @@ CREATE TABLE `league`
     `id`                   bigint unsigned auto_increment not null comment 'id',
     `master_user_id`       bigint unsigned                not null comment '社团拥有者user_id',
     `name`                 char(255)                      not null comment '社团名',
+    `slogan`               char(255)                      not null comment '宣传标语',
+    `introduction`         text                           not null comment '社团简介',
     `logo_pic`             char(255)                      not null comment 'LOGO图',
     `business_license_pic` char(255)                      not null comment '营业执照',
     `status`               tinyint                        not null default 1 comment '状态[-2作废,-1申请驳回,1待审核,2审核通过]',
@@ -70,24 +72,21 @@ CREATE TABLE `league_associate_hobby`
 (
     `league_id` bigint unsigned not null comment '社团id',
     `data_id`   bigint unsigned not null comment '爱好id',
-    INDEX (`league_id`),
-    INDEX (`data_id`)
+    UNIQUE KEY (`league_id`, `data_id`)
 ) ENGINE = INNODB COMMENT '社团与爱好关系';
 
 CREATE TABLE `league_associate_work`
 (
     `league_id` bigint unsigned not null comment '社团id',
     `data_id`   bigint unsigned not null comment '职业工作id',
-    INDEX (`league_id`),
-    INDEX (`data_id`)
+    UNIQUE KEY (`league_id`, `data_id`)
 ) ENGINE = INNODB COMMENT '社团与职业工作关系';
 
 CREATE TABLE `league_associate_speciality`
 (
     `league_id` bigint unsigned not null comment '社团id',
     `data_id`   bigint unsigned not null comment '特长id',
-    INDEX (`league_id`),
-    INDEX (`data_id`)
+    UNIQUE KEY (`league_id`, `data_id`)
 ) ENGINE = INNODB COMMENT '社团与特长关系';
 
 CREATE TABLE `league_mission`
