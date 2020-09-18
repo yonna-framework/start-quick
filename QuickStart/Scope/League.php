@@ -16,7 +16,7 @@ use Yonna\Validator\ArrayValidator;
 class League extends AbstractScope
 {
 
-    const TABLE = 'league_';
+    const TABLE = 'league';
 
     /**
      * @return mixed
@@ -45,6 +45,7 @@ class League extends AbstractScope
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
+            ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
             ->multi();
     }
@@ -62,13 +63,16 @@ class League extends AbstractScope
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
+            ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
     }
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
+     * @throws Exception\ThrowException
+     * @throws \Throwable
      */
     public function insert()
     {
@@ -97,10 +101,35 @@ class League extends AbstractScope
             'logo_pic' => $prism->getLogoPic(),
             'business_license_pic' => $prism->getBusinessLicensePic(),
             'status' => $prism->getStatus() ?? LeagueStatus::PENDING,
-            'apply_reason' => $prism->getApplyReason(),
+            'apply_reason' => $prism->getApplyReason() ?? '',
+            'apply_time' => time(),
+            'rejection_time' => 0,
+            'pass_time' => 0,
+            'delete_time' => 0,
             'sort' => $prism->getSort() ?? 0,
         ];
-        return DB::connect()->table(self::TABLE)->insert($add);
+        return DB::transTrace(function () use ($add, $prism) {
+            $id = DB::connect()->table(self::TABLE)->insert($add);
+            if ($prism->getHobby()) {
+                $this->scope(LeagueAssociateHobby::class, 'cover', [
+                    'league_id' => $id,
+                    'data' => $prism->getHobby()
+                ]);
+            }
+            if ($prism->getWork()) {
+                $this->scope(LeagueAssociateWork::class, 'cover', [
+                    'league_id' => $id,
+                    'data' => $prism->getWork()
+                ]);
+            }
+            if ($prism->getSpeciality()) {
+                $this->scope(LeagueAssociateSpeciality::class, 'cover', [
+                    'league_id' => $id,
+                    'data' => $prism->getSpeciality()
+                ]);
+            }
+            return $id;
+        });
     }
 
     /**

@@ -31,6 +31,10 @@ class LeaguePrism extends Prism
     protected ?int $delete_time = null;
     protected ?int $sort = null;
 
+    protected ?array $hobby = null;
+    protected ?array $work = null;
+    protected ?array $speciality = null;
+
     /**
      * @return int
      */
@@ -381,6 +385,54 @@ class LeaguePrism extends Prism
     public function setSort(?int $sort): void
     {
         $this->sort = $sort;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getHobby(): ?array
+    {
+        return $this->hobby;
+    }
+
+    /**
+     * @param array|null $hobby
+     */
+    public function setHobby(?array $hobby): void
+    {
+        $this->hobby = $hobby;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getWork(): ?array
+    {
+        return $this->work;
+    }
+
+    /**
+     * @param array|null $work
+     */
+    public function setWork(?array $work): void
+    {
+        $this->work = $work;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getSpeciality(): ?array
+    {
+        return $this->speciality;
+    }
+
+    /**
+     * @param array|null $speciality
+     */
+    public function setSpeciality(?array $speciality): void
+    {
+        $this->speciality = $speciality;
     }
 
 }
