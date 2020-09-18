@@ -27,9 +27,13 @@ class League extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        return DB::connect()->table(self::TABLE)
+        $result = DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->one();
+        $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
+        $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
+        $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        return $result;
     }
 
     /**
@@ -39,7 +43,7 @@ class League extends AbstractScope
     public function multi(): array
     {
         $prism = new LeaguePrism($this->request());
-        return DB::connect()->table(self::TABLE)
+        $result = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
@@ -48,6 +52,10 @@ class League extends AbstractScope
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
             ->multi();
+        $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
+        $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
+        $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        return $result;
     }
 
     /**
@@ -57,7 +65,7 @@ class League extends AbstractScope
     public function page(): array
     {
         $prism = new LeaguePrism($this->request());
-        return DB::connect()->table(self::TABLE)
+        $result = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
@@ -66,6 +74,10 @@ class League extends AbstractScope
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
+        $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
+        $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
+        $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        return $result;
     }
 
     /**
@@ -135,23 +147,60 @@ class League extends AbstractScope
     /**
      * @return int
      * @throws Exception\DatabaseException
+     * @throws \Throwable
      */
     public function update()
     {
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        $data = [
-            'name' => $this->input('name'),
-            'upper_id' => $this->input('upper_id'),
-            'status' => $this->input('status'),
-            'sort' => $this->input('sort'),
-        ];
-        if ($data) {
-            return DB::connect()->table(self::TABLE)
-                ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-                ->update($data);
+        $prism = new LeaguePrism($this->request());
+        if ($prism->getMasterUserAccount()) {
+            $account = $this->scope(UserAccount::class, 'one', ['string' => $prism->getMasterUserAccount()]);
+            if (empty($account['user_account_id'])) {
+                Exception::params('Account is not exist');
+            }
+            $prism->setMasterUserId($account['user_account_id']);
         }
+        if ($prism->getIntroduction()) {
+            $prism->setIntroduction($this->xoss_save($prism->getIntroduction()));
+        }
+
+        $data = [
+            'master_user_id' => $prism->getMasterUserId(),
+            'name' => $prism->getName(),
+            'slogan' => $prism->getSlogan(),
+            'introduction' => $prism->getIntroduction(),
+            'logo_pic' => $prism->getLogoPic(),
+            'business_license_pic' => $prism->getBusinessLicensePic(),
+            'status' => $prism->getStatus(),
+            'sort' => $prism->getSort(),
+        ];
+        DB::transTrace(function () use ($data, $prism) {
+            if ($data) {
+                return DB::connect()->table(self::TABLE)
+                    ->where(fn(Where $w) => $w->equalTo('id', $prism->getId()))
+                    ->update($data);
+            }
+            if ($prism->getHobby()) {
+                $this->scope(LeagueAssociateHobby::class, 'cover', [
+                    'league_id' => $prism->getId(),
+                    'data' => $prism->getHobby()
+                ]);
+            }
+            if ($prism->getWork()) {
+                $this->scope(LeagueAssociateWork::class, 'cover', [
+                    'league_id' => $prism->getId(),
+                    'data' => $prism->getWork()
+                ]);
+            }
+            if ($prism->getSpeciality()) {
+                $this->scope(LeagueAssociateSpeciality::class, 'cover', [
+                    'league_id' => $prism->getId(),
+                    'data' => $prism->getSpeciality()
+                ]);
+            }
+        });
         return true;
     }
 

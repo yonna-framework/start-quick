@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Yonna\Foundation\Arr;
 use Yonna\QuickStart\Prism\LeagueAssociateDataPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -32,6 +33,48 @@ class LeagueAssociateWork extends AbstractScope
     }
 
     /**
+     * @return array
+     * @throws Exception\DatabaseException
+     */
+    public function attach(): array
+    {
+        $prism = new LeagueAssociateDataPrism($this->request());
+        $data = $prism->getAttach();
+        $isPage = isset($data['page']);
+        $isOne = Arr::isAssoc($data);
+        if ($isPage) {
+            $tmp = $data['list'];
+        } elseif ($isOne) {
+            $tmp = [$data];
+        } else {
+            $tmp = $data;
+        }
+        if (!$tmp) {
+            return [];
+        }
+        $ids = array_column($tmp, 'league_id');
+        $values = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('league_id', $ids))
+            ->multi();
+        $datas = [];
+        foreach ($values as $v) {
+            if (!isset($datas[$v['league_associate_work_league_id']])) {
+                $datas[$v['league_associate_work_league_id']] = [];
+            }
+            $datas[$v['league_associate_work_league_id']][] = $v['league_associate_work_data_id'];
+        }
+        unset($values);
+        foreach ($tmp as $uk => $u) {
+            $tmp[$uk]['league_work'] = empty($datas[$u['league_id']]) ? [] : $datas[$u['league_id']];
+        }
+        if ($isPage) {
+            $data['list'] = $tmp;
+            return $data;
+        }
+        return $isOne ? $tmp[0] : $tmp;
+    }
+
+    /**
      * @return bool
      * @throws \Throwable
      */
@@ -43,7 +86,7 @@ class LeagueAssociateWork extends AbstractScope
         $league_id = $this->input('league_id');
         $data = $this->input('data');
         $add = [];
-        if($data){
+        if ($data) {
             foreach ($data as $d) {
                 $add[] = [
                     'league_id' => $league_id,

@@ -13,6 +13,8 @@ class LeagueAssociateDataPrism extends Prism
     protected ?int $league_id = null;
     protected ?string $data_id = null;
 
+    protected ?array $attach = null;
+
     /**
      * @return int
      */
@@ -75,6 +77,22 @@ class LeagueAssociateDataPrism extends Prism
     public function setDataId(?string $data_id): void
     {
         $this->data_id = $data_id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAttach(): ?array
+    {
+        return $this->attach;
+    }
+
+    /**
+     * @param array|null $attach
+     */
+    public function setAttach(?array $attach): void
+    {
+        $this->attach = $attach;
     }
 
 }
