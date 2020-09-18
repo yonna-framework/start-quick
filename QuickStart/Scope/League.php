@@ -2,7 +2,7 @@
 
 namespace Yonna\QuickStart\Scope;
 
-use Yonna\QuickStart\Mapping\Essay\EssayCategoryStatus;
+use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Prism\LeaguePrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -72,13 +72,33 @@ class League extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['name'], function ($error) {
+        ArrayValidator::required($this->input(), [
+            'master_user_account',
+            'name',
+            'slogan',
+            'introduction',
+            'logo_pic',
+            'business_license_pic',
+        ], function ($error) {
             Exception::throw($error);
         });
+        $prism = new LeaguePrism($this->request());
+        $account = $this->scope(UserAccount::class, 'one', ['string' => $prism->getMasterUserAccount()]);
+        if (empty($account['user_account_id'])) {
+            Exception::params('Account is not exist');
+        }
+        $prism->setMasterUserId($account['user_account_id']);
+        $introduction = $this->xoss_save($prism->getIntroduction() ?? '');
         $add = [
-            'name' => $this->input('name'),
-            'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
-            'sort' => $this->input('sort') ?? 0,
+            'master_user_id' => $prism->getMasterUserId(),
+            'name' => $prism->getName(),
+            'slogan' => $prism->getSlogan(),
+            'introduction' => $introduction,
+            'logo_pic' => $prism->getLogoPic(),
+            'business_license_pic' => $prism->getBusinessLicensePic(),
+            'status' => $prism->getStatus() ?? LeagueStatus::PENDING,
+            'apply_reason' => $prism->getApplyReason(),
+            'sort' => $prism->getSort() ?? 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
     }

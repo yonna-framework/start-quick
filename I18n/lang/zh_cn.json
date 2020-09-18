@@ -239,6 +239,7 @@
     "REFRESH": "刷新",
     "REGION": "地区",
     "REGISTER": "注册",
+    "RELATED": "相关",
     "RELOAD": "重新加载",
     "REMEMBER_ME": "记住我",
     "RENDERING": "渲染中...",
@@ -320,6 +321,7 @@
     "XXX": "XXX",
     "YELLOW": "黄色的",
     "YES": "是",
+    "YOU CAN ONLY UPLOAD": "你只能上传",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "您应该返回一些响应数据，而不是返回空",
     "YOUR": "你的"
 }

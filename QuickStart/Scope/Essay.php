@@ -67,8 +67,8 @@ class Essay extends AbstractScope
             preg_match_all('/<img(.*?)src="(.*?)"(.*?)>/', $essay_content, $imgs);
             if ($imgs[2]) {
                 foreach ($imgs[2] as $img) {
+                    //TODO 跳过一些不好看的图片，后续删除
                     if (in_array($img, [
-                        // 跳过一些不好看的图片
                         Xoss::ASSET . '1ebc6cdeaffea83a142d7d790db9a201ad564d729d98c0f63e6ff85ac7301c576f255776',
                         Xoss::ASSET . '2da5d23cc0205c3af8d7713623f26a4bb00f9e848f01e7c5a6967e7411638727755453bb',
                     ])) {

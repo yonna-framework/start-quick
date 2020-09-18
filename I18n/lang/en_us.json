@@ -239,6 +239,7 @@
     "REFRESH": "refresh",
     "REGION": "region",
     "REGISTER": "register",
+    "RELATED": "related",
     "RELOAD": "reload",
     "REMEMBER_ME": "Remember me",
     "RENDERING": "Rendering...",
@@ -320,6 +321,7 @@
     "XXX": "xxx",
     "YELLOW": "yellow",
     "YES": "Yes",
+    "YOU CAN ONLY UPLOAD": "you can only upload",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "You should return some response data instead of returning null",
     "YOUR": "your"
 }

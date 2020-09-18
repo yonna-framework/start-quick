@@ -14,11 +14,12 @@ class LeaguePrism extends Prism
     protected ?int $id = null;
     protected ?array $ids = null;
     protected ?int $master_user_id = null;
+    protected ?string $master_user_account = null;
     protected ?string $name = null;
     protected ?string $slogan = null;
     protected ?string $introduction = null;
-    protected ?string $logo_pic = null;
-    protected ?string $business_license_pic = null;
+    protected ?array $logo_pic = null;
+    protected ?array $business_license_pic = null;
     protected ?int $status = null;
     protected ?string $apply_reason = null;
     protected ?string $rejection_reason = null;
@@ -28,6 +29,7 @@ class LeaguePrism extends Prism
     protected ?int $rejection_time = null;
     protected ?int $pass_time = null;
     protected ?int $delete_time = null;
+    protected ?int $sort = null;
 
     /**
      * @return int
@@ -144,6 +146,22 @@ class LeaguePrism extends Prism
     /**
      * @return string|null
      */
+    public function getMasterUserAccount(): ?string
+    {
+        return $this->master_user_account;
+    }
+
+    /**
+     * @param string|null $master_user_account
+     */
+    public function setMasterUserAccount(?string $master_user_account): void
+    {
+        $this->master_user_account = $master_user_account;
+    }
+
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
@@ -190,33 +208,33 @@ class LeaguePrism extends Prism
     }
 
     /**
-     * @return string|null
+     * @return array|null
      */
-    public function getLogoPic(): ?string
+    public function getLogoPic(): ?array
     {
         return $this->logo_pic;
     }
 
     /**
-     * @param string|null $logo_pic
+     * @param array|null $logo_pic
      */
-    public function setLogoPic(?string $logo_pic): void
+    public function setLogoPic(?array $logo_pic): void
     {
         $this->logo_pic = $logo_pic;
     }
 
     /**
-     * @return string|null
+     * @return array|null
      */
-    public function getBusinessLicensePic(): ?string
+    public function getBusinessLicensePic(): ?array
     {
         return $this->business_license_pic;
     }
 
     /**
-     * @param string|null $business_license_pic
+     * @param array|null $business_license_pic
      */
-    public function setBusinessLicensePic(?string $business_license_pic): void
+    public function setBusinessLicensePic(?array $business_license_pic): void
     {
         $this->business_license_pic = $business_license_pic;
     }
@@ -347,6 +365,22 @@ class LeaguePrism extends Prism
     public function setDeleteTime(?int $delete_time): void
     {
         $this->delete_time = $delete_time;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSort(): ?int
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @param int|null $sort
+     */
+    public function setSort(?int $sort): void
+    {
+        $this->sort = $sort;
     }
 
 }

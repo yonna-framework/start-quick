@@ -239,6 +239,7 @@
     "REFRESH": "갱신하다.",
     "REGION": "구역.",
     "REGISTER": "등록하다.",
+    "RELATED": "상관하다.",
     "RELOAD": "다시불러오기",
     "REMEMBER_ME": "기억하다나",
     "RENDERING": "이르게하다.",
@@ -320,6 +321,7 @@
     "XXX": "xxx",
     "YELLOW": "황색",
     "YES": "네.",
+    "YOU CAN ONLY UPLOAD": "너는올릴수밖에없어.",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "비워두지않고일부응답데이터를반환해야합니다.",
     "YOUR": "너의"
 }

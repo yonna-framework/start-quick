@@ -239,6 +239,7 @@
     "REFRESH": "リフレッシュ",
     "REGION": "地域",
     "REGISTER": "登録済み",
+    "RELATED": "関連",
     "RELOAD": "再負荷",
     "REMEMBER_ME": "覚えて",
     "RENDERING": "レンダリング",
@@ -320,6 +321,7 @@
     "XXX": "XXX",
     "YELLOW": "イエロー",
     "YES": "はい",
+    "YOU CAN ONLY UPLOAD": "あなたがのみアップロード",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "空を返すのではなく、いくつかの応答データを返す必要があります",
     "YOUR": "あなた"
 }

@@ -27,11 +27,15 @@ class UserAccount extends AbstractScope
      */
     public function one(): array
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::anyone($this->input(), ['id', 'string'], function ($error) {
             Exception::throw($error);
         });
+        $prism = new UserAccountPrism($this->request());
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getString() && $w->equalTo('string', $prism->getString());
+            })
             ->one();
     }
 
