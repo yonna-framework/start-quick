@@ -168,7 +168,6 @@ class League extends AbstractScope
         if ($prism->getIntroduction()) {
             $prism->setIntroduction($this->xoss_save($prism->getIntroduction()));
         }
-
         $data = [
             'master_user_id' => $prism->getMasterUserId(),
             'name' => $prism->getName(),
@@ -179,6 +178,20 @@ class League extends AbstractScope
             'status' => $prism->getStatus(),
             'sort' => $prism->getSort(),
         ];
+        switch ($prism->getStatus()) {
+            case LeagueStatus::REJECTION:
+                $data['rejection_time'] = time();
+                $data['rejection_reason'] = $prism->getReason();
+                break;
+            case LeagueStatus::APPROVED:
+                $data['pass_time'] = time();
+                $data['pass_reason'] = $prism->getReason();
+                break;
+            case LeagueStatus::DELETE:
+                $data['delete_time'] = time();
+                $data['delete_reason'] = $prism->getReason();
+                break;
+        }
         DB::transTrace(function () use ($data, $prism) {
             if ($data) {
                 return DB::connect()->table(self::TABLE)

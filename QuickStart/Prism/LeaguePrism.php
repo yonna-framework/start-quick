@@ -35,6 +35,8 @@ class LeaguePrism extends Prism
     protected ?array $work = null;
     protected ?array $speciality = null;
 
+    protected ?string $reason = null;
+
     /**
      * @return int
      */
@@ -433,6 +435,22 @@ class LeaguePrism extends Prism
     public function setSpeciality(?array $speciality): void
     {
         $this->speciality = $speciality;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    /**
+     * @param string|null $reason
+     */
+    public function setReason(?string $reason): void
+    {
+        $this->reason = $reason;
     }
 
 }

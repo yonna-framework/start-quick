@@ -194,7 +194,10 @@ class LeagueTask extends AbstractScope
                 break;
         }
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->where(fn(Where $w) => $w
+                ->in('id', $this->input('ids'))
+                ->notEqualTo('status', LeagueTaskStatus::COMPLETE)
+            )
             ->update($data);
     }
 
