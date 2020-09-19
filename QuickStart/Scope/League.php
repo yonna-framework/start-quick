@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Throwable;
 use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Prism\LeaguePrism;
 use Yonna\Database\DB;
@@ -21,6 +22,9 @@ class League extends AbstractScope
     /**
      * @return mixed
      * @throws Exception\DatabaseException
+     * @throws Exception\ThrowException
+     * @throws Exception\ThrowException
+     * @throws Exception\ThrowException
      */
     public function one(): array
     {
@@ -39,6 +43,7 @@ class League extends AbstractScope
     /**
      * @return mixed
      * @throws Exception\DatabaseException
+     * @throws Exception\ThrowException
      */
     public function multi(): array
     {
@@ -61,6 +66,7 @@ class League extends AbstractScope
     /**
      * @return mixed
      * @throws Exception\DatabaseException
+     * @throws Exception\ThrowException
      */
     public function page(): array
     {
@@ -84,7 +90,7 @@ class League extends AbstractScope
      * @return int
      * @throws Exception\ParamsException
      * @throws Exception\ThrowException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function insert()
     {
@@ -146,8 +152,7 @@ class League extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function update()
     {
@@ -200,6 +205,7 @@ class League extends AbstractScope
                     'data' => $prism->getSpeciality()
                 ]);
             }
+            return true;
         });
         return true;
     }
@@ -215,7 +221,7 @@ class League extends AbstractScope
         });
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->delete();
+            ->update(["status" => LeagueStatus::DELETE]);
     }
 
     /**

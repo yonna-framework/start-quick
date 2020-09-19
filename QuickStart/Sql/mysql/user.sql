@@ -4,7 +4,7 @@ create table `user`
     `status`          tinyint                        not null default 1 comment '状态[-10注销,-3冻结,-2审核驳回,1待审核,2审核通过]',
     `password`        char(255)                      not null default '' comment '登录密码，不一定有，如通过微信登录的就没有',
     `inviter_user_id` bigint                         not null default 0 comment '邀请用户id[y_user_id]',
-    `register_time`   bigint                         not null comment '注册时间戳',
+    `register_time`   bigint unsigned                not null comment '注册时间戳',
     primary key (`id`),
     index (`status`)
 ) engine = innodb comment '用户核心数据';

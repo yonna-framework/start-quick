@@ -9,6 +9,6 @@ create table `feedback`
     `contact_name`  char(255)                      not null default '' comment '联系人',
     `contact_phone` char(255)                      not null default '' comment '联系电话',
     `remarks`       varchar(1024)                  not null default '' comment '处理备注',
-    `feedback_time` bigint                         not null comment '反馈时间',
+    `feedback_time` bigint unsigned                not null comment '反馈时间',
     primary key (`id`)
 ) engine = innodb comment '反馈';
