@@ -23,8 +23,6 @@ class League extends AbstractScope
      * @return mixed
      * @throws Exception\DatabaseException
      * @throws Exception\ThrowException
-     * @throws Exception\ThrowException
-     * @throws Exception\ThrowException
      */
     public function one(): array
     {

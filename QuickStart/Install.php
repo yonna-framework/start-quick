@@ -11,6 +11,7 @@ use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
 use Yonna\QuickStart\Scope\DataHobby;
 use Yonna\QuickStart\Scope\League;
+use Yonna\QuickStart\Scope\LeagueTask;
 use Yonna\QuickStart\Scope\License;
 use Yonna\QuickStart\Scope\DataSpeciality;
 use Yonna\QuickStart\Scope\DataWork;
@@ -294,13 +295,14 @@ class Install
                     Config::post('del', League::class, 'delete');
                     Config::post('mStatus', League::class, 'multiStatus');
                 });
-                Config::group(['league', 'mission'], function () {
-                    Config::post('info', League::class, 'one');
-                    Config::post('list', League::class, 'multi');
-                    Config::post('add', League::class, 'insert');
-                    Config::post('edit', League::class, 'update');
-                    Config::post('del', League::class, 'delete');
-                    Config::post('mStatus', League::class, 'multiStatus');
+                Config::group(['league', 'task'], function () {
+                    Config::post('info', LeagueTask::class, 'one');
+                    Config::post('list', LeagueTask::class, 'multi');
+                    Config::post('page', LeagueTask::class, 'page');
+                    Config::post('add', LeagueTask::class, 'insert');
+                    Config::post('edit', LeagueTask::class, 'update');
+                    Config::post('del', LeagueTask::class, 'delete');
+                    Config::post('mStatus', LeagueTask::class, 'multiStatus');
                 });
             }
         );

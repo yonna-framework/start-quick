@@ -1,0 +1,408 @@
+<?php
+
+namespace Yonna\QuickStart\Prism;
+
+
+use Yonna\IO\Prism;
+
+class LeagueTaskPrism extends Prism
+{
+
+    protected int $current = 1;
+    protected int $per = 10;
+    protected ?string $order_by = null;
+    protected ?int $id = null;
+    protected ?array $ids = null;
+
+    protected ?int $league_id = null;
+    protected ?int $user_id = null;
+    protected ?string $name = null;
+    protected ?string $introduction = null;
+    protected ?float $points = null;
+
+    protected ?int $status = null;
+    protected ?string $apply_reason = null;
+    protected ?string $rejection_reason = null;
+    protected ?string $passed_reason = null;
+    protected ?string $delete_reason = null;
+    protected ?int $apply_time = null;
+    protected ?int $rejection_time = null;
+    protected ?int $pass_time = null;
+    protected ?int $delete_time = null;
+
+    protected ?string $event_photos;
+    protected ?float $self_evaluation;
+    protected ?float $platform_evaluation;
+
+    protected ?int $sort = null;
+
+
+    /**
+     * @return int
+     */
+    public function getCurrent(): int
+    {
+        return $this->current;
+    }
+
+    /**
+     * @param int $current
+     */
+    public function setCurrent(int $current): void
+    {
+        $this->current = $current;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPer(): int
+    {
+        return $this->per;
+    }
+
+    /**
+     * @param int $per
+     */
+    public function setPer(int $per): void
+    {
+        $this->per = $per;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrderBy(): ?string
+    {
+        return $this->order_by;
+    }
+
+    /**
+     * @param string|null $order_by
+     */
+    public function setOrderBy(?string $order_by): void
+    {
+        $this->order_by = $order_by;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getIds(): ?array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * @param array|null $ids
+     */
+    public function setIds(?array $ids): void
+    {
+        $this->ids = $ids;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLeagueId(): ?int
+    {
+        return $this->league_id;
+    }
+
+    /**
+     * @param int|null $league_id
+     */
+    public function setLeagueId(?int $league_id): void
+    {
+        $this->league_id = $league_id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int|null $status
+     */
+    public function setStatus(?int $status): void
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int|null $user_id
+     */
+    public function setUserId(?int $user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     */
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIntroduction(): ?string
+    {
+        return $this->introduction;
+    }
+
+    /**
+     * @param string|null $introduction
+     */
+    public function setIntroduction(?string $introduction): void
+    {
+        $this->introduction = $introduction;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPoints(): ?float
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param float|null $points
+     */
+    public function setPoints(?float $points): void
+    {
+        $this->points = $points;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApplyReason(): ?string
+    {
+        return $this->apply_reason;
+    }
+
+    /**
+     * @param string|null $apply_reason
+     */
+    public function setApplyReason(?string $apply_reason): void
+    {
+        $this->apply_reason = $apply_reason;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRejectionReason(): ?string
+    {
+        return $this->rejection_reason;
+    }
+
+    /**
+     * @param string|null $rejection_reason
+     */
+    public function setRejectionReason(?string $rejection_reason): void
+    {
+        $this->rejection_reason = $rejection_reason;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPassedReason(): ?string
+    {
+        return $this->passed_reason;
+    }
+
+    /**
+     * @param string|null $passed_reason
+     */
+    public function setPassedReason(?string $passed_reason): void
+    {
+        $this->passed_reason = $passed_reason;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDeleteReason(): ?string
+    {
+        return $this->delete_reason;
+    }
+
+    /**
+     * @param string|null $delete_reason
+     */
+    public function setDeleteReason(?string $delete_reason): void
+    {
+        $this->delete_reason = $delete_reason;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getApplyTime(): ?int
+    {
+        return $this->apply_time;
+    }
+
+    /**
+     * @param int|null $apply_time
+     */
+    public function setApplyTime(?int $apply_time): void
+    {
+        $this->apply_time = $apply_time;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getRejectionTime(): ?int
+    {
+        return $this->rejection_time;
+    }
+
+    /**
+     * @param int|null $rejection_time
+     */
+    public function setRejectionTime(?int $rejection_time): void
+    {
+        $this->rejection_time = $rejection_time;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPassTime(): ?int
+    {
+        return $this->pass_time;
+    }
+
+    /**
+     * @param int|null $pass_time
+     */
+    public function setPassTime(?int $pass_time): void
+    {
+        $this->pass_time = $pass_time;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDeleteTime(): ?int
+    {
+        return $this->delete_time;
+    }
+
+    /**
+     * @param int|null $delete_time
+     */
+    public function setDeleteTime(?int $delete_time): void
+    {
+        $this->delete_time = $delete_time;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEventPhotos(): ?string
+    {
+        return $this->event_photos;
+    }
+
+    /**
+     * @param string|null $event_photos
+     */
+    public function setEventPhotos(?string $event_photos): void
+    {
+        $this->event_photos = $event_photos;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getSelfEvaluation(): ?float
+    {
+        return $this->self_evaluation;
+    }
+
+    /**
+     * @param float|null $self_evaluation
+     */
+    public function setSelfEvaluation(?float $self_evaluation): void
+    {
+        $this->self_evaluation = $self_evaluation;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPlatformEvaluation(): ?float
+    {
+        return $this->platform_evaluation;
+    }
+
+    /**
+     * @param float|null $platform_evaluation
+     */
+    public function setPlatformEvaluation(?float $platform_evaluation): void
+    {
+        $this->platform_evaluation = $platform_evaluation;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSort(): ?int
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @param int|null $sort
+     */
+    public function setSort(?int $sort): void
+    {
+        $this->sort = $sort;
+    }
+
+}

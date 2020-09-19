@@ -121,7 +121,7 @@ CREATE TABLE `league_task_assign`
 (
     `task_id`     bigint unsigned not null comment '参与的任务user_id',
     `league_id`   bigint unsigned not null comment '参加的社团id',
-    `assign_time` bigint unsigned not null comment '驳回日期时间戳',
+    `assign_time` bigint unsigned not null comment '参与日期时间戳',
     UNIQUE KEY (`task_id`, `league_id`)
 ) ENGINE = INNODB COMMENT '社团任务分配表(指定社团)';
 
