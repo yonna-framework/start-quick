@@ -212,28 +212,43 @@ class League extends AbstractScope
      * @return int
      * @throws Exception\DatabaseException
      */
-    public function delete()
-    {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
-            Exception::throw($error);
-        });
-        return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->update(["status" => LeagueStatus::DELETE]);
-    }
-
-    /**
-     * @return int
-     * @throws Exception\DatabaseException
-     */
     public function multiStatus()
     {
         ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
             Exception::throw($error);
         });
+        $status = $this->input('status');
+        $reason = $this->input('reason');
+        $data = ['status' => $status];
+        switch ($status) {
+            case LeagueStatus::REJECTION:
+                $data['rejection_time'] = time();
+                $data['rejection_reason'] = $reason;
+                break;
+            case LeagueStatus::APPROVED:
+                $data['pass_time'] = time();
+                $data['pass_reason'] = $reason;
+                break;
+            case LeagueStatus::DELETE:
+                $data['delete_time'] = time();
+                $data['delete_reason'] = $reason;
+                break;
+        }
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
-            ->update(["status" => $this->input('status')]);
+            ->update($data);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
+    public function delete()
+    {
+        return $this->scope(League::class, 'multiStatus', [
+            'ids' => [$this->input('id')],
+            'status' => LeagueStatus::DELETE,
+        ]);
     }
 
 }

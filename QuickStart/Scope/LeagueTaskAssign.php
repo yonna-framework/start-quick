@@ -41,90 +41,19 @@ class LeagueTaskAssign extends AbstractScope
 
     /**
      * @return int
-     * @throws Throwable
-     */
-    public function update()
-    {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
-            Exception::throw($error);
-        });
-        $prism = new LeagueTaskPrism($this->request());
-        if ($prism->getMasterUserAccount()) {
-            $account = $this->scope(UserAccount::class, 'one', ['string' => $prism->getMasterUserAccount()]);
-            if (empty($account['user_account_id'])) {
-                Exception::params('Account is not exist');
-            }
-            $prism->setMasterUserId($account['user_account_id']);
-        }
-        if ($prism->getIntroduction()) {
-            $prism->setIntroduction($this->xoss_save($prism->getIntroduction()));
-        }
-
-        $data = [
-            'master_user_id' => $prism->getMasterUserId(),
-            'name' => $prism->getName(),
-            'slogan' => $prism->getSlogan(),
-            'introduction' => $prism->getIntroduction(),
-            'logo_pic' => $prism->getLogoPic(),
-            'business_license_pic' => $prism->getBusinessLicensePic(),
-            'status' => $prism->getStatus(),
-            'sort' => $prism->getSort(),
-        ];
-        DB::transTrace(function () use ($data, $prism) {
-            if ($data) {
-                return DB::connect()->table(self::TABLE)
-                    ->where(fn(Where $w) => $w->equalTo('id', $prism->getId()))
-                    ->update($data);
-            }
-            if ($prism->getHobby()) {
-                $this->scope(LeagueAssociateHobby::class, 'cover', [
-                    'league_id' => $prism->getId(),
-                    'data' => $prism->getHobby()
-                ]);
-            }
-            if ($prism->getWork()) {
-                $this->scope(LeagueAssociateWork::class, 'cover', [
-                    'league_id' => $prism->getId(),
-                    'data' => $prism->getWork()
-                ]);
-            }
-            if ($prism->getSpeciality()) {
-                $this->scope(LeagueAssociateSpeciality::class, 'cover', [
-                    'league_id' => $prism->getId(),
-                    'data' => $prism->getSpeciality()
-                ]);
-            }
-            return true;
-        });
-        return true;
-    }
-
-    /**
-     * @return int
      * @throws Exception\DatabaseException
      */
     public function delete()
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['task_id', 'league_id'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->update(["status" => LeagueStatus::DELETE]);
-    }
-
-    /**
-     * @return int
-     * @throws Exception\DatabaseException
-     */
-    public function multiStatus()
-    {
-        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
-            Exception::throw($error);
-        });
-        return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
-            ->update(["status" => $this->input('status')]);
+            ->where(fn(Where $w) => $w
+                ->equalTo('task_id', $this->input('task_id'))
+                ->equalTo('league_id', $this->input('league_id'))
+            )
+            ->delete();
     }
 
 }

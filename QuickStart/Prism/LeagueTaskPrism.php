@@ -30,11 +30,14 @@ class LeagueTaskPrism extends Prism
     protected ?int $pass_time = null;
     protected ?int $delete_time = null;
 
-    protected ?string $event_photos;
-    protected ?float $self_evaluation;
-    protected ?float $platform_evaluation;
+    protected ?string $event_photos = null;
+    protected ?float $self_evaluation = null;
+    protected ?float $platform_evaluation = null;
 
     protected ?int $sort = null;
+
+
+    protected ?string $reason = null;
 
 
     /**
@@ -403,6 +406,22 @@ class LeagueTaskPrism extends Prism
     public function setSort(?int $sort): void
     {
         $this->sort = $sort;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    /**
+     * @param string|null $reason
+     */
+    public function setReason(?string $reason): void
+    {
+        $this->reason = $reason;
     }
 
 }

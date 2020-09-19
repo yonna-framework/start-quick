@@ -148,29 +148,23 @@ class LeagueTask extends AbstractScope
             'self_evaluation' => $prism->getSelfEvaluation() ? round($prism->getSelfEvaluation(), 1) : null,
             'platform_evaluation' => $prism->getPlatformEvaluation() ? round($prism->getPlatformEvaluation(), 1) : null,
         ];
+        switch ($prism->getStatus()) {
+            case LeagueTaskStatus::REJECTION:
+                $data['rejection_time'] = time();
+                $data['rejection_reason'] = $prism->getReason();
+                break;
+            case LeagueTaskStatus::APPROVED:
+                $data['pass_time'] = time();
+                $data['pass_reason'] = $prism->getReason();
+                break;
+            case LeagueTaskStatus::DELETE:
+                $data['delete_time'] = time();
+                $data['delete_reason'] = $prism->getReason();
+                break;
+        }
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $prism->getId()))
             ->update($data);
-    }
-
-    /**
-     * @return int
-     * @throws Exception\DatabaseException
-     */
-    public function delete()
-    {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
-            Exception::throw($error);
-        });
-        $one = DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->one();
-        if ($one !== LeagueTaskStatus::PENDING && $one !== LeagueTaskStatus::REJECTION) {
-            Exception::params('status error');
-        }
-        return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->delete();
     }
 
     /**
@@ -182,9 +176,38 @@ class LeagueTask extends AbstractScope
         ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
             Exception::throw($error);
         });
+        $status = $this->input('status');
+        $reason = $this->input('reason');
+        $data = ['status' => $status];
+        switch ($status) {
+            case LeagueTaskStatus::REJECTION:
+                $data['rejection_time'] = time();
+                $data['rejection_reason'] = $reason;
+                break;
+            case LeagueTaskStatus::APPROVED:
+                $data['pass_time'] = time();
+                $data['pass_reason'] = $reason;
+                break;
+            case LeagueTaskStatus::DELETE:
+                $data['delete_time'] = time();
+                $data['delete_reason'] = $reason;
+                break;
+        }
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
-            ->update(["status" => $this->input('status')]);
+            ->update($data);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
+    public function delete()
+    {
+        return $this->scope(LeagueTask::class, 'multiStatus', [
+            'ids' => [$this->input('id')],
+            'status' => LeagueTaskStatus::DELETE,
+        ]);
     }
 
 }
