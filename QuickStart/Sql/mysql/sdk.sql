@@ -1,6 +1,13 @@
-create table `sdk_config`
+create table `sdk`
 (
-    `user_id` bigint unsigned not null default 0 comment 'user_id',
-    `data`    json comment '数据',
-    primary key (`user_id`)
-) engine = innodb comment '第三方配置表';
+    `key`   char(255) not null comment 'key',
+    `value` char(255) not null comment '配置值',
+    primary key (`key`)
+) engine = innodb comment 'SDK配置表';
+
+insert into `sdk`
+values ('baidu_appid', ''),
+       ('baidu_secret', ''),
+       ('wxmp_appid', ''),
+       ('wxmp_secret', '');
+

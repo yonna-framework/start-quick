@@ -33,10 +33,6 @@ abstract class AbstractDB
     protected $replica = null;
     protected $charset = null;
     protected $auto_cache = null;
-    protected $auto_crypto = null;
-    protected $crypto_type = null;
-    protected $crypto_secret = null;
-    protected $crypto_iv = null;
 
     /**
      * action statement select|show|update|insert|delete
@@ -66,16 +62,11 @@ abstract class AbstractDB
     protected $fetchQuery = false;
 
     /**
-     * 加密对象
+     * 加密对象,设
+     * new Crypto($crypto_type, $crypto_secret, $crypto_iv);
      * @var Crypto
      */
-    protected $Crypto = null;
-
-    /**
-     * 是否对内容加密
-     * @var bool
-     */
-    private $is_crypto = false;
+    protected $crypto = null;
 
     /**
      * 最后请求的链接
@@ -103,11 +94,6 @@ abstract class AbstractDB
         $this->replica = $this->options['replica'] ?? null;
         $this->charset = $this->options['charset'] ?? 'utf8';
         $this->auto_cache = $this->options['auto_cache'] ?? false;
-        $this->auto_crypto = $this->options['auto_crypto'] ?? false;
-        $this->crypto_type = $this->options['crypto_type'] ?? null;
-        $this->crypto_secret = $this->options['crypto_secret'] ?? null;
-        $this->crypto_iv = $this->options['crypto_iv'] ?? null;
-        $this->Crypto = new Crypto($this->crypto_type, $this->crypto_secret, $this->crypto_iv);
         $this->analysis();
         return $this;
     }
@@ -251,7 +237,7 @@ abstract class AbstractDB
     protected function resetAll()
     {
         $this->options = null;
-        $this->is_crypto = false;
+        $this->crypto = null;
         $this->error = null;
     }
 
@@ -362,23 +348,16 @@ abstract class AbstractDB
         return $this->error;
     }
 
-
-    /**
-     * @return bool
-     */
-    protected function isCrypto(): bool
-    {
-        return $this->is_crypto;
-    }
-
     /**
      * @tips 一旦设为加密则只能全字而无法模糊匹配
-     * @param bool $is_crypto
+     * @param string $type
+     * @param string $secret
+     * @param string $iv
      * @return AbstractDB|Mysql|Pgsql|Mssql|Sqlite|Mongo|Redis
      */
-    protected function enCrypto(bool $is_crypto)
+    protected function crypto(string $type, string $secret, string $iv)
     {
-        $this->is_crypto = $is_crypto;
+        $this->crypto = new Crypto($type, $secret, $iv);
         return $this;
     }
 

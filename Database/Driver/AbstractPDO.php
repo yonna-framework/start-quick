@@ -385,8 +385,8 @@ abstract class AbstractPDO extends AbstractDB
             case 'json':
             case 'jsonb':
                 $val = json_encode($val);
-                if ($this->isCrypto()) {
-                    $json = array('crypto' => $this->Crypto::encrypt($val));
+                if ($this->crypto) {
+                    $json = array('crypto' => $this->crypto::encrypt($val));
                     $val = json_encode($json);
                 }
                 if ($this->options['db_type'] === Type::MYSQL) {
@@ -417,8 +417,8 @@ abstract class AbstractPDO extends AbstractDB
             case 'nvarchar':
             case 'ntext':
                 $val = trim($val);
-                if ($this->isCrypto()) {
-                    $val = $this->Crypto::encrypt($val);
+                if ($this->crypto) {
+                    $val = $this->crypto::encrypt($val);
                 }
                 break;
             default:
@@ -468,9 +468,9 @@ abstract class AbstractPDO extends AbstractDB
                 $arr = str_replace($this->mysqlFindInSetSep, '', $arr);
                 $arr = explode(',', $arr);
                 $arr = array_filter($arr);
-                if ($this->isCrypto()) {
+                if ($this->crypto) {
                     foreach ($arr as $ak => $a) {
-                        $arr[$ak] = $this->Crypto::decrypt($a);
+                        $arr[$ak] = $this->crypto::decrypt($a);
                     }
                 }
             } else {
@@ -521,9 +521,9 @@ abstract class AbstractPDO extends AbstractDB
                         case 'json':
                         case 'jsonb':
                             $result[$k] = json_decode($v, true);
-                            if ($this->isCrypto()) {
+                            if ($this->crypto) {
                                 $crypto = $result[$k]['crypto'] ?? '';
-                                $crypto = $this->Crypto::decrypt($crypto);
+                                $crypto = $this->crypto::decrypt($crypto);
                                 $result[$k] = json_decode($crypto, true);
                             }
                             $result[$k] = $this->parseKSort($result[$k]);
@@ -543,8 +543,8 @@ abstract class AbstractPDO extends AbstractDB
                         case 'char':
                         case 'varchar':
                         case 'text':
-                            if (strpos($v, $this->mysqlFindInSetSep) === false && $this->isCrypto()) {
-                                $result[$k] = $this->Crypto::decrypt($v);
+                            if (strpos($v, $this->mysqlFindInSetSep) === false && $this->crypto) {
+                                $result[$k] = $this->crypto::decrypt($v);
                             }
                             if (strpos($v, $this->mysqlFindInSetSep) === 0) {
                                 $result[$k] = $this->comma2arr($v, $ft);
@@ -554,9 +554,9 @@ abstract class AbstractPDO extends AbstractDB
                             if ($this->options['db_type'] === Type::PGSQL) {
                                 if (substr($ft[$k], -2) === '[]') {
                                     $result[$k] = json_decode($v, true);
-                                    if ($this->isCrypto()) {
+                                    if ($this->crypto) {
                                         $crypto = $result[$k]['crypto'] ?? '';
-                                        $crypto = $this->Crypto::decrypt($crypto);
+                                        $crypto = $this->crypto::decrypt($crypto);
                                         $result[$k] = json_decode($crypto, true);
                                     }
                                     $result[$k] = $this->parseKSort($result[$k]);
@@ -819,8 +819,8 @@ abstract class AbstractPDO extends AbstractDB
             case 'nvarchar':
             case 'ntext':
                 $val = trim($val);
-                if ($this->isCrypto()) {
-                    $val = $this->Crypto::encrypt($val);
+                if ($this->crypto) {
+                    $val = $this->crypto::encrypt($val);
                 }
                 break;
             default:
@@ -896,7 +896,7 @@ abstract class AbstractPDO extends AbstractDB
                                     $innerSql .= " <= {$value}";
                                     break;
                                 case Where::like:
-                                    if ($this->isCrypto()) {
+                                    if ($this->crypto) {
                                         $likeO = '';
                                         $likeE = '';
                                         $vSplit = str_split($v['value']);
@@ -918,7 +918,7 @@ abstract class AbstractPDO extends AbstractDB
                                     if (substr($ft_type, -2) === '[]') {
                                         $innerSql = "array_to_string({$innerSql},'')";
                                     }
-                                    if ($this->isCrypto()) {
+                                    if ($this->crypto) {
                                         $likeO = '';
                                         $likeE = '';
                                         $vSplit = str_split($v['value']);

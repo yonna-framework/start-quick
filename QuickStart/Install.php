@@ -17,6 +17,7 @@ use Yonna\QuickStart\Scope\DataSpeciality;
 use Yonna\QuickStart\Scope\DataWork;
 use Yonna\QuickStart\Scope\Essay;
 use Yonna\QuickStart\Scope\EssayCategory;
+use Yonna\QuickStart\Scope\Sdk;
 use Yonna\QuickStart\Scope\SdkWxmp;
 use Yonna\QuickStart\Scope\User;
 use Yonna\QuickStart\Scope\UserAccount;
@@ -169,6 +170,9 @@ class Install
         Config::middleware([Limiter::class],
             function () {
                 Config::group(['sdk'], function () {
+
+                    Config::post('list', Sdk::class, 'multi');
+                    Config::post('edit', Sdk::class, 'update');
 
                     Config::group(['wxmp'], function () {
                         Config::post('login', SdkWxmp::class, 'in');

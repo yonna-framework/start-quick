@@ -48,10 +48,6 @@ class Config
         $schemas = $setting['schemas'] ?? null;
         $project_key = isset($setting['project_key']) ? strtolower($setting['project_key']) : null;
         $auto_cache = isset($setting['auto_cache']) ? strtolower($setting['auto_cache']) : false;
-        $auto_crypto = isset($setting['auto_crypto']) ? strtolower($setting['auto_crypto']) : false;
-        $crypto_type = $setting['crypto_type'] ?? null;
-        $crypto_secret = $setting['crypto_secret'] ?? null;
-        $crypto_iv = $setting['crypto_iv'] ?? null;
         // check
         if (empty($type)) {
             throw new Exception('no type');
@@ -85,24 +81,6 @@ class Config
         } elseif (is_numeric($auto_cache)) {
             $auto_cache = (int)$auto_cache;
         }
-        // auto_crypto
-        if ($auto_crypto === 'true' || $auto_crypto === 'false') {
-            $auto_crypto = $auto_crypto === 'true';
-            if ($auto_crypto === true) {
-                if (empty($crypto_type)) {
-                    throw new Exception('no crypto_type');
-                }
-                if (empty($crypto_secret)) {
-                    throw new Exception('no crypto_secret');
-                }
-                if (empty($crypto_iv)) {
-                    throw new Exception('no crypto_iv');
-                }
-                if (!in_array($crypto_type, System::getOpensslCipherMethods())) {
-                    throw new Exception("OpensslCipherMethods not support this type: {$crypto_type}");
-                }
-            }
-        }
         static::$config[$tag] = [
             'type' => $type,
             'host' => $host,
@@ -115,10 +93,6 @@ class Config
             'schemas' => $schemas,
             'project_key' => $project_key,
             'auto_cache' => $auto_cache,
-            'auto_crypto' => $auto_crypto,
-            'crypto_type' => $crypto_type,
-            'crypto_secret' => $crypto_secret,
-            'crypto_iv' => $crypto_iv,
         ];
     }
 
