@@ -31,6 +31,17 @@ class Table extends AbstractPDO
     }
 
     /**
+     * @param string $type
+     * @param string $secret
+     * @param string $iv
+     * @return $this
+     */
+    public function crypto(string $type, string $secret, string $iv)
+    {
+        return parent::crypto($type, $secret, $iv);
+    }
+
+    /**
      * 指定查询字段
      * @param mixed $field
      * @param string | null $table

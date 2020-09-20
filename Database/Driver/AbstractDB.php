@@ -357,6 +357,9 @@ abstract class AbstractDB
      */
     protected function crypto(string $type, string $secret, string $iv)
     {
+        if (!$type || !$secret || !$iv) {
+            return $this;
+        }
         $this->crypto = new Crypto($type, $secret, $iv);
         return $this;
     }

@@ -9,9 +9,11 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Yonna\Database\DB;
+use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Database\Driver\Redis;
 use Yonna\Foundation\Str;
 use Yonna\Log\Log;
+use Yonna\QuickStart\Scope\Sdk;
 use Yonna\Throwable\Exception;
 
 class BaiduApi
@@ -61,15 +63,37 @@ class BaiduApi
     private static $confIndex = null;
 
     /**
+     * @return array|mixed
+     * @throws Exception\DatabaseException
+     */
+    private static function getBaidu()
+    {
+        $conf = [];
+        $sdk = new Sdk(null);
+        $res = $sdk->get(['baidu_appid', 'baidu_secret']);
+        if ($res) {
+            $res = array_column($res, 'sdk_value', 'sdk_key');
+            $appid = explode(',', $res['baidu_appid']);
+            $secret = explode(',', $res['baidu_secret']);
+            foreach ($appid as $k => $id) {
+                if ($id) {
+                    $conf[] = [$id, $secret[$k]];
+                }
+            }
+        }
+        return $conf;
+    }
+
+    /**
      * 随机分配一个签名用于使用
      * @param string $query
      * @return array
      */
     private static function certificate(string $query): array
     {
-        $confCount = count(Config::getBaidu()) - 1;
+        $confCount = count(self::getBaidu()) - 1;
         if ($confCount === 0) {
-            $config = current(Config::getBaidu());
+            $config = current(self::getBaidu());
         } else {
             if (self::$confIndex === null) {
                 self::$confIndex = rand(0, $confCount);
@@ -78,7 +102,7 @@ class BaiduApi
             } else {
                 self::$confIndex += 1;
             }
-            $config = Config::getBaidu()[self::$confIndex]; // 轮训地取一个配置，分散使用
+            $config = self::getBaidu()[self::$confIndex]; // 轮训地取一个配置，分散使用
         }
         $appid = $config[0];
         $salt = Str::randomNum(16);
@@ -102,7 +126,7 @@ class BaiduApi
         if (!$translates) {
             Exception::params('BaiduApi: translates');
         }
-        if (!Config::getBaidu()) {
+        if (!self::getBaidu()) {
             Exception::params('BaiduApi: Please set config');
         }
         $rds = DB::redis(Config::getAuto());

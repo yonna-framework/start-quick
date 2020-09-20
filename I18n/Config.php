@@ -9,7 +9,6 @@ class Config
 
     private static $database = null;
     private static $auto = null;
-    private static array $baidu = [];
 
     /**
      * @param $key
@@ -51,23 +50,6 @@ class Config
     public static function setAuto($auto): void
     {
         self::$auto = $auto;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getBaidu()
-    {
-        return self::$baidu;
-    }
-
-    /**
-     * @param string $baidu
-     */
-    public static function setBaidu(string $baidu): void
-    {
-        $baidu = explode(',', $baidu);
-        self::$baidu[] = $baidu;
     }
 
 }

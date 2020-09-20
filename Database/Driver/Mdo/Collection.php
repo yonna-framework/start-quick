@@ -24,6 +24,17 @@ class Collection extends AbstractMDO
     }
 
     /**
+     * @param string $type
+     * @param string $secret
+     * @param string $iv
+     * @return $this
+     */
+    public function crypto(string $type, string $secret, string $iv)
+    {
+        return parent::crypto($type, $secret, $iv);
+    }
+
+    /**
      * 限定字段
      * @param $field
      * @param bool $except 排除模式

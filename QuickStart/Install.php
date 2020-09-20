@@ -172,6 +172,7 @@ class Install
                 Config::group(['sdk'], function () {
 
                     Config::post('list', Sdk::class, 'multi');
+                    Config::post('info', Sdk::class, 'one');
                     Config::post('edit', Sdk::class, 'update');
 
                     Config::group(['wxmp'], function () {

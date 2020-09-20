@@ -59,18 +59,15 @@ class I18n
         if (!Config::getAuto()) {
             return;
         }
-        if (!Config::getBaidu()) {
-            return;
-        }
         $rds = DB::redis(Config::getAuto());
         if (($rds instanceof Redis) === false) {
             Exception::params('Auto Translate Should use Redis Database Driver.');
         }
 
-        $bdLimit = count(Config::getBaidu()) * 4;
+        $limit = 4;
 
         $rk = 'i18n_qts';
-        if ((int)$rds->gcr($rk) >= $bdLimit) {
+        if ((int)$rds->gcr($rk) >= $limit) {
             return;
         }
         $multi = null;
@@ -125,7 +122,7 @@ class I18n
                 foreach (self::ALLOW_LANG as $v) {
                     if (empty($one['i18n_' . $v])) {
                         $bi++;
-                        if ($bi > $bdLimit) {
+                        if ($bi > $limit) {
                             break;
                         }
                         $uk = $one['i18n_unique_key'];
