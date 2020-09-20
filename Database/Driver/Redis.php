@@ -328,7 +328,7 @@ class Redis extends AbstractRDO
     {
         $result = null;
         if ($this->rdo() === null || !$key) {
-            return $result;
+            return null;
         } else {
             if (is_string($key)) {
                 $res = $this->query('get', $key);

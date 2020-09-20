@@ -176,7 +176,7 @@ class Install
                     Config::post('edit', Sdk::class, 'update');
 
                     Config::group(['wxmp'], function () {
-                        Config::post('login', SdkWxmp::class, 'in');
+                        Config::post('oauth', SdkWxmp::class, 'oauth');
                     });
 
                 });

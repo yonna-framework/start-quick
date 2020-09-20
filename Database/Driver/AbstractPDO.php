@@ -5,7 +5,6 @@ namespace Yonna\Database\Driver;
 use PDO;
 use PDOException;
 use PDOStatement;
-use Yonna\Database\Driver\Pdo\Table;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\Moment;
 use Yonna\Throwable\Exception;
@@ -178,32 +177,33 @@ abstract class AbstractPDO extends AbstractDB
                 $alia = true;
             }
             $result = null;
+            $cacheKey = "field::{$this->options['db_type']}::{$table}";
             switch ($this->options['db_type']) {
                 case Type::MYSQL:
                     $sql = "SELECT COLUMN_NAME AS `field`,DATA_TYPE AS fieldtype FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema ='{$this->name}' AND table_name = '{$table}';";
-                    $result = Cache::get($sql);
+                    $result = Cache::get($cacheKey);
                     if (!$result) {
                         $PDOStatement = $this->execute($sql);
                         if ($PDOStatement) {
                             $result = $PDOStatement->fetchAll(PDO::FETCH_ASSOC);
-                            Cache::set($sql, $result, 600);
+                            Cache::set($cacheKey, $result, 600);
                         }
                     }
                     break;
                 case Type::PGSQL:
                     $sql = "SELECT a.attname as field,format_type(a.atttypid,a.atttypmod) as fieldtype FROM pg_class as c,pg_attribute as a where a.attisdropped = false and c.relname = '{$table}' and a.attrelid = c.oid and a.attnum>0;";
-                    $result = Cache::get($sql);
+                    $result = Cache::get($cacheKey);
                     if (!$result) {
                         $PDOStatement = $this->execute($sql);
                         if ($PDOStatement) {
                             $result = $PDOStatement->fetchAll(PDO::FETCH_ASSOC);
-                            Cache::set($sql, $result, 600);
+                            Cache::set($cacheKey, $result, 600);
                         }
                     }
                     break;
                 case Type::MSSQL:
                     $sql = "sp_columns \"{$table}\";";
-                    $result = Cache::get($sql);
+                    $result = Cache::get($cacheKey);
                     if (!$result) {
                         $PDOStatement = $this->execute($sql);
                         if ($PDOStatement) {
@@ -215,13 +215,13 @@ abstract class AbstractPDO extends AbstractDB
                                     'fieldtype' => strtolower($v['TYPE_NAME']),
                                 );
                             }
-                            Cache::set($sql, $result, 600);
+                            Cache::set($cacheKey, $result, 600);
                         }
                     }
                     break;
                 case Type::SQLITE:
                     $sql = "select sql from sqlite_master where tbl_name = '{$table}' and type='table';";
-                    $result = Cache::get($sql);
+                    $result = Cache::get($cacheKey);
                     if (!$result) {
                         $PDOStatement = $this->execute($sql);
                         if ($PDOStatement) {
@@ -239,7 +239,7 @@ abstract class AbstractPDO extends AbstractDB
                                     'fieldtype' => strtolower($v[1]),
                                 );
                             }
-                            Cache::set($sql, $result, 600);
+                            Cache::set($cacheKey, $result, 600);
                         }
                     }
                     break;

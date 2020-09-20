@@ -73,10 +73,9 @@ class BaiduApi
             return self::$baiduConf;
         }
         self::$baiduConf = [];
-        $sdk = new Sdk(null);
-        $res = $sdk->get(['baidu_appid', 'baidu_secret']);
+        $sdk = new Sdk();
+        $res = $sdk->_get(['baidu_appid', 'baidu_secret']);
         if ($res) {
-            $res = array_column($res, 'sdk_value', 'sdk_key');
             $appid = explode(',', $res['baidu_appid']);
             $secret = explode(',', $res['baidu_secret']);
             foreach ($appid as $k => $id) {

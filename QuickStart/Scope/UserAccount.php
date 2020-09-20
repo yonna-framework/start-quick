@@ -35,6 +35,7 @@ class UserAccount extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getString() && $w->equalTo('string', $prism->getString());
+                $prism->getType() && $w->equalTo('type', $prism->getType());
             })
             ->one();
     }

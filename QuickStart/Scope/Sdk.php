@@ -25,17 +25,30 @@ class Sdk extends AbstractScope
      * @return mixed|string
      * @throws Exception\DatabaseException
      */
-    public function get(array $keys)
+    public function _get(array $keys)
     {
         $res = DB::connect()->table(self::TABLE)->where(fn(Where $w) => $w->in('key', $keys))->multi();
         if (!$res) {
             return [];
         }
         $Crypto = new Crypto(...self::CRYPTO);
+        $res2 = [];
         foreach ($res as $k => $v) {
-            $res[$k]['sdk_value'] = $Crypto::decrypt($v['sdk_value']);
+            $res2[$v['sdk_key']] = $Crypto::decrypt($v['sdk_value']);
         }
-        return $res;
+        return $res2;
+    }
+
+    /**
+     * @return mixed|string
+     * @throws Exception\DatabaseException
+     */
+    public function get()
+    {
+        ArrayValidator::required($this->input(), ['keys'], function ($error) {
+            Exception::throw($error);
+        });
+        return $this->_get($this->input('keys'));
     }
 
     /**

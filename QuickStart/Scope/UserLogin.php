@@ -66,8 +66,7 @@ class UserLogin extends AbstractScope
         if (!$this->request()->getClientId()) {
             return 0;
         }
-        $id = DB::redis()->get(self::ONLINE_REDIS_KEY . $this->request()->getClientId()) ?? 0;
-        return (int)$id;
+        return DB::redis()->get(self::ONLINE_REDIS_KEY . $this->request()->getClientId()) ?? 0;
     }
 
     /**
@@ -76,7 +75,7 @@ class UserLogin extends AbstractScope
      */
     public function isLogging(): bool
     {
-        return $this->getLoggingId() > 0;
+        return $this->getLoggingId() !== 0;
     }
 
     /**
