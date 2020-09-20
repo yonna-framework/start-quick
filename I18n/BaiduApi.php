@@ -60,6 +60,7 @@ class BaiduApi
         return self::$client;
     }
 
+    private static $baiduConf = [];
     private static $confIndex = null;
 
     /**
@@ -68,7 +69,10 @@ class BaiduApi
      */
     private static function getBaidu()
     {
-        $conf = [];
+        if (self::$baiduConf) {
+            return self::$baiduConf;
+        }
+        self::$baiduConf = [];
         $sdk = new Sdk(null);
         $res = $sdk->get(['baidu_appid', 'baidu_secret']);
         if ($res) {
@@ -77,11 +81,11 @@ class BaiduApi
             $secret = explode(',', $res['baidu_secret']);
             foreach ($appid as $k => $id) {
                 if ($id) {
-                    $conf[] = [$id, $secret[$k]];
+                    self::$baiduConf[] = [$id, $secret[$k]];
                 }
             }
         }
-        return $conf;
+        return self::$baiduConf;
     }
 
     /**
