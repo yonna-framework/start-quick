@@ -117,27 +117,30 @@ class Xoss extends AbstractScope
         $md5 = md5($data);
         $sha1 = sha1($data);
         $hash = $sha1 . $md5;
-        $saveData['hash'] = $hash;
-        $saveData['key'] = $hash; // 这个key用于访问资源，默认是hash
-        $saveData['md5_name'] = $md5;
-        $saveData['path'] = '/uploads/' . date('Y-m-d') . "/" . date('H') . "/";
-        $saveData['uri'] = $saveData['path'] . $md5 . '.' . $fd['suffix'];
-        if (!System::dirCheck($root . $saveData['path'], true)) {
-            return $this->false('invalid dir');
-        }
-        if (!is_file($root . $saveData['uri'])) {
-            $size = @file_put_contents($root . $saveData['uri'], $data);
-            if ($size === false) {
-                return $this->false('Save failed');
-            }
-        }
-        if ($this->request()->getLoggingId()) {
-            $saveData['user_id'] = $this->request()->getLoggingId();
-        }
+        // 检查文件是否已存在
         $fileData = DB::connect()->table('xoss')
-            ->field('key,name,suffix,size,content_type')
+            ->field('key,name,suffix,size,content_type,uri')
             ->where(fn(Where $w) => $w->equalTo('hash', $hash))
             ->one();
+        if (!$fileData || !is_file($root . $fileData['xoss_uri'])) {
+            $saveData['hash'] = $hash;
+            $saveData['key'] = $hash; // 这个key用于访问资源，默认是hash
+            $saveData['md5_name'] = $md5;
+            $saveData['path'] = '/uploads/' . date('Y-m-d') . "/" . date('H') . "/";
+            $saveData['uri'] = $saveData['path'] . $md5 . '.' . $fd['suffix'];
+            if (!System::dirCheck($root . $saveData['path'], true)) {
+                return $this->false('invalid dir');
+            }
+            if (!is_file($root . $saveData['uri'])) {
+                $size = @file_put_contents($root . $saveData['uri'], $data);
+                if ($size === false) {
+                    return $this->false('Save failed');
+                }
+            }
+            if ($this->request()->getLoggingId()) {
+                $saveData['user_id'] = $this->request()->getLoggingId();
+            }
+        }
         if (!$fileData) {
             DB::connect()->table('xoss')->insert($saveData);
             $fileData = DB::connect()->table('xoss')
