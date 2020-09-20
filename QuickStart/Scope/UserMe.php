@@ -6,7 +6,6 @@ use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Helper\Password;
 use Yonna\QuickStart\Mapping\Common\Boolean;
-use Yonna\QuickStart\Mapping\User\MetaValueFormat;
 use Yonna\Throwable\Exception;
 
 class UserMe extends AbstractScope

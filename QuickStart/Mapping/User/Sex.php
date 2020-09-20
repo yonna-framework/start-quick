@@ -14,7 +14,7 @@ class Sex extends Mapping
 
     public function __construct()
     {
-        self::setLabel(self::UN_KNOW, '未设置');
+        self::setLabel(self::UN_KNOW, '保密');
         self::setLabel(self::MAN, '男');
         self::setLabel(self::WOMEN, '女');
     }

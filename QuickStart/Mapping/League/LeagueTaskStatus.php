@@ -18,7 +18,7 @@ class LeagueTaskStatus extends Mapping
         self::setLabel(self::DELETE, '作废');
         self::setLabel(self::REJECTION, '申请驳回');
         self::setLabel(self::PENDING, '待审核');
-        self::setLabel(self::APPROVED, '审核通过');
+        self::setLabel(self::APPROVED, '进行中');
         self::setLabel(self::COMPLETE, '完成');
     }
 

@@ -122,6 +122,9 @@ class Install
                 Config::group(['stat'], function () {
                     Config::post('user', Stat::class, 'user');
                     Config::post('userAccount', Stat::class, 'account');
+                    Config::post('task', Stat::class, 'task');
+                    Config::post('userGrow', Stat::class, 'userGrow');
+                    Config::post('leagueGrow', Stat::class, 'leagueGrow');
                 });
             }
         );
@@ -202,35 +205,36 @@ class Install
 
     public static function user(): void
     {
-        Config::middleware([Limiter::class],
-            function () {
-                Config::group(['user'], function () {
-                    Config::post('login', UserLogin::class, 'in');
-                    Config::post('logging', UserLogin::class, 'isLogging');
-                    Config::post('logout', UserLogin::class, 'out');
+        Config::middleware([Limiter::class], function () {
 
-                    Config::middleware([Logging::class], function () {
+            Config::middleware([Logging::class], function () {
+                Config::group(['me'], function () {
+                    Config::post('info', UserMe::class, 'one');
+                    Config::post('password', UserMe::class, 'password');
+                });
+            });
 
-                        Config::post('info', User::class, 'one');
-                        Config::post('list', User::class, 'multi');
-                        Config::post('page', User::class, 'page');
-                        Config::post('add', User::class, 'insert');
-                        Config::post('edit', User::class, 'update');
-                        Config::post('mStatus', User::class, 'multiStatus');
+            Config::group(['user'], function () {
+                Config::post('login', UserLogin::class, 'in');
+                Config::post('logging', UserLogin::class, 'isLogging');
+                Config::post('logout', UserLogin::class, 'out');
 
-                        Config::group(['account'], function () {
-                            Config::post('info', UserAccount::class, 'one');
-                            Config::post('edit', UserAccount::class, 'update');
-                        });
+                Config::middleware([Logging::class], function () {
 
-                        Config::group(['me'], function () {
-                            Config::post('info', UserMe::class, 'one');
-                            Config::post('password', UserMe::class, 'password');
-                        });
+                    Config::post('info', User::class, 'one');
+                    Config::post('list', User::class, 'multi');
+                    Config::post('page', User::class, 'page');
+                    Config::post('add', User::class, 'insert');
+                    Config::post('edit', User::class, 'update');
+                    Config::post('mStatus', User::class, 'multiStatus');
+
+                    Config::group(['account'], function () {
+                        Config::post('info', UserAccount::class, 'one');
+                        Config::post('edit', UserAccount::class, 'update');
                     });
                 });
-            }
-        );
+            });
+        });
     }
 
     public static function userMetaCategory(): void

@@ -58,10 +58,10 @@ class UserLogin extends AbstractScope
     }
 
     /**
-     * @return int
+     * @return mixed
      * @throws null
      */
-    public function getLoggingId(): int
+    public function getLoggingId()
     {
         if (!$this->request()->getClientId()) {
             return 0;
