@@ -88,7 +88,7 @@ abstract class AbstractPDO extends AbstractDB
      * 检查数据库
      * @param $type
      * @param $msg
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function askType($type, $msg)
     {
@@ -163,7 +163,7 @@ abstract class AbstractPDO extends AbstractDB
      * 获取表字段类型
      * @param $table
      * @return mixed|null
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function getFieldType($table = null)
     {
@@ -362,7 +362,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param $val
      * @param $ft
      * @return array|bool|false|int|string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function parseValueByFieldType($val, $ft)
     {
@@ -438,7 +438,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param $arr
      * @param $type
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function arr2comma($arr, $type)
     {
@@ -460,7 +460,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param $arr
      * @param $type
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function comma2arr($arr, $type)
     {
@@ -486,7 +486,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param $arr
      * @param $type
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function toPGArray($arr, $type)
     {
@@ -507,7 +507,7 @@ abstract class AbstractPDO extends AbstractDB
      * 递归式格式化数据
      * @param $result
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function fetchFormat($result)
     {
@@ -577,7 +577,7 @@ abstract class AbstractPDO extends AbstractDB
      * schemas分析
      * @param mixed $schemas
      * @return string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function parseSchemas($schemas)
     {
@@ -648,7 +648,7 @@ abstract class AbstractPDO extends AbstractDB
      * offset分析
      * @param mixed $offset
      * @return string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function parseOffset($offset)
     {
@@ -678,7 +678,7 @@ abstract class AbstractPDO extends AbstractDB
     /**
      * where分析
      * @return string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function parseWhere()
     {
@@ -775,7 +775,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param $val
      * @param $ft
      * @return array|bool|false|int|string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     private function parseWhereByFieldType($val, $ft)
     {
@@ -841,7 +841,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param string $sql
      * @param string $cond
      * @return string|null
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function builtWhereSql($closure, $sql = '', $cond = 'and')
     {
@@ -1024,7 +1024,7 @@ abstract class AbstractPDO extends AbstractDB
     /**
      * 生成查询SQL
      * @return string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function buildSelectSql()
     {
@@ -1128,7 +1128,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param string $query
      * @param int $fetchMode
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function query($query = '', $fetchMode = PDO::FETCH_ASSOC)
     {
@@ -1203,7 +1203,7 @@ abstract class AbstractPDO extends AbstractDB
      * @param string | null $table
      * @param null $function
      * @return $this
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function field($field, $table = null, $function = null)
     {

@@ -19,7 +19,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -43,7 +43,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function page(): array
     {
@@ -69,7 +69,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function insert()
     {
@@ -91,7 +91,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function update()
     {
@@ -112,7 +112,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function delete()
     {
@@ -126,7 +126,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multiDelete()
     {
@@ -140,7 +140,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multiAnswer()
     {

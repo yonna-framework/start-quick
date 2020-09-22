@@ -19,7 +19,7 @@ class SdkWxmpUser extends AbstractScope
 
     /**
      * @return false|int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function save()
     {

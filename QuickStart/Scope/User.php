@@ -18,7 +18,7 @@ class User extends AbstractScope
     /**
      * 获取详情
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      * @throws Exception\ThrowException
      */
     public function one(): array
@@ -37,7 +37,7 @@ class User extends AbstractScope
     /**
      * 获取列表
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -68,7 +68,7 @@ class User extends AbstractScope
     /**
      * 获取分页列表
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function page(): array
     {
@@ -105,7 +105,7 @@ class User extends AbstractScope
 
     /**
      * @return bool
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\ParamsException
      * @throws \Throwable
      */
     public function insert()
@@ -151,8 +151,8 @@ class User extends AbstractScope
 
     /**
      * @return false|int
-     * @throws Exception\DatabaseException
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\DatabaseException
+     * @throws Exception\Error\ParamsException
      */
     public function update()
     {
@@ -189,7 +189,7 @@ class User extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multiStatus()
     {

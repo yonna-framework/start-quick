@@ -85,7 +85,7 @@ abstract class AbstractMDO extends AbstractDB
      * @param array $filter
      * @param string $cond
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     private function builtFilter($closure, $filter = [], $cond = 'and')
     {
@@ -154,7 +154,7 @@ abstract class AbstractMDO extends AbstractDB
      * where分析
      * 这个where需要被继承的where覆盖才会有效
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function parseWhere()
     {
@@ -213,7 +213,7 @@ abstract class AbstractMDO extends AbstractDB
      * 设置执行命令
      * @param $command
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     protected function query($command)
     {

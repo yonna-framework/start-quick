@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Yonna\Mapping\Mapping;
 use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Mapping\User\MetaValueFormat;
 use Yonna\QuickStart\Prism\UserMetaCategoryPrism;
@@ -74,7 +75,7 @@ class UserMetaCategory extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function one(): array
     {
@@ -88,7 +89,7 @@ class UserMetaCategory extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -123,6 +124,9 @@ class UserMetaCategory extends AbstractScope
                     $dk = explode(':', $d);
                     switch ($dk[0]) {
                         case 'mapping':
+                            /**
+                             * @var $m Mapping
+                             */
                             $m = str_replace('_', "\\", $dk[1]);
                             $d = class_exists($m) ? $m::toAntd() : [];
                             break;
@@ -149,7 +153,7 @@ class UserMetaCategory extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function page(): array
     {
@@ -165,7 +169,7 @@ class UserMetaCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function insert()
     {
@@ -187,7 +191,7 @@ class UserMetaCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function update()
     {
@@ -213,7 +217,7 @@ class UserMetaCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function delete()
     {
@@ -227,7 +231,7 @@ class UserMetaCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multiStatus()
     {

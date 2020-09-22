@@ -6,13 +6,12 @@ namespace Yonna\Throwable\Exception;
 use Exception;
 
 /**
- * SDK的错误
- * Class SDKException
+ * Class ErrorException
  * @package Yonna\Throwable\Exception
  */
-class SDKException extends Exception
+class ErrorException extends Exception
 {
 
-    protected $code = Code::SDK;
+    protected $code = Code::ERROR;
 
 }

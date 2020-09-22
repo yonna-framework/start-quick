@@ -23,7 +23,7 @@ class LeagueMember extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -40,7 +40,7 @@ class LeagueMember extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function page(): array
     {
@@ -57,7 +57,7 @@ class LeagueMember extends AbstractScope
 
     /**
      * @return bool|mixed|null
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      * @throws Throwable
      */
     public function insert()
@@ -88,7 +88,7 @@ class LeagueMember extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function update()
     {
@@ -130,7 +130,7 @@ class LeagueMember extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function status()
     {
@@ -164,7 +164,7 @@ class LeagueMember extends AbstractScope
 
     /**
      * @return false|int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function delete()
     {

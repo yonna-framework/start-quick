@@ -46,7 +46,7 @@ class Mongo extends AbstractMDO
     /**
      * @param string $collection
      * @return Collection count
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function collection(string $collection): Collection
     {

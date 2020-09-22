@@ -23,7 +23,7 @@ class Sdk extends AbstractScope
     /**
      * @param array $keys
      * @return mixed|string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function _get(array $keys)
     {
@@ -41,7 +41,7 @@ class Sdk extends AbstractScope
 
     /**
      * @return mixed|string
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function get()
     {
@@ -54,7 +54,7 @@ class Sdk extends AbstractScope
     /**
      * 获取详情
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function one(): array
     {
@@ -69,7 +69,7 @@ class Sdk extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -85,7 +85,7 @@ class Sdk extends AbstractScope
 
     /**
      * @return false|int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function update()
     {

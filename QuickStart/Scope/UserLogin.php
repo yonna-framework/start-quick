@@ -27,8 +27,8 @@ class UserLogin extends AbstractScope
      * 登录记录
      * @param $userInfo
      * @return bool
-     * @throws Exception\DatabaseException
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\DatabaseException
+     * @throws Exception\Error\ParamsException
      */
     public function loginRecord($userInfo)
     {
@@ -127,16 +127,16 @@ class UserLogin extends AbstractScope
         // 检查账号状态
         switch ($userInfo['user_status']) {
             case UserStatus::DELETE:
-                Exception::permission('Account is not exist');
+                Exception::error('Account is not exist');
                 break;
             case UserStatus::FREEZE:
-                Exception::throw('Account has been frozen');
+                Exception::error('Account has been frozen');
                 break;
             case UserStatus::PENDING:
-                Exception::throw('Account has not been approved, please wait for approval');
+                Exception::error('Account has not been approved, please wait for approval');
                 break;
             case UserStatus::REJECTION:
-                Exception::throw('Account audit failed');
+                Exception::error('Account audit failed');
                 break;
             default:
                 break;
@@ -153,7 +153,7 @@ class UserLogin extends AbstractScope
             })
             ->multi();
         if (!$userLicense) {
-            Exception::throw("Account not any licensed");
+            Exception::error("Account not any licensed");
         }
         $userLicenseIds = array_column($userLicense, 'user_license_license_id');
         $al = DB::connect()->table('license')
@@ -170,11 +170,11 @@ class UserLogin extends AbstractScope
         $allowScopes = array_unique($allowScopes);
         $currentScope = strtoupper($this->input('scope'));
         if (!in_array('ALL', $allowScopes) && !in_array($currentScope, $allowScopes)) {
-            Exception::throw("Account not licensed");
+            Exception::error("Account not licensed");
         }
         // 检查密码
         if (empty($userInfo['user_password']) || $userInfo['user_password'] !== Password::parse($password)) {
-            Exception::throw('Wrong password');
+            Exception::error('Wrong password');
         }
         // 记录登录信息
         try {

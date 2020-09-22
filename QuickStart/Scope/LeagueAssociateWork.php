@@ -20,7 +20,7 @@ class LeagueAssociateWork extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -34,7 +34,7 @@ class LeagueAssociateWork extends AbstractScope
 
     /**
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function attach(): array
     {

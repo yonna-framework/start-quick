@@ -10,12 +10,12 @@ class Debug extends Before
 {
     /**
      * @return Request
-     * @throws Exception\DebugException
+     * @throws Exception\ErrorException
      */
     public function handle(): Request
     {
         if (getenv('DEBUG') === 'false') {
-            Exception::debug('NOT_DEBUG');
+            Exception::error('NOT_DEBUG');
         }
         return $this->request();
     }

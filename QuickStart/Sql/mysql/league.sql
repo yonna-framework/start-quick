@@ -5,6 +5,7 @@ CREATE TABLE `data_hobby`
     `status` tinyint                        not null default 1 comment '状态[-1无效,1生效]',
     `sort`   int                            not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
+    UNIQUE KEY (`name`),
     INDEX (`status`)
 ) ENGINE = INNODB COMMENT '兴趣爱好';
 
@@ -15,6 +16,7 @@ CREATE TABLE `data_work`
     `status` tinyint                        not null default 1 comment '状态[-1无效,1生效]',
     `sort`   int                            not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
+    UNIQUE KEY (`name`),
     INDEX (`status`)
 ) ENGINE = INNODB COMMENT '职业工作';
 
@@ -25,6 +27,7 @@ CREATE TABLE `data_speciality`
     `status` tinyint                        not null default 1 comment '状态[-1无效,1生效]',
     `sort`   int                            not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
+    UNIQUE KEY (`name`),
     INDEX (`status`)
 ) ENGINE = INNODB COMMENT '特长';
 

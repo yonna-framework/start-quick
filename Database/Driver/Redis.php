@@ -43,7 +43,7 @@ class Redis extends AbstractRDO
      * 选择一个数据库，索引从0开始,最大支持15
      * @param int $index
      * @param Closure $tempCall
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function select(int $index, Closure $tempCall = null)
     {
@@ -63,7 +63,7 @@ class Redis extends AbstractRDO
     /**
      * time
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function time()
     {
@@ -77,7 +77,7 @@ class Redis extends AbstractRDO
     /**
      * DB size
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function dbSize()
     {
@@ -91,7 +91,7 @@ class Redis extends AbstractRDO
     /**
      * 使用aof来进行数据库持久化
      * @param bool $sure
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function bgRewriteAof($sure = false)
     {
@@ -103,7 +103,7 @@ class Redis extends AbstractRDO
     /**
      * 将数据同步保存到磁盘
      * @param bool $sure
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function save($sure = false)
     {
@@ -115,7 +115,7 @@ class Redis extends AbstractRDO
     /**
      * 将数据异步保存到磁盘
      * @param bool $sure
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function bgSave($sure = false)
     {
@@ -127,7 +127,7 @@ class Redis extends AbstractRDO
     /**
      * 返回上次成功将数据保存到磁盘的Unix时戳
      * @param bool $sure
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function lastSave($sure = false)
     {
@@ -139,7 +139,7 @@ class Redis extends AbstractRDO
     /**
      * 清空所有
      * @param bool $sure
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function flushAll($sure = false)
     {
@@ -151,7 +151,7 @@ class Redis extends AbstractRDO
     /**
      * 清空DB
      * @param bool $sure
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function flushDB($sure = false)
     {
@@ -164,7 +164,7 @@ class Redis extends AbstractRDO
      * info [section]------返回关于 Redis 服务器的各种信息和统计数值
      * @param string $section
      * @return mixed|null
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function info($section = 'default')
     {
@@ -178,7 +178,7 @@ class Redis extends AbstractRDO
     /**
      * 删除kEY
      * @param $key
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function delete($key)
     {
@@ -191,7 +191,7 @@ class Redis extends AbstractRDO
      * 以秒为单位,返回给定key的剩余生存时间(TTL, time to live)
      * @param $key
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function ttl($key): int
     {
@@ -206,7 +206,7 @@ class Redis extends AbstractRDO
      * 以毫秒为单位,返回给定key的剩余生存时间(TTL, time to live)
      * @param $key
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function pttl($key): int
     {
@@ -221,7 +221,7 @@ class Redis extends AbstractRDO
      * 检查给定key是否存在
      * @param string $key
      * @return bool
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function exists(string $key): bool
     {
@@ -237,7 +237,7 @@ class Redis extends AbstractRDO
      * @param $key
      * @param int $timeout <= 0 not expire
      * @return void
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function expire($key, int $timeout = 0)
     {
@@ -254,7 +254,7 @@ class Redis extends AbstractRDO
      * @param $value
      * @param int $ttl <= 0 forever unit:milliseconds
      * @return void
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function pSet($key, $value, int $ttl = 0)
     {
@@ -289,7 +289,7 @@ class Redis extends AbstractRDO
      * @param $value
      * @param int $ttl <= 0 forever unit:second
      * @return void
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function set($key, $value, int $ttl = 0)
     {
@@ -322,7 +322,7 @@ class Redis extends AbstractRDO
      * 获取值，key可以是string或一个string的数组，返回多个值
      * @param string|array[string] $key
      * @return bool|null|string|array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function get($key)
     {
@@ -352,7 +352,7 @@ class Redis extends AbstractRDO
      * @param array $kv
      * @param int $ttl
      * @return void
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function mSet(array $kv, int $ttl = 0)
     {
@@ -377,7 +377,7 @@ class Redis extends AbstractRDO
      * 获取值，key可以是string或一个string的数组，返回多个值
      * @param array[string] $key
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function mGet(array $key)
     {
@@ -401,7 +401,7 @@ class Redis extends AbstractRDO
      * @param $key
      * @param $value
      * @return void
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function hSet($hashKey, $key, $value)
     {
@@ -422,7 +422,7 @@ class Redis extends AbstractRDO
      * @param $key
      * @param $hashKey
      * @return bool|null|string|array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function hGet($key, $hashKey)
     {
@@ -442,7 +442,7 @@ class Redis extends AbstractRDO
      * 这个方法是专门用来获取自增值
      * @param $key
      * @return int | float
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function gcr($key)
     {
@@ -458,7 +458,7 @@ class Redis extends AbstractRDO
      * @param $key
      * @param int $value
      * @return int | float
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function incr($key, $value = 1)
     {
@@ -478,7 +478,7 @@ class Redis extends AbstractRDO
      * @param $key
      * @param int $value
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function decr($key, int $value = 1)
     {
@@ -499,7 +499,7 @@ class Redis extends AbstractRDO
      * @param $hashKey
      * @param int | float $value
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function hIncr($key, $hashKey, $value = 1)
     {
@@ -513,7 +513,7 @@ class Redis extends AbstractRDO
     /**
      * @param $key
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function lLen($key)
     {
@@ -528,7 +528,7 @@ class Redis extends AbstractRDO
      * @param $key
      * @param string|array $value
      * @return bool
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function lPush($key, $value)
     {
@@ -542,7 +542,7 @@ class Redis extends AbstractRDO
     /**
      * @param $key
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function rPop($key)
     {
@@ -557,7 +557,7 @@ class Redis extends AbstractRDO
      * @param $key
      * @param string|array $value
      * @return bool
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function rPush($key, $value)
     {
@@ -571,7 +571,7 @@ class Redis extends AbstractRDO
     /**
      * @param $key
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function lPop($key)
     {

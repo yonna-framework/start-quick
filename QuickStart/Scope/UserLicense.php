@@ -2,7 +2,6 @@
 
 namespace Yonna\QuickStart\Scope;
 
-use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\UserLicensePrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -20,7 +19,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function one(): array
     {
@@ -34,7 +33,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -51,7 +50,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function count(): int
     {
@@ -68,7 +67,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function delete()
     {

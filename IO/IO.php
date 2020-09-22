@@ -26,8 +26,10 @@ class IO
      * @param array $scopes
      * @param Request $request
      * @param array $upperData
-     * @return mixed
+     * @return array
+     * @throws Exception\LogoutException
      * @throws Exception\ThrowException
+     * @throws Exception\ErrorException
      */
     private function scopes(array $scopes, Request $request, $upperData = [])
     {
@@ -100,19 +102,23 @@ class IO
     {
         $scopes = $request->getScopes();
         if (!$scopes) {
-            return Response::abort('no scope');
+            return Response::error('no scope');
         }
         $responses = null;
         try {
             $responses = $this->scopes($scopes, $request);
+        } catch (Exception\LogoutException $e) {
+            return Response::logout($e->getMessage());
         } catch (Exception\ThrowException $e) {
             return Response::throwable($e);
+        } catch (Exception\ErrorException $e) {
+            return Response::error($e);
         }
         // response
         $response = $responses[0];
         if ($responses[1] === 1) {
             if ($response === null) {
-                $response = Response::notFound('You should return some response but not null');
+                $response = Response::error('You should return some response but not null');
             } else if ($response instanceof Consequent\File) {
                 $response = Response::download($response);
             } else if (is_array($response)) {
@@ -128,7 +134,7 @@ class IO
             $response = Response::success('fetch multi success', $response);
         }
         if (!($response instanceof Collector)) {
-            $response = Response::notFound('Response must instanceof ResponseCollector');
+            $response = Response::error('Response must instanceof ResponseCollector');
         }
         return Crypto::output($request, $response);
     }

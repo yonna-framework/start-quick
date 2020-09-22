@@ -8,7 +8,7 @@ use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
 use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Mapping\User\UserStatus;
-use Yonna\Throwable\Exception\DatabaseException;
+use Yonna\Throwable\Exception\Error\DatabaseException;
 
 class Stat extends AbstractScope
 {

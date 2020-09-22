@@ -41,7 +41,7 @@ class LeagueTaskAssign extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function delete()
     {

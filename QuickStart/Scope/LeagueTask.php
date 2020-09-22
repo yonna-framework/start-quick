@@ -22,7 +22,7 @@ class LeagueTask extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function one(): array
     {
@@ -37,7 +37,7 @@ class LeagueTask extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -57,7 +57,7 @@ class LeagueTask extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function page(): array
     {
@@ -77,7 +77,7 @@ class LeagueTask extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\ParamsException
      * @throws Exception\ThrowException
      * @throws Throwable
      */
@@ -169,7 +169,7 @@ class LeagueTask extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multiStatus()
     {

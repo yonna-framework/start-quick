@@ -23,7 +23,7 @@ class UserAccount extends AbstractScope
     /**
      * 获取详情
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function one(): array
     {
@@ -42,8 +42,8 @@ class UserAccount extends AbstractScope
 
     /**
      * @return false|int
-     * @throws Exception\DatabaseException
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\DatabaseException
+     * @throws Exception\Error\ParamsException
      */
     public function update()
     {
@@ -72,8 +72,8 @@ class UserAccount extends AbstractScope
 
     /**
      * @return bool
-     * @throws Exception\DatabaseException
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\DatabaseException
+     * @throws Exception\Error\ParamsException
      * @throws \Throwable
      */
     public function insertAll()
@@ -112,7 +112,7 @@ class UserAccount extends AbstractScope
 
     /**
      * @return array
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function attach(): array
     {

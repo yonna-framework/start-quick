@@ -90,7 +90,7 @@ class Response
         $HandleCollector
             ->setResponseDataType($type)
             ->setCharset($charset)
-            ->setCode(Code::THROWABLE)
+            ->setErrorCode(ErrorCode::THROWABLE)
             ->setMsg($t->getMessage())
             ->setData([
                 'error_code' => $t->getCode(),
@@ -99,101 +99,37 @@ class Response
         return $HandleCollector;
     }
 
-    public static function error(Throwable $t, array $data = array(), $type = 'json', $charset = 'utf-8')
+    public static function error(string $msg = 'error', array $data = [], $type = 'json', $charset = 'utf-8')
     {
         $HandleCollector = new Collector();
         $HandleCollector
             ->setResponseDataType($type)
             ->setCharset($charset)
-            ->setCode(Code::ERROR)
-            ->setMsg($t->getMessage())
-            ->setData([
-                'error_code' => $t->getCode(),
-                'error_data' => $data,
-                'error_trace' => self::debug_backtrace($t->getTrace(), getenv('DEBUG') !== 'true')
-            ]);
-        return $HandleCollector;
-    }
-
-    public static function success(string $msg = 'success', array $data = array(), $type = 'json', $charset = 'utf-8')
-    {
-        $HandleCollector = new Collector();
-        $HandleCollector
-            ->setResponseDataType($type)
-            ->setCharset($charset)
-            ->setCode(Code::SUCCESS)
+            ->setErrorCode(ErrorCode::ERROR)
             ->setMsg($msg)
             ->setData($data);
         return $HandleCollector;
     }
 
-    public static function broadcast(string $msg = 'broadcast', array $data = array(), $type = 'json', $charset = 'utf-8')
+    public static function success(string $msg = 'success', array $data = [], $type = 'json', $charset = 'utf-8')
     {
         $HandleCollector = new Collector();
         $HandleCollector
             ->setResponseDataType($type)
             ->setCharset($charset)
-            ->setCode(Code::BROADCAST)
+            ->setErrorCode(ErrorCode::SUCCESS)
             ->setMsg($msg)
             ->setData($data);
         return $HandleCollector;
     }
 
-    public static function goon(string $msg = 'goon', array $data = array(), $type = 'json', $charset = 'utf-8')
+    public static function logout(string $msg = 'logout', array $data = [], $type = 'json', $charset = 'utf-8')
     {
         $HandleCollector = new Collector();
         $HandleCollector
             ->setResponseDataType($type)
             ->setCharset($charset)
-            ->setCode(Code::GOON)
-            ->setMsg($msg)
-            ->setData($data);
-        return $HandleCollector;
-    }
-
-    public static function abort(string $msg = 'abort', array $data = array(), $type = 'json', $charset = 'utf-8')
-    {
-        $HandleCollector = new Collector();
-        $HandleCollector
-            ->setResponseDataType($type)
-            ->setCharset($charset)
-            ->setCode(Code::ABORT)
-            ->setMsg($msg)
-            ->setData($data);
-        return $HandleCollector;
-    }
-
-    public static function notPermission(string $msg = 'not permission', array $data = array(), $type = 'json', $charset = 'utf-8')
-    {
-        $HandleCollector = new Collector();
-        $HandleCollector
-            ->setResponseDataType($type)
-            ->setCharset($charset)
-            ->setCode(Code::NOT_PERMISSION)
-            ->setMsg($msg)
-            ->setData($data);
-        return $HandleCollector;
-    }
-
-    public static function notLogging(string $msg = 'not logging', array $data = array(), $type = 'json', $charset = 'utf-8')
-    {
-        $HandleCollector = new Collector();
-        $HandleCollector
-            ->setResponseDataType($type)
-            ->setCharset($charset)
-            ->setCode(Code::NOT_LOGGING)
-            ->setMsg($msg)
-            ->setData($data);
-        return $HandleCollector;
-    }
-
-    public static function notFound(string $msg = 'not found', array $data = array(), $type = 'json', $charset = 'utf-8')
-    {
-        $HandleCollector = new Collector();
-        $HandleCollector
-            ->setResponseDataType($type)
-            ->setCharset($charset)
-            ->setCode(Code::NOT_FOUND)
+            ->setErrorCode(ErrorCode::LOGOUT)
             ->setMsg($msg)
             ->setData($data);
         return $HandleCollector;

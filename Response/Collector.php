@@ -7,7 +7,6 @@ namespace Yonna\Response;
 
 use Throwable;
 use Yonna\Foundation\Convert;
-use Yonna\Response\Consequent;
 
 /**
  * Class Collector
@@ -16,10 +15,10 @@ use Yonna\Response\Consequent;
 class Collector
 {
 
-    private $response_data_type = 'json';
-    private $charset = '';
-    private $code = 0;
-    private $msg = '';
+    private string $response_data_type = 'json';
+    private string $charset = '';
+    private int $error_code = ErrorCode::THROWABLE;
+    private string $msg = '';
     private $data = [];
 
     public function __construct()
@@ -66,18 +65,18 @@ class Collector
     /**
      * @return int
      */
-    public function getCode(): int
+    public function getErrorCode(): int
     {
-        return $this->code;
+        return $this->error_code;
     }
 
     /**
-     * @param int $code
+     * @param int $errorCode
      * @return Collector
      */
-    public function setCode(int $code): self
+    public function setErrorCode(int $errorCode): self
     {
-        $this->code = $code;
+        $this->error_code = $errorCode;
         return $this;
     }
 
@@ -96,7 +95,7 @@ class Collector
     public function setMsg(string $msg): self
     {
         $this->msg = $msg;
-        if ($this->code !== Code::THROWABLE && class_exists("\\Yonna\\I18n\\I18n")) {
+        if ($this->error_code !== ErrorCode::THROWABLE && class_exists("\\Yonna\\I18n\\I18n")) {
             $i18n = new \Yonna\I18n\I18n();
             $i18n->set($msg);
         }
@@ -129,7 +128,7 @@ class Collector
     {
         $data = $this->getData();
         return array(
-            'code' => $this->getCode(),
+            'error' => $this->getErrorCode(),
             'msg' => $this->getMsg(),
             'data' => $data,
         );

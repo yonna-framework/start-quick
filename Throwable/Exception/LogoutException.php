@@ -10,9 +10,9 @@ use Exception;
  * Class NotLoggingException
  * @package Yonna\Throwable\Exception
  */
-class NotLoggingException extends Exception
+class LogoutException extends Exception
 {
 
-    protected $code = Code::NOT_LOGGING;
+    protected $code = Code::LOGOUT;
 
 }

@@ -12,14 +12,14 @@ class Logging extends Before
 
     /**
      * @return Request
-     * @throws Exception\NotLoggingException
+     * @throws Exception\LogoutException
      * @throws Exception\ThrowException
      */
     public function handle(): Request
     {
         $isLogin = $this->scope(UserLogin::class, 'isLogging');
         if ($isLogin !== true) {
-            Exception::notLogging('UN_LOGIN');
+            Exception::logout('UN_LOGIN');
         }
         $request = $this->request();
         $request->setLoggingId($this->scope(UserLogin::class, 'getLoggingId'));

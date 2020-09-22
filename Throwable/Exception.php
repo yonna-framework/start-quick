@@ -4,13 +4,12 @@ namespace Yonna\Throwable;
 
 
 use Throwable;
-use Yonna\Throwable\Exception\DatabaseException;
-use Yonna\Throwable\Exception\DebugException;
-use Yonna\Throwable\Exception\NotLoggingException;
-use Yonna\Throwable\Exception\ParamsException;
-use Yonna\Throwable\Exception\PermissionException;
-use Yonna\Throwable\Exception\SDKException;
 use Yonna\Throwable\Exception\ThrowException;
+use Yonna\Throwable\Exception\LogoutException;
+use Yonna\Throwable\Exception\ErrorException;
+
+use Yonna\Throwable\Exception\Error\DatabaseException;
+use Yonna\Throwable\Exception\Error\ParamsException;
 
 class Exception
 {
@@ -35,12 +34,23 @@ class Exception
 
     /**
      * @param $msg
-     * @throws DebugException
+     * @throws ErrorException
      */
-    public static function debug($msg)
+    public static function error($msg)
     {
-        throw new DebugException($msg);
+        throw new ErrorException($msg);
     }
+
+    /**
+     * @param $msg
+     * @throws LogoutException
+     */
+    public static function logout($msg)
+    {
+        throw new LogoutException($msg);
+    }
+
+    // ----------------ERROR---------------------
 
     /**
      * @param $msg
@@ -58,33 +68,6 @@ class Exception
     public static function params($msg)
     {
         throw new ParamsException($msg);
-    }
-
-    /**
-     * @param $msg
-     * @throws SDKException
-     */
-    public static function sdk($msg)
-    {
-        throw new SDKException($msg);
-    }
-
-    /**
-     * @param $msg
-     * @throws PermissionException
-     */
-    public static function permission($msg)
-    {
-        throw new PermissionException($msg);
-    }
-
-    /**
-     * @param $msg
-     * @throws NotLoggingException
-     */
-    public static function notLogging($msg)
-    {
-        throw new NotLoggingException($msg);
     }
 
 }

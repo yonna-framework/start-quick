@@ -16,7 +16,7 @@ class Coupling
      * 连接数据库
      * @param string | array $conf
      * @return Mysql|Pgsql|Mssql|Sqlite|Mongo|Redis
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\ParamsException
      */
     public static function connect($conf = 'default'): object
     {

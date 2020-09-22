@@ -2,8 +2,8 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Throwable;
 use Yonna\Foundation\Arr;
-use Yonna\QuickStart\Mapping\Data\DataStatus;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Prism\LicensePrism;
@@ -22,7 +22,7 @@ class License extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function one(): array
     {
@@ -36,7 +36,7 @@ class License extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function tree(): array
     {
@@ -46,7 +46,7 @@ class License extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function scopes(): array
     {
@@ -81,8 +81,8 @@ class License extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\DatabaseException
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\DatabaseException
+     * @throws Exception\Error\ParamsException
      */
     public function insert()
     {
@@ -111,8 +111,8 @@ class License extends AbstractScope
 
     /**
      * @return bool|int
-     * @throws Exception\DatabaseException
-     * @throws Exception\ParamsException
+     * @throws Exception\Error\DatabaseException
+     * @throws Exception\Error\ParamsException
      */
     public function update()
     {
@@ -141,7 +141,7 @@ class License extends AbstractScope
 
     /**
      * @return int
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function delete()
     {

@@ -2,9 +2,9 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Throwable;
 use Yonna\Foundation\Arr;
 use Yonna\QuickStart\Mapping\Common\Boolean;
-use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\UserMetaPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
@@ -22,7 +22,7 @@ class UserMeta extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function one(): array
     {
@@ -36,7 +36,7 @@ class UserMeta extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function multi(): array
     {
@@ -51,7 +51,7 @@ class UserMeta extends AbstractScope
 
     /**
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function cover()
     {
@@ -80,7 +80,7 @@ class UserMeta extends AbstractScope
     /**
      * @return array
      * @throws Exception\ThrowException
-     * @throws Exception\DatabaseException
+     * @throws Exception\Error\DatabaseException
      */
     public function attach(): array
     {
