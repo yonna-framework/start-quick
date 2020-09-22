@@ -10,7 +10,9 @@ use Yonna\QuickStart\Middleware\Debug;
 use Yonna\QuickStart\Middleware\Limiter;
 use Yonna\QuickStart\Middleware\Logging;
 use Yonna\QuickStart\Scope\DataHobby;
+use Yonna\QuickStart\Scope\Feedback;
 use Yonna\QuickStart\Scope\League;
+use Yonna\QuickStart\Scope\LeagueMember;
 use Yonna\QuickStart\Scope\LeagueTask;
 use Yonna\QuickStart\Scope\License;
 use Yonna\QuickStart\Scope\DataSpeciality;
@@ -293,28 +295,55 @@ class Install
 
     public static function league(): void
     {
-        Config::middleware([Limiter::class, Logging::class],
-            function () {
-                Config::group(['league'], function () {
-                    Config::post('info', League::class, 'one');
-                    Config::post('list', League::class, 'multi');
-                    Config::post('page', League::class, 'page');
-                    Config::post('add', League::class, 'insert');
-                    Config::post('edit', League::class, 'update');
-                    Config::post('del', League::class, 'delete');
-                    Config::post('mStatus', League::class, 'multiStatus');
-                });
-                Config::group(['league', 'task'], function () {
-                    Config::post('info', LeagueTask::class, 'one');
-                    Config::post('list', LeagueTask::class, 'multi');
-                    Config::post('page', LeagueTask::class, 'page');
-                    Config::post('add', LeagueTask::class, 'insert');
-                    Config::post('edit', LeagueTask::class, 'update');
-                    Config::post('del', LeagueTask::class, 'delete');
-                    Config::post('mStatus', LeagueTask::class, 'multiStatus');
-                });
-            }
-        );
+        Config::middleware([Limiter::class, Logging::class], function () {
+            Config::group(['league'], function () {
+                Config::post('info', League::class, 'one');
+                Config::post('list', League::class, 'multi');
+                Config::post('page', League::class, 'page');
+                Config::post('add', League::class, 'insert');
+                Config::post('edit', League::class, 'update');
+                Config::post('del', League::class, 'delete');
+                Config::post('mStatus', League::class, 'multiStatus');
+            });
+            Config::group(['league', 'task'], function () {
+                Config::post('info', LeagueTask::class, 'one');
+                Config::post('list', LeagueTask::class, 'multi');
+                Config::post('page', LeagueTask::class, 'page');
+                Config::post('add', LeagueTask::class, 'insert');
+                Config::post('edit', LeagueTask::class, 'update');
+                Config::post('del', LeagueTask::class, 'delete');
+                Config::post('mStatus', LeagueTask::class, 'multiStatus');
+            });
+        });
+    }
+
+    public static function leagueMember(): void
+    {
+        Config::middleware([Limiter::class, Logging::class], function () {
+            Config::group(['league', 'member'], function () {
+                Config::post('list', LeagueMember::class, 'multi');
+                Config::post('page', LeagueMember::class, 'page');
+                Config::post('add', LeagueMember::class, 'insert');
+                Config::post('edit', LeagueMember::class, 'update');
+                Config::post('del', LeagueMember::class, 'delete');
+                Config::post('status', LeagueMember::class, 'status');
+            });
+        });
+    }
+
+    public static function feedback(): void
+    {
+        Config::middleware([Limiter::class, Logging::class], function () {
+            Config::group(['feedback'], function () {
+                Config::post('list', Feedback::class, 'multi');
+                Config::post('page', Feedback::class, 'page');
+                Config::post('add', Feedback::class, 'insert');
+                Config::post('edit', Feedback::class, 'update');
+                Config::post('del', Feedback::class, 'delete');
+                Config::post('mdel', Feedback::class, 'multiDelete');
+                Config::post('manswer', Feedback::class, 'multiAnswer');
+            });
+        });
     }
 
 }
