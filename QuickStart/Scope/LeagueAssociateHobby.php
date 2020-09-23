@@ -3,11 +3,9 @@
 namespace Yonna\QuickStart\Scope;
 
 use Yonna\Foundation\Arr;
-use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Prism\LeagueAssociateDataPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
-use Yonna\QuickStart\Prism\UserMetaPrism;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 

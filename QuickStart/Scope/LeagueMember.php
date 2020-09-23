@@ -3,7 +3,6 @@
 namespace Yonna\QuickStart\Scope;
 
 use Throwable;
-use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Mapping\League\LeagueIsAdmin;
 use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Prism\LeagueMemberPrism;
@@ -22,13 +21,14 @@ class LeagueMember extends AbstractScope
     const TABLE = 'league_member';
 
     /**
-     * @return mixed
+     * @return array
      * @throws Exception\DatabaseException
+     * @throws Exception\ThrowException
      */
     public function multi(): array
     {
         $prism = new LeagueMemberPrism($this->request());
-        return DB::connect()->table(self::TABLE)
+        $res = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
@@ -36,6 +36,15 @@ class LeagueMember extends AbstractScope
             })
             ->orderBy('league_id', 'desc')
             ->multi();
+        $userIds = array_column($res, 'league_member_user_id');
+        if ($userIds) {
+            $users = $this->scope(User::class, 'multi', ['ids' => $userIds]);
+            $users = array_combine($userIds, $users);
+            foreach ($res as $k => $v) {
+                $res[$k]['league_member_user_info'] = $users[$v['league_member_user_id']];
+            }
+        }
+        return $res;
     }
 
     /**

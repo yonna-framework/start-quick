@@ -42,14 +42,13 @@ class User extends AbstractScope
     public function multi(): array
     {
         $prism = new UserPrism($this->request());
-
         $db = DB::connect()
             ->table(self::TABLE)
             ->field('id,status,inviter_user_id,register_time')
             ->where(function (Where $w) use ($prism) {
                 $w->notEqualTo('status', UserStatus::DELETE);
                 $prism->getId() && $w->equalTo('id', $prism->getId());
-                $prism->getIds() && $w->in('ids', $prism->getIds());
+                $prism->getIds() && $w->in('id', $prism->getIds());
                 $prism->getInviterUserId() && $w->equalTo('inviter_user_id', $prism->getInviterUserId());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getRegisterTime() && $w->between('register_time', $prism->getRegisterTime());
@@ -79,7 +78,7 @@ class User extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $w->notEqualTo('status', UserStatus::DELETE);
                 $prism->getId() && $w->equalTo('id', $prism->getId());
-                $prism->getIds() && $w->in('ids', $prism->getIds());
+                $prism->getIds() && $w->in('id', $prism->getIds());
                 $prism->getInviterUserId() && $w->equalTo('inviter_user_id', $prism->getInviterUserId());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getRegisterTime() && $w->between('register_time', $prism->getRegisterTime());

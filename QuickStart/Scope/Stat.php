@@ -8,7 +8,8 @@ use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
 use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Mapping\User\UserStatus;
-use Yonna\Throwable\Exception\Error\DatabaseException;
+use Yonna\QuickStart\Prism\LeagueTaskPrism;
+use Yonna\Throwable\Exception\DatabaseException;
 
 class Stat extends AbstractScope
 {
@@ -24,8 +25,8 @@ class Stat extends AbstractScope
         foreach (UserStatus::toKv('label') as $k => $v) {
             $stat[$k] = [
                 'key' => $k,
-                'value' => 0,
                 'label' => $v,
+                'value' => 0,
             ];
         }
         $userCount = DB::connect()
@@ -49,8 +50,8 @@ class Stat extends AbstractScope
         foreach (AccountType::toKv('label') as $k => $v) {
             $stat[$k] = [
                 'key' => $k,
-                'value' => 0,
                 'label' => $v,
+                'value' => 0,
             ];
         }
         $userCount = DB::connect()
@@ -70,25 +71,31 @@ class Stat extends AbstractScope
      */
     public function task(): array
     {
-        $color = [
-            LeagueTaskStatus::PENDING => '#13C2C2',
-            LeagueTaskStatus::REJECTION => '#FACC14',
-            LeagueTaskStatus::APPROVED => '#1890ff',
-            LeagueTaskStatus::DELETE => '#E04240',
-            LeagueTaskStatus::COMPLETE => '#2FC25B',
-        ];
         $stat = [];
         foreach (LeagueTaskStatus::toKv('label') as $k => $v) {
             $stat[$k] = [
-                'name' => $v,
-                'percent' => 0,
-                'color' => $color[$k],
+                'key' => $k,
+                'label' => $v,
+                'value' => 0,
             ];
         }
-        $total = DB::connect()->table('league_task')->count('id');
-        $res = DB::connect()->table('league_task')->field('count(`id`) as qty,status')->groupBy('status')->multi();
+        $prism = new LeagueTaskPrism($this->request());
+        $total = DB::connect()->table('league_task')
+            ->where(function (Where $w) use ($prism) {
+                $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
+                $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
+            })
+            ->count('id');
+        $res = DB::connect()->table('league_task')
+            ->field('count(`id`) as qty,status')
+            ->groupBy('status')
+            ->where(function (Where $w) use ($prism) {
+                $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
+                $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
+            })
+            ->multi();
         foreach ($res as $v) {
-            $stat[$v['league_task_status']]['percent'] = round($v['qty'] / $total * 100);
+            $stat[$v['league_task_status']]['value'] = $prism->isPercent() ? round($v['qty'] / $total * 100) : $v['qty'];
         }
         return array_values($stat);
     }
@@ -120,7 +127,7 @@ class Stat extends AbstractScope
         }
         $stat = [];
         foreach ($tmp as $k => $v) {
-            $stat[] = ['date' => $k, 'qty' => $v];
+            $stat[] = ['label' => $k, 'value' => $v];
         }
         return $stat;
     }
@@ -152,7 +159,7 @@ class Stat extends AbstractScope
         }
         $stat = [];
         foreach ($tmp as $k => $v) {
-            $stat[] = ['date' => $k, 'qty' => $v];
+            $stat[] = ['label' => $k, 'value' => $v];
         }
         return $stat;
     }

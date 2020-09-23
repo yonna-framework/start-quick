@@ -38,7 +38,7 @@ class LeagueTaskPrism extends Prism
 
 
     protected ?string $reason = null;
-
+    protected bool $percent = false;
 
     /**
      * @return int
@@ -422,6 +422,22 @@ class LeagueTaskPrism extends Prism
     public function setReason(?string $reason): void
     {
         $this->reason = $reason;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercent(): bool
+    {
+        return $this->percent;
+    }
+
+    /**
+     * @param bool $percent
+     */
+    public function setPercent(bool $percent): void
+    {
+        $this->percent = $percent;
     }
 
 }

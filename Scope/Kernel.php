@@ -23,7 +23,7 @@ abstract class Kernel implements Interfaces\Kernel
     public function __construct(?object $request = null, array $input = [])
     {
         if ($request) {
-            $request->setInput(array_merge($request->getInput(), $input));
+            $request->setInput($input ?: $request->getInput());
             $this->request = $request;
         }
         return $this;

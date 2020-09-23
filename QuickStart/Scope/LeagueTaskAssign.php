@@ -3,10 +3,7 @@
 namespace Yonna\QuickStart\Scope;
 
 use Throwable;
-use Yonna\QuickStart\Mapping\League\LeagueStatus;
-use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
 use Yonna\QuickStart\Prism\LeagueTaskAssignPrism;
-use Yonna\QuickStart\Prism\LeagueTaskPrism;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Throwable\Exception;
