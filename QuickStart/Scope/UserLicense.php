@@ -19,7 +19,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function one(): array
     {
@@ -33,7 +33,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multi(): array
     {
@@ -50,7 +50,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function count(): int
     {
@@ -67,7 +67,7 @@ class UserLicense extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function delete()
     {

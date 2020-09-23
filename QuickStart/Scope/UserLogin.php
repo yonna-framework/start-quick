@@ -27,8 +27,8 @@ class UserLogin extends AbstractScope
      * 登录记录
      * @param $userInfo
      * @return bool
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function loginRecord($userInfo)
     {

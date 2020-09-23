@@ -22,7 +22,7 @@ class UserMeta extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function one(): array
     {
@@ -36,7 +36,7 @@ class UserMeta extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multi(): array
     {
@@ -80,7 +80,7 @@ class UserMeta extends AbstractScope
     /**
      * @return array
      * @throws Exception\ThrowException
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function attach(): array
     {

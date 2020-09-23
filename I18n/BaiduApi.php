@@ -65,7 +65,7 @@ class BaiduApi
 
     /**
      * @return array|mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     private static function getBaidu()
     {
@@ -121,8 +121,8 @@ class BaiduApi
      * 通用翻译API
      * @param $translates
      * @param Closure $call
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public static function translate(array $translates, Closure $call)
     {

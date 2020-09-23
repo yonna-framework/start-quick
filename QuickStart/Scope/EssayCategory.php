@@ -20,7 +20,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function one(): array
     {
@@ -34,7 +34,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multi(): array
     {
@@ -52,7 +52,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function page(): array
     {
@@ -70,7 +70,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function insert()
     {
@@ -88,7 +88,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function update()
     {
@@ -111,7 +111,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function delete()
     {
@@ -125,7 +125,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multiDelete()
     {
@@ -139,7 +139,7 @@ class EssayCategory extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multiStatus()
     {

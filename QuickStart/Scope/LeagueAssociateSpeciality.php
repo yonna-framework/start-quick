@@ -20,7 +20,7 @@ class LeagueAssociateSpeciality extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multi(): array
     {
@@ -34,7 +34,7 @@ class LeagueAssociateSpeciality extends AbstractScope
 
     /**
      * @return array
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function attach(): array
     {

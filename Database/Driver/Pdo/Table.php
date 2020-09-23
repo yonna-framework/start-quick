@@ -47,7 +47,7 @@ class Table extends AbstractPDO
      * @param string | null $table
      * @param null $function
      * @return $this
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function field($field, $table = null, $function = null)
     {
@@ -309,7 +309,7 @@ class Table extends AbstractPDO
      * 查找记录多条
      * @access public
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multi()
     {
@@ -320,7 +320,7 @@ class Table extends AbstractPDO
     /**
      * 查找记录一条
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function one()
     {
@@ -334,7 +334,7 @@ class Table extends AbstractPDO
      * @param int $current
      * @param int $per
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function page($current = 1, $per = 10)
     {
@@ -375,7 +375,7 @@ class Table extends AbstractPDO
      * 统计
      * @param int $field
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function count($field = 0)
     {
@@ -388,7 +388,7 @@ class Table extends AbstractPDO
      * 求和
      * @param string $field
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function sum($field)
     {
@@ -401,7 +401,7 @@ class Table extends AbstractPDO
      * 求均
      * @param $field
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function avg($field)
     {
@@ -414,7 +414,7 @@ class Table extends AbstractPDO
      * 求最小
      * @param $field
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function min($field)
     {
@@ -427,7 +427,7 @@ class Table extends AbstractPDO
      * 求最大
      * @param $field
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function max($field)
     {
@@ -441,7 +441,7 @@ class Table extends AbstractPDO
      * @access public
      * @param mixed $data 数据
      * @return integer
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function insert($data)
     {
@@ -481,7 +481,7 @@ class Table extends AbstractPDO
      * @access public
      * @param mixed $dataSet 数据集
      * @return false | integer
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function insertAll($dataSet)
     {
@@ -527,7 +527,7 @@ class Table extends AbstractPDO
      * @param mixed $data 数据
      * @param bool $sure
      * @return false | integer
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function update($data, $sure = false)
     {
@@ -575,7 +575,7 @@ class Table extends AbstractPDO
      * @access public
      * @param bool $sure
      * @return false | integer
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function delete($sure = false)
     {
@@ -607,7 +607,7 @@ class Table extends AbstractPDO
      * @alert 必须注意，这个方法一经执行会“清空”原来的“所有数据”及“自增量”
      * @param bool $sure 确认执行，防止误操作
      * @return self
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function truncate($sure = false)
     {

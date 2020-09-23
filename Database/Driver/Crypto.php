@@ -21,7 +21,7 @@ class Crypto
     /**
      * @param string $str
      * @return string
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public static function encrypt(string $str)
     {
@@ -34,7 +34,7 @@ class Crypto
     /**
      * @param string $str
      * @return string
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public static function decrypt(string $str)
     {

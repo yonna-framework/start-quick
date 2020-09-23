@@ -204,7 +204,7 @@ class I18n
     /**
      * 初始化数据
      * @return bool
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function init()
     {
@@ -246,7 +246,7 @@ class I18n
 
     /**
      * 备份数据到json文件
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function backup()
     {
@@ -272,7 +272,7 @@ class I18n
     /**
      * 获得i18n数据
      * @return array
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function get()
     {
@@ -297,7 +297,7 @@ class I18n
      * @param int $per
      * @param array $filter
      * @return array
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function page($current = 1, $per = 10, $filter = [])
     {
@@ -326,8 +326,8 @@ class I18n
      * @param $uniqueKey
      * @param array $data
      * @return bool|mixed|object
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function set($uniqueKey, $data = [])
     {

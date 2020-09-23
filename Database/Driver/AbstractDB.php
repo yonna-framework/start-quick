@@ -100,7 +100,7 @@ abstract class AbstractDB
 
     /**
      * 分析 DSN，设定 master-slave
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      * @throws \MongoDB\Driver\Exception\Exception
      */
     private function analysis()
@@ -245,7 +245,7 @@ abstract class AbstractDB
      * 设置执行状态
      * @param $statement
      * @return $this
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     protected function setState($statement)
     {

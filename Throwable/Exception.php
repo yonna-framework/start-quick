@@ -7,9 +7,8 @@ use Throwable;
 use Yonna\Throwable\Exception\ThrowException;
 use Yonna\Throwable\Exception\LogoutException;
 use Yonna\Throwable\Exception\ErrorException;
-
-use Yonna\Throwable\Exception\Error\DatabaseException;
-use Yonna\Throwable\Exception\Error\ParamsException;
+use Yonna\Throwable\Exception\DatabaseException;
+use Yonna\Throwable\Exception\ParamsException;
 
 class Exception
 {
@@ -50,7 +49,7 @@ class Exception
         throw new LogoutException($msg);
     }
 
-    // ----------------ERROR---------------------
+    // ----------------SUB---------------------
 
     /**
      * @param $msg

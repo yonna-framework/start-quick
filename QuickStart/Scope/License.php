@@ -22,7 +22,7 @@ class License extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function one(): array
     {
@@ -36,7 +36,7 @@ class License extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function tree(): array
     {
@@ -46,7 +46,7 @@ class License extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function scopes(): array
     {
@@ -81,8 +81,8 @@ class License extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function insert()
     {
@@ -111,8 +111,8 @@ class License extends AbstractScope
 
     /**
      * @return bool|int
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function update()
     {

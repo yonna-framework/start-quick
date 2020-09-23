@@ -35,8 +35,8 @@ class UserMe extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      */
     public function password()
     {

@@ -22,7 +22,7 @@ class SdkWxmp extends AbstractScope
     /**
      * 获取sdk配置
      * @return array|mixed
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\ParamsException
      * @throws Exception\ThrowException
      */
     private function getConfig()
@@ -46,8 +46,8 @@ class SdkWxmp extends AbstractScope
      * 获取 SnsOauth2AccessToken
      * @param null $wxCode
      * @return array|bool|null
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      * @throws Exception\ThrowException
      */
     private function snsOauth2AccessToken($wxCode = null)
@@ -78,8 +78,8 @@ class SdkWxmp extends AbstractScope
      * @param $openid
      * @param $access_token
      * @return array|bool|null
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      * @throws Exception\ThrowException
      */
     private function userInfo($openid, $access_token)
@@ -106,8 +106,8 @@ class SdkWxmp extends AbstractScope
      * 登录记录
      * @param $openid
      * @return mixed
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      * @throws Exception\ThrowException
      */
     private function loginRecord($openid)
@@ -147,8 +147,8 @@ class SdkWxmp extends AbstractScope
 
     /**
      * @return string
-     * @throws Exception\Error\DatabaseException
-     * @throws Exception\Error\ParamsException
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
      * @throws Exception\ThrowException
      */
     public function oauth()

@@ -132,7 +132,7 @@ class Collection extends AbstractMDO
      * 删除合集
      * @param bool $sure 确认执行，防止误操作
      * @return self
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function drop($sure = false)
     {
@@ -144,7 +144,7 @@ class Collection extends AbstractMDO
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multi()
     {
@@ -154,7 +154,7 @@ class Collection extends AbstractMDO
     /**
      * 查找记录一条
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function one()
     {
@@ -168,7 +168,7 @@ class Collection extends AbstractMDO
      * @param int $current
      * @param int $per
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function page($current = 1, $per = 10)
     {
@@ -192,7 +192,7 @@ class Collection extends AbstractMDO
     /**
      * 统计
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function count()
     {
@@ -203,7 +203,7 @@ class Collection extends AbstractMDO
      * insert
      * @param $data
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function insert($data)
     {
@@ -215,7 +215,7 @@ class Collection extends AbstractMDO
      * insert all
      * @param $data
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function insertAll($data)
     {
@@ -228,7 +228,7 @@ class Collection extends AbstractMDO
      * @param $data
      * @param bool $sure
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function update($data, $sure = false)
     {
@@ -244,7 +244,7 @@ class Collection extends AbstractMDO
      * delete
      * @param bool $sure
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function delete($sure = false)
     {

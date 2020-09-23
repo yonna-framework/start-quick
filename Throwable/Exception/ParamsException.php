@@ -1,11 +1,8 @@
 <?php
 
 
-namespace Yonna\Throwable\Exception\Error;
+namespace Yonna\Throwable\Exception;
 
-
-use Yonna\Throwable\Exception\Code;
-use Yonna\Throwable\Exception\ErrorException;
 
 /**
  * 错误[参数]

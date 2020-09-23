@@ -19,7 +19,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multi(): array
     {
@@ -43,7 +43,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return mixed
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function page(): array
     {
@@ -69,7 +69,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function insert()
     {
@@ -85,13 +85,14 @@ class Feedback extends AbstractScope
             'contact_phone' => $this->input('contact_phone') || '',
             'remarks' => $this->input('remarks') || '',
             'feedback_time' => time(),
+            'answer_time' => 0,
         ];
         return DB::connect()->table(self::TABLE)->insert($add);
     }
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function update()
     {
@@ -112,7 +113,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function delete()
     {
@@ -126,7 +127,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multiDelete()
     {
@@ -140,7 +141,7 @@ class Feedback extends AbstractScope
 
     /**
      * @return int
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      */
     public function multiAnswer()
     {

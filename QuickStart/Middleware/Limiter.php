@@ -17,7 +17,7 @@ class Limiter extends Before
     /**
      * IP N秒内请求限制器
      * @return Request
-     * @throws Exception\Error\DatabaseException
+     * @throws Exception\DatabaseException
      * @throws Exception\ThrowException
      */
     public function handle(): Request
