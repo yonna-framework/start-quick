@@ -20,17 +20,7 @@ class UserMe extends AbstractScope
      */
     public function one(): array
     {
-        $values = $this->scope(UserMeta::class, 'multi', ['user_id' => $this->request()->getLoggingId()]);
-        $category = $this->scope(UserMetaCategory::class, 'multi', ['status' => Boolean::true]);
-        $info = [
-            'user_id' => $this->request()->getLoggingId(),
-        ];
-        foreach ($category as $c) {
-            $k = $c['user_meta_category_key'];
-            $v = $values[$k] ?? $c['user_meta_category_value_default'];
-            $info['user_meta_' . $k] = UserMetaCategory::valueFormat($v, $c['user_meta_category_value_format']);
-        }
-        return $info;
+        return $this->scope(User::class, 'one', ['id' => $this->request()->getLoggingId()]);
     }
 
     /**

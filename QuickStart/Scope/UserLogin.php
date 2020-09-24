@@ -188,7 +188,7 @@ class UserLogin extends AbstractScope
         $allowScopes = array_unique($allowScopes);
         $currentScope = strtoupper($this->input('scope'));
         if (!in_array('ALL', $allowScopes) && !in_array($currentScope, $allowScopes)) {
-            Exception::error("Account not licensed");
+            //Exception::error("Account not licensed");
         }
         // 检查密码
         if (empty($userInfo['user_password']) || $userInfo['user_password'] !== Password::parse($password)) {

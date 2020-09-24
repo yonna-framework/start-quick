@@ -114,7 +114,7 @@ class UserMeta extends AbstractScope
         foreach ($category as $c) {
             $key = $c['user_meta_category_key'];
             foreach ($tmp as $uk => $u) {
-                if (!empty($meta[$u['user_id']]) && !empty($meta[$u['user_id']][$key])) {
+                if (!empty($meta[$u['user_id']]) && isset($meta[$u['user_id']][$key])) {
                     $val = $meta[$u['user_id']][$key];
                 } else {
                     $val = $c['user_meta_category_value_default'];

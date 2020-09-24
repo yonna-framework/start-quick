@@ -98,3 +98,6 @@ values ('region', 'residential region', 'string', 1, 'cascader_region', 5);
 
 insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
 values ('address', 'residential address', 'string', 1, 'input_string', 4);
+
+insert into `user_meta_category` (`key`, `label`, `value_format`, `status`, `component`, `sort`)
+values ('avatar', 'avatar', 'string', 1, 'upload_image', 10);
