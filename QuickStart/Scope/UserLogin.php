@@ -164,6 +164,7 @@ class UserLogin extends AbstractScope
             }
             $inCheck = false;
             foreach ($checkLicenseId as $lid) {
+                $lid = (int)$lid;
                 if (in_array($lid, $userLicenseIds)) {
                     $inCheck = true;
                     break;
