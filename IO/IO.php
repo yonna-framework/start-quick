@@ -112,7 +112,7 @@ class IO
         } catch (Exception\ThrowException $e) {
             return Response::throwable($e);
         } catch (Exception\ErrorException $e) {
-            return Response::error($e);
+            return Response::error($e->getMessage());
         }
         // response
         $response = $responses[0];

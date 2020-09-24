@@ -156,6 +156,23 @@ class UserLogin extends AbstractScope
             Exception::error("Account not any licensed");
         }
         $userLicenseIds = array_column($userLicense, 'user_license_license_id');
+        // 额外的自定义检查
+        $checkLicenseId = $this->input('license_id');
+        if ($checkLicenseId) {
+            if (!is_array($checkLicenseId)) {
+                $checkLicenseId = [$checkLicenseId];
+            }
+            $inCheck = false;
+            foreach ($checkLicenseId as $lid) {
+                if (in_array($lid, $userLicenseIds)) {
+                    $inCheck = true;
+                    break;
+                }
+            }
+            if (!$inCheck) {
+                Exception::error("Account not licensed");
+            }
+        }
         $al = DB::connect()->table('license')
             ->field('allow_scope')
             ->where(fn(Where $w) => $w->in('id', $userLicenseIds))
