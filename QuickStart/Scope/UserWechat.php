@@ -4,8 +4,10 @@ namespace Yonna\QuickStart\Scope;
 
 use Yonna\Database\DB;
 use Yonna\Foundation\Str;
+use Yonna\Log\Log;
 use Yonna\QuickStart\Helper\Assets;
 use Yonna\QuickStart\Mapping\User\AccountType;
+use Yonna\QuickStart\Mapping\User\UserStatus;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
 
@@ -39,6 +41,7 @@ class UserWechat extends AbstractScope
         }
         $phone = $this->input('phone');
         $metas = $this->input('metas');
+        $licenses = $this->input('licenses');
         // 合并一下从微信获得的数据，如果用户有自定义则跳过
         if (empty($metas['sex']) && !empty($sdk['sdk_wxmp_user_sex'])) {
             $metas['sex'] = (int)$sdk['sdk_wxmp_user_sex'];
@@ -55,17 +58,11 @@ class UserWechat extends AbstractScope
                 }
             }
         }
-        DB::transTrace(function () use ($phone, $openid, $metas) {
+        $user_id = DB::transTrace(function () use ($phone, $openid, $metas, $licenses) {
             $find = $this->scope(UserAccount::class, 'one', ['string' => $phone]);
             $user_id = $find['user_account_user_id'] ?? null;
             // 有数据则绑定原有账号，没数据则新建账号
             if ($user_id) {
-                // 记录openid
-                $this->scope(UserAccount::class, 'insert', [
-                    'user_id' => $user_id,
-                    'string' => $openid,
-                    'type' => AccountType::WX_OPEN_ID,
-                ]);
                 // 更新数据
                 $data = [
                     'id' => $user_id,
@@ -76,13 +73,39 @@ class UserWechat extends AbstractScope
                 $data = [
                     'password' => Str::randomLetter(10),
                     'accounts' => [$phone => AccountType::PHONE],
+                    'licenses' => $licenses,
                     'metas' => $metas,
+                    'status' => UserStatus::APPROVED,
                 ];
-                $this->scope(User::class, 'insert', $data);
+                $user_id = $this->scope(User::class, 'insert', $data);
             }
-            Exception::throw('666');
+            // 记录openid
+            $this->scope(UserAccount::class, 'insert', [
+                'user_id' => $user_id,
+                'string' => $openid,
+                'type' => AccountType::WX_OPEN_ID,
+            ]);
+            return $user_id;
         });
-        return true;
+        // 写日志
+        $input = $this->input();
+        $log = [
+            'user_id' => $user_id,
+            'ip' => $this->request()->getIp(),
+            'client_id' => $this->request()->getClientId(),
+            'input' => $input,
+        ];
+        Log::db()->info($log, 'login-bind');
+        // 设定client_id为登录状态
+        $onlineKey = UserLogin::ONLINE_REDIS_KEY . $log['client_id'];
+        $onlineId = DB::redis()->get($onlineKey);
+        $onlineId = (int)$onlineId;
+        if ($onlineId > 0) {
+            DB::redis()->expire($onlineKey, UserLogin::ONLINE_KEEP_TIME);
+        } else {
+            DB::redis()->set($onlineKey, $user_id, UserLogin::ONLINE_KEEP_TIME);
+        }
+        return $this->scope(User::class, 'one', ['id' => $user_id]);
     }
 
 

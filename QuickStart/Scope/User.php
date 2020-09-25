@@ -103,7 +103,7 @@ class User extends AbstractScope
     }
 
     /**
-     * @return bool
+     * @return mixed|null
      * @throws Exception\ParamsException
      * @throws \Throwable
      */
@@ -126,7 +126,7 @@ class User extends AbstractScope
         $accounts = $this->input('accounts');
         $licenses = $this->input('licenses');
         $metas = $this->input('metas');
-        DB::transTrace(function () use ($add, $accounts, $licenses, $metas) {
+        return DB::transTrace(function () use ($add, $accounts, $licenses, $metas) {
             $user_id = DB::connect()->table(self::TABLE)->insert($add);
             $this->scope(UserAccount::class, 'insertAll', [
                 'user_id' => $user_id,
@@ -144,8 +144,8 @@ class User extends AbstractScope
                     'metas' => $metas,
                 ]);
             }
+            return $user_id;
         });
-        return true;
     }
 
     /**
