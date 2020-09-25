@@ -220,6 +220,38 @@ class Assets extends AbstractHelper
     }
 
     /**
+     * 根据 网址 string dataSource 获得媒体
+     * @param string $url
+     * @return array|null ?array
+     */
+    public static function getUrlSource(string $url): ?array
+    {
+        if (!$url) {
+            return null;
+        }
+        $src = null;
+        $header = self::getHeaderByUrl($url);
+        if (!empty($header['CONTENT-TYPE'])) {
+            $suffix = self::getSuffix(null, $header['CONTENT-TYPE']);
+            if (in_array($suffix, self::$allow_mimes)) {
+                $size = $header['CONTENT-LENGTH'] ?? 0;
+                $name = $header['FILE_NAME'] ?? 'http.' . microtime(true) . rand(1000, 9999) . '.' . $suffix;
+                $data = Curl::get($url, 10);
+                if ($data) {
+                    $src = [
+                        'name' => $name,
+                        'suffix' => $suffix,
+                        'type' => self::$mimes[$suffix],
+                        'data' => $data,
+                        'size' => $size,
+                    ];
+                }
+            }
+        }
+        return $src;
+    }
+
+    /**
      * 根据 html string dataSource 获得媒体
      * @param $html
      * @return array|null ?array

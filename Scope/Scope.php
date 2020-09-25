@@ -21,7 +21,7 @@ abstract class Scope extends Kernel
      */
     public function scope(string $call, string $action, array $input = [])
     {
-        $Scope = Core::get($call, $this->request(), $input);
+        $Scope = Core::get($call, clone($this->request()), $input);
         if (!$Scope instanceof Scope) {
             Exception::throw("Class {$call} is not instanceof Log");
         }

@@ -75,7 +75,7 @@ class UserLogin extends AbstractScope
      */
     public function isLogging(): bool
     {
-        return $this->getLoggingId() !== 0;
+        return $this->getLoggingId() !== 0 && $this->getLoggingId() !== '' && $this->getLoggingId() !== null;
     }
 
     /**

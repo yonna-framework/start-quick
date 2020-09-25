@@ -76,6 +76,40 @@ class UserAccount extends AbstractScope
      * @throws Exception\ParamsException
      * @throws \Throwable
      */
+    public function insert()
+    {
+        ArrayValidator::required($this->input(), ['user_id', 'string', 'type'], function ($error) {
+            Exception::throw($error);
+        });
+        $user_id = $this->input('user_id');
+        $account = $this->input('string');
+        $type = $this->input('type');
+        if (!in_array($type, AccountType::toArray())) {
+            Exception::throw('type error');
+        }
+        $acc = DB::connect()->table(self::TABLE)->where(fn(Where $w) => $w->equalTo('string', $account))->one();
+        if ($acc) {
+            Exception::params('Account already exists');
+        }
+        $allow_login = Boolean::false;
+        if (in_array($type, [AccountType::PHONE, AccountType::EMAIL, AccountType::NAME])) {
+            $allow_login = Boolean::true;
+        }
+        $add = [
+            'user_id' => $user_id,
+            'type' => $type,
+            'string' => $account,
+            'allow_login' => $this->input('allow_login') ?? $allow_login,
+        ];
+        return DB::connect()->table(self::TABLE)->insert($add);
+    }
+
+    /**
+     * @return bool
+     * @throws Exception\DatabaseException
+     * @throws Exception\ParamsException
+     * @throws \Throwable
+     */
     public function insertAll()
     {
         ArrayValidator::required($this->input(), ['user_id', 'accounts'], function ($error) {

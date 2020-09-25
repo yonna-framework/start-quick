@@ -91,7 +91,8 @@ class Xoss extends AbstractScope
 
     /**
      * @param $fd
-     * @return bool
+     * @return bool|mixed
+     * @throws \Yonna\Throwable\Exception\DatabaseException
      */
     public function saveFile($fd)
     {

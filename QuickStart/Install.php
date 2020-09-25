@@ -27,6 +27,7 @@ use Yonna\QuickStart\Scope\UserMe;
 use Yonna\QuickStart\Scope\UserLogin;
 use Yonna\QuickStart\Scope\UserMetaCategory;
 use Yonna\QuickStart\Scope\Stat;
+use Yonna\QuickStart\Scope\UserWechat;
 use Yonna\QuickStart\Scope\Xoss;
 use Yonna\Scope\Config;
 use Yonna\Throwable\Exception\DatabaseException;
@@ -119,7 +120,7 @@ class Install
 
     public static function stat(): void
     {
-        Config::middleware([Limiter::class, Logging::class],
+        Config::middleware([Limiter::class],
             function () {
                 Config::group(['stat'], function () {
                     Config::post('user', Stat::class, 'user');
@@ -209,8 +210,8 @@ class Install
     {
         Config::middleware([Limiter::class], function () {
 
-            Config::middleware([Logging::class], function () {
-                Config::group(['me'], function () {
+            Config::group(['me'], function () {
+                Config::middleware([Logging::class], function () {
                     Config::post('info', UserMe::class, 'one');
                     Config::post('password', UserMe::class, 'password');
                     Config::post('edit', UserMe::class, 'update');
@@ -221,20 +222,26 @@ class Install
                 Config::post('login', UserLogin::class, 'in');
                 Config::post('logging', UserLogin::class, 'isLogging');
                 Config::post('logout', UserLogin::class, 'out');
-
                 Config::middleware([Logging::class], function () {
-
                     Config::post('info', User::class, 'one');
                     Config::post('list', User::class, 'multi');
                     Config::post('page', User::class, 'page');
                     Config::post('add', User::class, 'insert');
                     Config::post('edit', User::class, 'update');
                     Config::post('mStatus', User::class, 'multiStatus');
+                });
+            });
 
-                    Config::group(['account'], function () {
-                        Config::post('info', UserAccount::class, 'one');
-                        Config::post('edit', UserAccount::class, 'update');
-                    });
+            Config::group(['user', 'account'], function () {
+                Config::middleware([Logging::class], function () {
+                    Config::post('info', UserAccount::class, 'one');
+                    Config::post('edit', UserAccount::class, 'update');
+                });
+            });
+
+            Config::group(['user', 'wechat'], function () {
+                Config::middleware([Logging::class], function () {
+                    Config::post('bind', UserWechat::class, 'bind');
                 });
             });
         });
@@ -258,11 +265,21 @@ class Install
 
     public static function data(): void
     {
-        Config::middleware([Limiter::class, Logging::class],
-            function () {
+        Config::middleware([Limiter::class], function () {
+
+            Config::group(['data', 'hobby'], function () {
+                Config::post('list', DataHobby::class, 'multi');
+            });
+            Config::group(['data', 'speciality'], function () {
+                Config::post('list', DataSpeciality::class, 'multi');
+            });
+            Config::group(['data', 'work'], function () {
+                Config::post('list', DataWork::class, 'multi');
+            });
+
+            Config::middleware([Logging::class], function () {
                 Config::group(['data', 'hobby'], function () {
                     Config::post('info', DataHobby::class, 'one');
-                    Config::post('list', DataHobby::class, 'multi');
                     Config::post('page', DataHobby::class, 'page');
                     Config::post('add', DataHobby::class, 'insert');
                     Config::post('edit', DataHobby::class, 'update');
@@ -272,7 +289,6 @@ class Install
                 });
                 Config::group(['data', 'speciality'], function () {
                     Config::post('info', DataSpeciality::class, 'one');
-                    Config::post('list', DataSpeciality::class, 'multi');
                     Config::post('page', DataSpeciality::class, 'page');
                     Config::post('add', DataSpeciality::class, 'insert');
                     Config::post('edit', DataSpeciality::class, 'update');
@@ -282,7 +298,6 @@ class Install
                 });
                 Config::group(['data', 'work'], function () {
                     Config::post('info', DataWork::class, 'one');
-                    Config::post('list', DataWork::class, 'multi');
                     Config::post('page', DataWork::class, 'page');
                     Config::post('add', DataWork::class, 'insert');
                     Config::post('edit', DataWork::class, 'update');
@@ -290,8 +305,8 @@ class Install
                     Config::post('mDel', DataWork::class, 'multiDelete');
                     Config::post('mStatus', DataWork::class, 'multiStatus');
                 });
-            }
-        );
+            });
+        });
     }
 
     public static function league(): void

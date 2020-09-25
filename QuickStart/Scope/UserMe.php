@@ -5,7 +5,6 @@ namespace Yonna\QuickStart\Scope;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Helper\Password;
-use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\Throwable\Exception;
 
 class UserMe extends AbstractScope
@@ -45,17 +44,5 @@ class UserMe extends AbstractScope
         }
         return true;
     }
-
-    /**
-     * @return mixed
-     * @throws Exception\ThrowException
-     */
-    public function update()
-    {
-        $input = $this->input();
-        $input['id'] = $this->request()->getLoggingId();
-        return $this->scope(User::class, 'update', $input);
-    }
-
 
 }

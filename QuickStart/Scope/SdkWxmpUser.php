@@ -18,6 +18,22 @@ class SdkWxmpUser extends AbstractScope
     const TABLE = 'sdk_wxmp_user';
 
     /**
+     * 获取详情
+     * @return array
+     * @throws Exception\DatabaseException
+     * @throws Exception\ThrowException
+     */
+    public function one(): array
+    {
+        ArrayValidator::required($this->input(), ['openid'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('openid', $this->input('openid')))
+            ->one();
+    }
+
+    /**
      * @return false|int
      * @throws Exception\DatabaseException
      */
