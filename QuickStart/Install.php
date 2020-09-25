@@ -213,6 +213,7 @@ class Install
                 Config::group(['me'], function () {
                     Config::post('info', UserMe::class, 'one');
                     Config::post('password', UserMe::class, 'password');
+                    Config::post('edit', UserMe::class, 'update');
                 });
             });
 

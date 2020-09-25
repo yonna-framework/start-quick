@@ -552,6 +552,9 @@ class Table extends AbstractPDO
                 }
             }
         }
+        if (empty($set)) {
+            return 0;
+        }
         $sql .= ' SET ' . implode(',', $set);
         if (strpos($table, ',')) {// 多表更新支持JOIN操作
             $sql .= $this->parseJoin(!empty($this->options['join']) ? $this->options['join'] : '');

@@ -46,5 +46,16 @@ class UserMe extends AbstractScope
         return true;
     }
 
+    /**
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
+    public function update()
+    {
+        $input = $this->input();
+        $input['id'] = $this->request()->getLoggingId();
+        return $this->scope(User::class, 'update', $input);
+    }
+
 
 }
