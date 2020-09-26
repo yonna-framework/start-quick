@@ -31,12 +31,22 @@ class League extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
+        $prism = new LeaguePrism($this->request());
         $result = DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->where(fn(Where $w) => $w->equalTo('id', $prism->getId()))
             ->one();
-        $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
-        $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
-        $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        if ($prism->isAttachHobby()) {
+            $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachWork()) {
+            $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachSpeciality()) {
+            $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachMember()) {
+            $result = $this->scope(LeagueMember::class, 'attach', ['attach' => $result]);
+        }
         return $result;
     }
 
@@ -61,7 +71,7 @@ class League extends AbstractScope
         if ($prism->getUserId()) {
             $db->join(self::TABLE, 'league_member', ['id' => 'league_id'])
                 ->where(fn(Where $w) => $w->searchTable('league_member')
-                    ->in('user_id', $prism->getUserId()));
+                    ->equalTo('user_id', $prism->getUserId()));
         }
         if ($prism->getHobby()) {
             $db->join(self::TABLE, 'league_associate_hobby', ['id' => 'league_id'])
@@ -79,9 +89,21 @@ class League extends AbstractScope
                     ->in('data_id', $prism->getSpeciality()));
         }
         $result = $db->multi();
-        $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
-        $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
-        $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        if ($prism->isAttachHobby()) {
+            $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachWork()) {
+            $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachSpeciality()) {
+            $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachMember()) {
+            $result = $this->scope(LeagueMember::class, 'attach', [
+                'attach' => $result,
+                'user_id' => $prism->getUserId(),
+            ]);
+        }
         return $result;
     }
 
@@ -103,9 +125,18 @@ class League extends AbstractScope
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
-        $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
-        $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
-        $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        if ($prism->isAttachHobby()) {
+            $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachWork()) {
+            $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachSpeciality()) {
+            $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
+        }
+        if ($prism->isAttachMember()) {
+            $result = $this->scope(LeagueMember::class, 'attach', ['attach' => $result]);
+        }
         return $result;
     }
 
@@ -120,7 +151,7 @@ class League extends AbstractScope
         ArrayValidator::required($this->input(), [
             'name',
             'slogan',
-            'introduction',
+            //'introduction',
             'logo_pic',
             'business_license_pic',
         ], function ($error) {

@@ -39,6 +39,10 @@ class LeaguePrism extends Prism
     protected ?string $reason = null;
 
     protected ?int $user_id = null;
+    protected bool $attach_hobby = true;
+    protected bool $attach_work = true;
+    protected bool $attach_speciality = true;
+    protected bool $attach_member = false;
 
     /**
      * @return int
@@ -486,6 +490,70 @@ class LeaguePrism extends Prism
     public function setStatuss(?array $statuss): void
     {
         $this->statuss = $statuss;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttachHobby(): bool
+    {
+        return $this->attach_hobby;
+    }
+
+    /**
+     * @param bool $attach_hobby
+     */
+    public function setAttachHobby(bool $attach_hobby): void
+    {
+        $this->attach_hobby = $attach_hobby;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttachWork(): bool
+    {
+        return $this->attach_work;
+    }
+
+    /**
+     * @param bool $attach_work
+     */
+    public function setAttachWork(bool $attach_work): void
+    {
+        $this->attach_work = $attach_work;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttachSpeciality(): bool
+    {
+        return $this->attach_speciality;
+    }
+
+    /**
+     * @param bool $attach_speciality
+     */
+    public function setAttachSpeciality(bool $attach_speciality): void
+    {
+        $this->attach_speciality = $attach_speciality;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttachMember(): bool
+    {
+        return $this->attach_member;
+    }
+
+    /**
+     * @param bool $attach_member
+     */
+    public function setAttachMember(bool $attach_member): void
+    {
+        $this->attach_member = $attach_member;
     }
 
 }

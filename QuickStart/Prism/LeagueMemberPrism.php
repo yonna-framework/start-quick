@@ -26,6 +26,8 @@ class LeagueMemberPrism extends Prism
 
     protected ?string $reason = null;
 
+    protected ?array $attach = null;
+
     /**
      * @return int
      */
@@ -280,6 +282,22 @@ class LeagueMemberPrism extends Prism
     public function setReason(?string $reason): void
     {
         $this->reason = $reason;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAttach(): ?array
+    {
+        return $this->attach;
+    }
+
+    /**
+     * @param array|null $attach
+     */
+    public function setAttach(?array $attach): void
+    {
+        $this->attach = $attach;
     }
 
 }

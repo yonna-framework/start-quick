@@ -3,7 +3,7 @@
 namespace Yonna\QuickStart\Scope;
 
 use Throwable;
-use Yonna\QuickStart\Mapping\League\LeagueIsAdmin;
+use Yonna\Foundation\Arr;
 use Yonna\QuickStart\Mapping\League\LeagueMemberStatus;
 use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Prism\LeagueMemberPrism;
@@ -188,5 +188,53 @@ class LeagueMember extends AbstractScope
             'status' => LeagueMemberStatus::DELETE,
         ]);
     }
+
+    /**
+     * @return array
+     * @throws Exception\DatabaseException
+     */
+    public function attach(): array
+    {
+        $prism = new LeagueMemberPrism($this->request());
+        $data = $prism->getAttach();
+        $isPage = isset($data['page']);
+        $isOne = Arr::isAssoc($data);
+        if ($isPage) {
+            $tmp = $data['list'];
+        } elseif ($isOne) {
+            $tmp = [$data];
+        } else {
+            $tmp = $data;
+        }
+        if (!$tmp) {
+            return [];
+        }
+        $ids = array_column($tmp, 'league_id');
+        $values = DB::connect()->table(self::TABLE)
+            ->where(function (Where $w) use ($ids, $prism) {
+                $w->in('league_id', $ids)->equalTo('status', LeagueMemberStatus::APPROVED);
+                if ($prism->getUserId()) {
+                    $w->equalTo('user_id', $prism->getUserId());
+                }
+            })
+            ->multi();
+        $datas = [];
+        foreach ($values as $v) {
+            if (!isset($datas[$v['league_member_league_id']])) {
+                $datas[$v['league_member_league_id']] = [];
+            }
+            $datas[$v['league_member_league_id']][] = $v;
+        }
+        unset($values);
+        foreach ($tmp as $uk => $u) {
+            $tmp[$uk]['league_member'] = empty($datas[$u['league_id']]) ? [] : $datas[$u['league_id']];
+        }
+        if ($isPage) {
+            $data['list'] = $tmp;
+            return $data;
+        }
+        return $isOne ? $tmp[0] : $tmp;
+    }
+
 
 }
