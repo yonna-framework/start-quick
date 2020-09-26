@@ -50,7 +50,6 @@ CREATE TABLE `league`
     `delete_time`          bigint unsigned                not null comment '作废日期时间戳',
     `sort`                 int                            not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
-    UNIQUE KEY (`name`),
     INDEX (`name`)
 ) ENGINE = INNODB COMMENT '社团';
 

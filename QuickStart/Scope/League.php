@@ -163,7 +163,10 @@ class League extends AbstractScope
         $prism = new LeaguePrism($this->request());
         // 检测同名
         $c = DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('name', $prism->getName()))
+            ->where(fn(Where $w) => $w
+                ->equalTo('name', $prism->getName())
+                ->notEqualTo('status', LeagueStatus::DELETE)
+            )
             ->count();
         if ($c > 0) {
             Exception::params('Name is exist');
@@ -294,6 +297,25 @@ class League extends AbstractScope
         return true;
     }
 
+    public function updatec()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        $id = $this->input('id');
+        $res = DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w
+                ->equalTo('league_id', $id)
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('permission', LeagueMemberPermission::OWNER)
+            )
+            ->one();
+        if (!$res) {
+            Exception::error("Account not licensed");
+        }
+        return $this->update();
+    }
+
     /**
      * @return int
      * @throws Exception\DatabaseException
@@ -327,12 +349,28 @@ class League extends AbstractScope
 
     /**
      * @return mixed
+     * @throws Exception\DatabaseException
+     * @throws Exception\ErrorException
      * @throws Exception\ThrowException
      */
     public function delete()
     {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        $id = $this->input('id');
+        $res = DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w
+                ->equalTo('league_id', $id)
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('permission', LeagueMemberPermission::OWNER)
+            )
+            ->one();
+        if (!$res) {
+            Exception::error("Account not licensed");
+        }
         return $this->scope(League::class, 'multiStatus', [
-            'ids' => [$this->input('id')],
+            'ids' => [$id],
             'status' => LeagueStatus::DELETE,
         ]);
     }

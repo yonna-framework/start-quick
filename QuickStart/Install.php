@@ -318,6 +318,7 @@ class Install
                 Config::post('page', League::class, 'page');
                 Config::post('add', League::class, 'insert');
                 Config::post('edit', League::class, 'update');
+                Config::post('editc', League::class, 'updatec');
                 Config::post('del', League::class, 'delete');
                 Config::post('mStatus', League::class, 'multiStatus');
             });
