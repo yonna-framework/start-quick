@@ -7,6 +7,7 @@ use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\Arr;
 use Yonna\QuickStart\Mapping\League\LeagueTaskJoinerStatus;
 use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
+use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\LeagueTaskJoinerPrism;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
@@ -87,10 +88,26 @@ class LeagueTaskJoiner extends AbstractScope
         $values = DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->in('task_id', $ids)->equalTo('status', LeagueTaskStatus::APPROVED))
             ->multi();
+
+        $uids = array_column($values, 'league_task_joiner_user_id');
+        if ($uids) {
+            $avatars = DB::connect()->table('user_meta')
+                ->where(fn(Where $w) => $w->in('user_id', $uids)->equalTo('key', 'avatar'))
+                ->multi();
+            $avatars = array_column($avatars, 'user_meta_value', 'user_meta_user_id');
+        }
+
         $joiners = [];
         foreach ($values as $v) {
             if (!isset($joiners[$v['league_task_joiner_task_id']])) {
                 $joiners[$v['league_task_joiner_task_id']] = [];
+            }
+            if ($v['league_task_joiner_user_id']) {
+                if (!empty($avatars[$v['league_task_joiner_user_id']])) {
+                    $v['league_task_joiner_avatar'] = $avatars[$v['league_task_joiner_user_id']][0];
+                } else {
+                    $v['league_task_joiner_avatar'] = null;
+                }
             }
             $joiners[$v['league_task_joiner_task_id']][] = $v;
         }
