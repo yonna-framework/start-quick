@@ -34,7 +34,6 @@ CREATE TABLE `data_speciality`
 CREATE TABLE `league`
 (
     `id`                   bigint unsigned auto_increment not null comment 'id',
-    `master_user_id`       bigint unsigned                not null comment '社团拥有者user_id',
     `name`                 char(255)                      not null comment '社团名',
     `slogan`               char(255)                      not null comment '宣传标语',
     `introduction`         text                           not null comment '社团简介',
@@ -51,7 +50,7 @@ CREATE TABLE `league`
     `delete_time`          bigint unsigned                not null comment '作废日期时间戳',
     `sort`                 int                            not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
-    INDEX (`master_user_id`),
+    UNIQUE KEY (`name`),
     INDEX (`name`)
 ) ENGINE = INNODB COMMENT '社团';
 
@@ -59,7 +58,7 @@ CREATE TABLE `league_member`
 (
     `league_id`        bigint unsigned not null comment '社团id',
     `user_id`          bigint unsigned not null comment '成员user_id',
-    `is_admin`         tinyint         not null comment '是否管理员',
+    `permission`       tinyint         not null comment '权限[1成员 5管理员 10拥有者]',
     `status`           tinyint         not null default 1 comment '状态[-2作废,-1申请驳回,1待审核,2审核通过]',
     `apply_reason`     char(255)       not null default '' comment '申请理由',
     `rejection_reason` char(255)       not null default '' comment '驳回理由',
@@ -69,8 +68,7 @@ CREATE TABLE `league_member`
     `rejection_time`   bigint unsigned not null comment '驳回日期时间戳',
     `pass_time`        bigint unsigned not null comment '通过日期时间戳',
     `delete_time`      bigint unsigned not null comment '作废日期时间戳',
-    INDEX (`league_id`),
-    INDEX (`user_id`)
+    UNIQUE KEY (`league_id`, `user_id`)
 ) ENGINE = INNODB COMMENT '社团成员';
 
 CREATE TABLE `league_associate_hobby`

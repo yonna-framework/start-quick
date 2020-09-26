@@ -176,6 +176,8 @@
     "LOGOUT_SUCCESS": "已成功退出",
     "MANAGE": "管理",
     "ME": "我",
+    "MEMBER": "会员",
+    "MEMBER2": "成员",
     "MENU": "菜单",
     "MESSAGE IS NOT DEFINED": "消息未定义",
     "MOBILE": "移动",
@@ -344,5 +346,6 @@
     "YES": "是",
     "YOU CAN ONLY UPLOAD": "你只能上传",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "您应该返回一些响应数据，而不是返回空",
-    "YOUR": "你的"
+    "YOUR": "你的",
+    "_THIS2.RENDERWORK IS NOT A FUNCTION": "_这2.RENDERWORK是不是A函数"
 }

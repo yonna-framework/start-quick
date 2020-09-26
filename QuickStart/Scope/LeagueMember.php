@@ -4,6 +4,7 @@ namespace Yonna\QuickStart\Scope;
 
 use Throwable;
 use Yonna\QuickStart\Mapping\League\LeagueIsAdmin;
+use Yonna\QuickStart\Mapping\League\LeagueMemberStatus;
 use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Prism\LeagueMemberPrism;
 use Yonna\Database\DB;
@@ -32,6 +33,7 @@ class LeagueMember extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
+                $prism->getPermission() && $w->equalTo('permission', $prism->getPermission());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
             ->orderBy('league_id', 'desc')
@@ -58,6 +60,7 @@ class LeagueMember extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
+                $prism->getPermission() && $w->equalTo('permission', $prism->getPermission());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
             ->orderBy('league_id', 'desc')
@@ -71,7 +74,7 @@ class LeagueMember extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['league_id', 'user_id'], function ($error) {
+        ArrayValidator::required($this->input(), ['league_id', 'user_id', 'permission'], function ($error) {
             Exception::throw($error);
         });
         $prism = new LeagueMemberPrism($this->request());
@@ -84,7 +87,7 @@ class LeagueMember extends AbstractScope
         $add = [
             'league_id' => $prism->getLeagueId(),
             'user_id' => $prism->getUserId(),
-            'is_admin' => $prism->getIsAdmin() ?? LeagueIsAdmin::NO,
+            'permission' => $prism->getPermission(),
             'status' => $prism->getStatus() ?? LeagueStatus::PENDING,
             'apply_reason' => $prism->getApplyReason() ?? '',
             'apply_time' => time(),
@@ -112,7 +115,7 @@ class LeagueMember extends AbstractScope
             return 0;
         }
         $data = [
-            'is_admin' => $prism->getIsAdmin(),
+            'permission' => $prism->getPermission(),
             'status' => $prism->getStatus(),
         ];
         switch ($prism->getStatus()) {
@@ -143,11 +146,11 @@ class LeagueMember extends AbstractScope
      */
     public function status()
     {
-        ArrayValidator::required($this->input(), ['league_id', 'user_id'], function ($error) {
+        ArrayValidator::required($this->input(), ['league_id', 'user_id', 'status'], function ($error) {
             Exception::throw($error);
         });
         $status = $this->input('status');
-        $reason = $this->input('reason');
+        $reason = $this->input('reason') || '';
         $data = ['status' => $status];
         switch ($status) {
             case LeagueStatus::REJECTION:
@@ -173,19 +176,17 @@ class LeagueMember extends AbstractScope
 
     /**
      * @return false|int
-     * @throws Exception\DatabaseException
      */
     public function delete()
     {
         ArrayValidator::required($this->input(), ['league_id', 'user_id'], function ($error) {
             Exception::throw($error);
         });
-        return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w
-                ->equalTo('league_id', $prism->getLeagueId())
-                ->equalTo('user_id', $prism->getUserId())
-            )
-            ->delete();
+        return $this->scope(self::class, 'status', [
+            'league_id' => $this->input('league_id'),
+            'user_id' => $this->input('user_id'),
+            'status' => LeagueMemberStatus::DELETE,
+        ]);
     }
 
 }

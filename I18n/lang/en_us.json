@@ -176,6 +176,8 @@
     "LOGOUT_SUCCESS": "Logout success",
     "MANAGE": "Manage",
     "ME": "me",
+    "MEMBER": "member",
+    "MEMBER2": "member",
     "MENU": "menu",
     "MESSAGE IS NOT DEFINED": "message is not defined",
     "MOBILE": "mobile",
@@ -344,5 +346,6 @@
     "YES": "Yes",
     "YOU CAN ONLY UPLOAD": "you can only upload",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "You should return some response data instead of returning null",
-    "YOUR": "your"
+    "YOUR": "your",
+    "_THIS2.RENDERWORK IS NOT A FUNCTION": "_this2.renderwork is not a function"
 }

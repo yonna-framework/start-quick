@@ -3,6 +3,8 @@
 namespace Yonna\QuickStart\Scope;
 
 use Throwable;
+use Yonna\QuickStart\Mapping\League\LeagueMemberPermission;
+use Yonna\QuickStart\Mapping\League\LeagueMemberStatus;
 use Yonna\QuickStart\Mapping\League\LeagueStatus;
 use Yonna\QuickStart\Prism\LeaguePrism;
 use Yonna\Database\DB;
@@ -46,15 +48,37 @@ class League extends AbstractScope
     public function multi(): array
     {
         $prism = new LeaguePrism($this->request());
-        $result = DB::connect()->table(self::TABLE)
+        $db = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
+                $w->searchTable(self::TABLE);
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getStatuss() && $w->in('status', $prism->getStatuss());
             })
-            ->orderBy('sort', 'desc')
-            ->orderBy('id', 'desc')
-            ->multi();
+            ->orderBy('sort', 'desc', self::TABLE)
+            ->orderBy('id', 'desc', self::TABLE);
+        if ($prism->getUserId()) {
+            $db->join(self::TABLE, 'league_member', ['id' => 'league_id'])
+                ->where(fn(Where $w) => $w->searchTable('league_member')
+                    ->in('user_id', $prism->getUserId()));
+        }
+        if ($prism->getHobby()) {
+            $db->join(self::TABLE, 'league_associate_hobby', ['id' => 'league_id'])
+                ->where(fn(Where $w) => $w->searchTable('league_associate_hobby')
+                    ->in('data_id', $prism->getHobby()));
+        }
+        if ($prism->getWork()) {
+            $db->join(self::TABLE, 'league_associate_work', ['id' => 'league_id'])
+                ->where(fn(Where $w) => $w->searchTable('league_associate_work')
+                    ->in('data_id', $prism->getWork()));
+        }
+        if ($prism->getSpeciality()) {
+            $db->join(self::TABLE, 'league_associate_speciality', ['id' => 'league_id'])
+                ->where(fn(Where $w) => $w->searchTable('league_associate_speciality')
+                    ->in('data_id', $prism->getSpeciality()));
+        }
+        $result = $db->multi();
         $result = $this->scope(LeagueAssociateHobby::class, 'attach', ['attach' => $result]);
         $result = $this->scope(LeagueAssociateWork::class, 'attach', ['attach' => $result]);
         $result = $this->scope(LeagueAssociateSpeciality::class, 'attach', ['attach' => $result]);
@@ -74,6 +98,7 @@ class League extends AbstractScope
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getStatuss() && $w->in('status', $prism->getStatuss());
             })
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
@@ -93,7 +118,6 @@ class League extends AbstractScope
     public function insert()
     {
         ArrayValidator::required($this->input(), [
-            'master_user_account',
             'name',
             'slogan',
             'introduction',
@@ -102,15 +126,27 @@ class League extends AbstractScope
         ], function ($error) {
             Exception::throw($error);
         });
+        ArrayValidator::anyone($this->input(), ['master_user_id', 'master_user_account'], function ($error) {
+            Exception::throw($error);
+        });
         $prism = new LeaguePrism($this->request());
-        $account = $this->scope(UserAccount::class, 'one', ['string' => $prism->getMasterUserAccount()]);
-        if (empty($account['user_account_id'])) {
-            Exception::params('Account is not exist');
+        // 检测同名
+        $c = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('name', $prism->getName()))
+            ->count();
+        if ($c > 0) {
+            Exception::params('Name is exist');
         }
-        $prism->setMasterUserId($account['user_account_id']);
+        // 找到社团主
+        if (!$prism->getMasterUserId()) {
+            $account = $this->scope(UserAccount::class, 'one', ['string' => $prism->getMasterUserAccount()]);
+            if (empty($account['user_account_id'])) {
+                Exception::params('Account is not exist');
+            }
+            $prism->setMasterUserId($account['user_account_id']);
+        }
         $introduction = $this->xoss_save($prism->getIntroduction() ?? '');
         $add = [
-            'master_user_id' => $prism->getMasterUserId(),
             'name' => $prism->getName(),
             'slogan' => $prism->getSlogan(),
             'introduction' => $introduction,
@@ -126,6 +162,12 @@ class League extends AbstractScope
         ];
         return DB::transTrace(function () use ($add, $prism) {
             $id = DB::connect()->table(self::TABLE)->insert($add);
+            $this->scope(LeagueMember::class, 'insert', [
+                'league_id' => $id,
+                'user_id' => $prism->getMasterUserId(),
+                'permission' => LeagueMemberPermission::MASTER,
+                'status' => LeagueMemberStatus::APPROVED,
+            ]);
             if ($prism->getHobby()) {
                 $this->scope(LeagueAssociateHobby::class, 'cover', [
                     'league_id' => $id,

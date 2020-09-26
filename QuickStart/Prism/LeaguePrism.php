@@ -13,14 +13,15 @@ class LeaguePrism extends Prism
     protected ?string $order_by = null;
     protected ?int $id = null;
     protected ?array $ids = null;
-    protected ?int $master_user_id = null;
     protected ?string $master_user_account = null;
+    protected ?int $master_user_id = null;
     protected ?string $name = null;
     protected ?string $slogan = null;
     protected ?string $introduction = null;
     protected ?array $logo_pic = null;
     protected ?array $business_license_pic = null;
     protected ?int $status = null;
+    protected ?array $statuss = null;
     protected ?string $apply_reason = null;
     protected ?string $rejection_reason = null;
     protected ?string $passed_reason = null;
@@ -36,6 +37,8 @@ class LeaguePrism extends Prism
     protected ?array $speciality = null;
 
     protected ?string $reason = null;
+
+    protected ?int $user_id = null;
 
     /**
      * @return int
@@ -451,6 +454,38 @@ class LeaguePrism extends Prism
     public function setReason(?string $reason): void
     {
         $this->reason = $reason;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int|null $user_id
+     */
+    public function setUserId(?int $user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getStatuss(): ?array
+    {
+        return $this->statuss;
+    }
+
+    /**
+     * @param array|null $statuss
+     */
+    public function setStatuss(?array $statuss): void
+    {
+        $this->statuss = $statuss;
     }
 
 }

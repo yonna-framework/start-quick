@@ -176,6 +176,8 @@
     "LOGOUT_SUCCESS": "註銷成功",
     "MANAGE": "管理",
     "ME": "我",
+    "MEMBER": "會員",
+    "MEMBER2": "成員",
     "MENU": "選單",
     "MESSAGE IS NOT DEFINED": "消息未定義",
     "MOBILE": "移動",
@@ -344,5 +346,6 @@
     "YES": "是的",
     "YOU CAN ONLY UPLOAD": "你只能上傳",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "您應該返回一些響應數據，而不是返回空",
-    "YOUR": "你的"
+    "YOUR": "你的",
+    "_THIS2.RENDERWORK IS NOT A FUNCTION": "_這2.RENDERWORK是不是A函數"
 }

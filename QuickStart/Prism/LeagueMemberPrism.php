@@ -13,7 +13,7 @@ class LeagueMemberPrism extends Prism
     protected ?string $order_by = null;
     protected ?int $league_id = null;
     protected ?int $user_id = null;
-    protected ?int $is_admin = null;
+    protected ?int $permission = null;
     protected ?int $status = null;
     protected ?string $apply_reason = null;
     protected ?string $rejection_reason = null;
@@ -109,17 +109,17 @@ class LeagueMemberPrism extends Prism
     /**
      * @return int|null
      */
-    public function getIsAdmin(): ?int
+    public function getPermission(): ?int
     {
-        return $this->is_admin;
+        return $this->permission;
     }
 
     /**
-     * @param int|null $is_admin
+     * @param int|null $permission
      */
-    public function setIsAdmin(?int $is_admin): void
+    public function setPermission(?int $permission): void
     {
-        $this->is_admin = $is_admin;
+        $this->permission = $permission;
     }
 
     /**

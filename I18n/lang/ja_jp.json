@@ -176,6 +176,8 @@
     "LOGOUT_SUCCESS": "ログアウト成功",
     "MANAGE": "管理する",
     "ME": "ミー",
+    "MEMBER": "メンバー",
+    "MEMBER2": "メンバー",
     "MENU": "メニュー",
     "MESSAGE IS NOT DEFINED": "メッセージは定義されません",
     "MOBILE": "モバイル",
@@ -344,5 +346,6 @@
     "YES": "はい",
     "YOU CAN ONLY UPLOAD": "あなたがのみアップロード",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "空を返すのではなく、いくつかの応答データを返す必要があります",
-    "YOUR": "あなた"
+    "YOUR": "あなた",
+    "_THIS2.RENDERWORK IS NOT A FUNCTION": "RenderWorkはaa関数です。"
 }
