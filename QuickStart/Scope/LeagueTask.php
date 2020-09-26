@@ -28,9 +28,13 @@ class LeagueTask extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
+        $prism = new LeagueTaskPrism($this->request());
         $result = DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->where(fn(Where $w) => $w->equalTo('id', $prism->getId()))
             ->one();
+        if ($prism->isAttachJoiner()) {
+            $result = $this->scope(LeagueTaskJoiner::class, 'attach', ['attach' => $result]);
+        }
         return $result;
     }
 
@@ -45,12 +49,17 @@ class LeagueTask extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
+                $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getStatuss() && $w->in('status', $prism->getStatuss());
             })
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
             ->multi();
+        if ($prism->isAttachJoiner()) {
+            $result = $this->scope(LeagueTaskJoiner::class, 'attach', ['attach' => $result]);
+        }
         return $result;
     }
 
@@ -65,12 +74,17 @@ class LeagueTask extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
+                $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getStatuss() && $w->in('status', $prism->getStatuss());
             })
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
+        if ($prism->isAttachJoiner()) {
+            $result = $this->scope(LeagueTaskJoiner::class, 'attach', ['attach' => $result]);
+        }
         return $result;
     }
 

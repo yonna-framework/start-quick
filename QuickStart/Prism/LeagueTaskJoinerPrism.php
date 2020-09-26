@@ -23,6 +23,8 @@ class LeagueTaskJoinerPrism extends Prism
     protected ?float $self_evaluation = null;
     protected ?float $league_evaluation = null;
 
+    protected ?array $attach = null;
+
     /**
      * @return int
      */
@@ -229,6 +231,22 @@ class LeagueTaskJoinerPrism extends Prism
     public function setLeagueEvaluation(?float $league_evaluation): void
     {
         $this->league_evaluation = $league_evaluation;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAttach(): ?array
+    {
+        return $this->attach;
+    }
+
+    /**
+     * @param array|null $attach
+     */
+    public function setAttach(?array $attach): void
+    {
+        $this->attach = $attach;
     }
 
 }

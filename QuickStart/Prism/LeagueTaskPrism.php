@@ -24,6 +24,7 @@ class LeagueTaskPrism extends Prism
     protected ?float $points = null;
 
     protected ?int $status = null;
+    protected ?array $statuss = null;
     protected ?string $apply_reason = null;
     protected ?string $rejection_reason = null;
     protected ?string $passed_reason = null;
@@ -33,7 +34,7 @@ class LeagueTaskPrism extends Prism
     protected ?int $pass_time = null;
     protected ?int $delete_time = null;
 
-    protected ?string $event_photos = null;
+    protected ?array $event_photos = null;
     protected ?float $self_evaluation = null;
     protected ?float $platform_evaluation = null;
 
@@ -42,6 +43,8 @@ class LeagueTaskPrism extends Prism
 
     protected ?string $reason = null;
     protected bool $percent = false;
+
+    protected bool $attach_joiner = true;
 
     /**
      * @return int
@@ -153,6 +156,22 @@ class LeagueTaskPrism extends Prism
     public function setStatus(?int $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getStatuss(): ?array
+    {
+        return $this->statuss;
+    }
+
+    /**
+     * @param array|null $statuss
+     */
+    public function setStatuss(?array $statuss): void
+    {
+        $this->statuss = $statuss;
     }
 
     /**
@@ -396,17 +415,17 @@ class LeagueTaskPrism extends Prism
     }
 
     /**
-     * @return string|null
+     * @return array|null
      */
-    public function getEventPhotos(): ?string
+    public function getEventPhotos(): ?array
     {
         return $this->event_photos;
     }
 
     /**
-     * @param string|null $event_photos
+     * @param array|null $event_photos
      */
-    public function setEventPhotos(?string $event_photos): void
+    public function setEventPhotos(?array $event_photos): void
     {
         $this->event_photos = $event_photos;
     }
@@ -489,6 +508,22 @@ class LeagueTaskPrism extends Prism
     public function setPercent(bool $percent): void
     {
         $this->percent = $percent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttachJoiner(): bool
+    {
+        return $this->attach_joiner;
+    }
+
+    /**
+     * @param bool $attach_joiner
+     */
+    public function setAttachJoiner(bool $attach_joiner): void
+    {
+        $this->attach_joiner = $attach_joiner;
     }
 
 }
