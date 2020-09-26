@@ -15,6 +15,7 @@ class LeagueTaskPrism extends Prism
     protected ?array $ids = null;
 
     protected ?int $league_id = null;
+    protected ?array $league_ids = null;
     protected ?int $user_id = null;
     protected ?string $name = null;
     protected ?string $introduction = null;
@@ -140,6 +141,22 @@ class LeagueTaskPrism extends Prism
     public function setLeagueId(?int $league_id): void
     {
         $this->league_id = $league_id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getLeagueIds(): ?array
+    {
+        return $this->league_ids;
+    }
+
+    /**
+     * @param array|null $league_ids
+     */
+    public function setLeagueIds(?array $league_ids): void
+    {
+        $this->league_ids = $league_ids;
     }
 
     /**

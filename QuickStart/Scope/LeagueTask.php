@@ -49,6 +49,7 @@ class LeagueTask extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
+                $prism->getLeagueIds() && $w->in('league_id', $prism->getLeagueIds());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
@@ -74,6 +75,7 @@ class LeagueTask extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
+                $prism->getLeagueIds() && $w->in('league_id', $prism->getLeagueIds());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
@@ -214,10 +216,7 @@ class LeagueTask extends AbstractScope
                 break;
         }
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w
-                ->in('id', $this->input('ids'))
-                ->notEqualTo('status', LeagueTaskStatus::COMPLETE)
-            )
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
             ->update($data);
     }
 
