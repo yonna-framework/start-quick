@@ -82,7 +82,11 @@ class LeagueTask extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['name', 'introduction', 'points'], function ($error) {
+        ArrayValidator::required($this->input(), [
+            'name', 'introduction',
+            'people_number', 'points',
+            'start_time', 'end_time'
+        ], function ($error) {
             Exception::throw($error);
         });
         $prism = new LeagueTaskPrism($this->request());
@@ -99,6 +103,9 @@ class LeagueTask extends AbstractScope
             'league_id' => $prism->getLeagueId(),
             'points' => round($prism->getPoints(), 1),
             'introduction' => $prism->getIntroduction(),
+            'people_number' => $prism->getPeopleNumber(),
+            'start_time' => $prism->getStartTime(),
+            'end_time' => $prism->getEndTime(),
             'status' => $prism->getStatus() ?? LeagueTaskStatus::PENDING,
             'apply_reason' => $prism->getApplyReason() ?? '',
             'apply_time' => time(),

@@ -18,6 +18,9 @@ class LeagueTaskPrism extends Prism
     protected ?int $user_id = null;
     protected ?string $name = null;
     protected ?string $introduction = null;
+    protected ?int $people_number = null;
+    protected ?int $start_time = null;
+    protected ?int $end_time = null;
     protected ?float $points = null;
 
     protected ?int $status = null;
@@ -198,6 +201,54 @@ class LeagueTaskPrism extends Prism
     public function setIntroduction(?string $introduction): void
     {
         $this->introduction = $introduction;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPeopleNumber(): ?int
+    {
+        return $this->people_number;
+    }
+
+    /**
+     * @param int|null $people_number
+     */
+    public function setPeopleNumber(?int $people_number): void
+    {
+        $this->people_number = $people_number;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getStartTime(): ?int
+    {
+        return $this->start_time;
+    }
+
+    /**
+     * @param int|null $start_time
+     */
+    public function setStartTime(?int $start_time): void
+    {
+        $this->start_time = $start_time;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getEndTime(): ?int
+    {
+        return $this->end_time;
+    }
+
+    /**
+     * @param int|null $end_time
+     */
+    public function setEndTime(?int $end_time): void
+    {
+        $this->end_time = $end_time;
     }
 
     /**

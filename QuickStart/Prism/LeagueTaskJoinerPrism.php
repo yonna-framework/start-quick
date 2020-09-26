@@ -19,6 +19,7 @@ class LeagueTaskJoinerPrism extends Prism
     protected ?int $league_id = null;
     protected ?int $status = null;
     protected ?string $abort_reason = null;
+    protected ?string $give_up_reason = null;
     protected ?float $self_evaluation = null;
     protected ?float $league_evaluation = null;
 
@@ -180,6 +181,22 @@ class LeagueTaskJoinerPrism extends Prism
     public function setAbortReason(?string $abort_reason): void
     {
         $this->abort_reason = $abort_reason;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGiveUpReason(): ?string
+    {
+        return $this->give_up_reason;
+    }
+
+    /**
+     * @param string|null $give_up_reason
+     */
+    public function setGiveUpReason(?string $give_up_reason): void
+    {
+        $this->give_up_reason = $give_up_reason;
     }
 
     /**
