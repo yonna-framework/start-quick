@@ -196,7 +196,7 @@ class League extends AbstractScope
             $this->scope(LeagueMember::class, 'insert', [
                 'league_id' => $id,
                 'user_id' => $prism->getMasterUserId(),
-                'permission' => LeagueMemberPermission::MASTER,
+                'permission' => LeagueMemberPermission::OWNER,
                 'status' => LeagueMemberStatus::APPROVED,
             ]);
             if ($prism->getHobby()) {
