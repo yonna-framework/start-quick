@@ -133,12 +133,10 @@ CREATE TABLE `league_task_joiner`
     `task_id`           bigint unsigned not null comment '参与的任务user_id',
     `user_id`           bigint unsigned not null comment '参与人user_id',
     `league_id`         bigint unsigned not null comment '参与人当时所在社团id',
-    `status`            tinyint         not null default 1 comment '状态[-2中止,-1中途放弃,1进行中,2已完成]',
+    `status`            tinyint         not null default 1 comment '状态[-2中止,-1中途放弃,1待审核,5进行中,10已完成]',
     `abort_reason`      char(255)       not null default '' comment '中止理由',
     `give_up_reason`    char(255)       not null default '' comment '中途放弃理由',
     `self_evaluation`   numeric(3, 1)   not null default 0.0 comment '成员评分',
     `league_evaluation` numeric(3, 1)   not null default 0.0 comment '社团打分',
-    PRIMARY KEY (`task_id`, `user_id`),
-    INDEX (`league_id`),
-    INDEX (`status`)
+    INDEX (`task_id`, `user_id`, `status`)
 ) ENGINE = INNODB COMMENT '社团任务参加者';

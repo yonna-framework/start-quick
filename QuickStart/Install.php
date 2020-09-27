@@ -217,6 +217,8 @@ class Install
                 Config::post('task', Me::class, 'task');
                 Config::post('taskAssign', Me::class, 'taskAssign');
                 Config::post('taskJoin', Me::class, 'taskJoin');
+                Config::post('taskApply', Me::class, 'taskApply');
+                Config::post('taskGiveUp', Me::class, 'taskGiveUp');
             });
         });
     }

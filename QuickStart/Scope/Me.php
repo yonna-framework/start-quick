@@ -6,8 +6,10 @@ use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\QuickStart\Helper\Password;
 use Yonna\QuickStart\Mapping\League\LeagueMemberStatus;
+use Yonna\QuickStart\Mapping\League\LeagueTaskJoinerStatus;
 use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
 use Yonna\Throwable\Exception;
+use Yonna\Validator\ArrayValidator;
 
 class Me extends AbstractScope
 {
@@ -101,6 +103,47 @@ class Me extends AbstractScope
             )
             ->multi();
         return [];
+    }
+
+    public function taskApply()
+    {
+        ArrayValidator::required($this->input(), ['task_id', 'league_id'], function ($error) {
+            Exception::throw($error);
+        });
+        $one = DB::connect()->table('league_task_joiner')
+            ->where(fn(Where $e) => $e
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('task_id', $this->input('task_id'))
+                ->in('status', [
+                    LeagueTaskJoinerStatus::PENDING,
+                    LeagueTaskJoinerStatus::APPROVED,
+                    LeagueTaskJoinerStatus::COMPLETE,
+                ])
+            )
+            ->one();
+        if ($one) {
+            Exception::params('You have already applied, please wait for the review result.');
+        }
+        $data = [
+            'user_id' => $this->request()->getLoggingId(),
+            'task_id' => $this->input('task_id'),
+            'league_id' => $this->input('league_id'),
+            'status' => LeagueTaskJoinerStatus::PENDING,
+        ];
+        return DB::connect()->table('league_task_joiner')->insert($data);
+    }
+
+    public function taskGiveUp()
+    {
+        ArrayValidator::required($this->input(), ['task_id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table('league_task_joiner')
+            ->where(fn(Where $e) => $e
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('task_id', $this->input('task_id'))
+            )
+            ->update(['status' => LeagueTaskJoinerStatus::GIVE_UP]);
     }
 
 }
