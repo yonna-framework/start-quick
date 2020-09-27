@@ -48,6 +48,7 @@ class LeagueTask extends AbstractScope
         $result = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getIds() && $w->in('id', $prism->getIds());
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
                 $prism->getLeagueIds() && $w->in('league_id', $prism->getLeagueIds());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());

@@ -14,6 +14,7 @@ use Yonna\QuickStart\Scope\Feedback;
 use Yonna\QuickStart\Scope\League;
 use Yonna\QuickStart\Scope\LeagueMember;
 use Yonna\QuickStart\Scope\LeagueTask;
+use Yonna\QuickStart\Scope\LeagueTaskJoiner;
 use Yonna\QuickStart\Scope\License;
 use Yonna\QuickStart\Scope\DataSpeciality;
 use Yonna\QuickStart\Scope\DataWork;
@@ -23,7 +24,7 @@ use Yonna\QuickStart\Scope\Sdk;
 use Yonna\QuickStart\Scope\SdkWxmp;
 use Yonna\QuickStart\Scope\User;
 use Yonna\QuickStart\Scope\UserAccount;
-use Yonna\QuickStart\Scope\UserMe;
+use Yonna\QuickStart\Scope\Me;
 use Yonna\QuickStart\Scope\UserLogin;
 use Yonna\QuickStart\Scope\UserMetaCategory;
 use Yonna\QuickStart\Scope\Stat;
@@ -206,17 +207,23 @@ class Install
         );
     }
 
+    public static function me(): void
+    {
+        Config::middleware([Limiter::class, Logging::class], function () {
+            Config::group(['me'], function () {
+                Config::post('info', Me::class, 'one');
+                Config::post('password', Me::class, 'password');
+                Config::post('edit', Me::class, 'update');
+                Config::post('task', Me::class, 'task');
+                Config::post('taskAssign', Me::class, 'taskAssign');
+                Config::post('taskJoin', Me::class, 'taskJoin');
+            });
+        });
+    }
+
     public static function user(): void
     {
         Config::middleware([Limiter::class], function () {
-
-            Config::group(['me'], function () {
-                Config::middleware([Logging::class], function () {
-                    Config::post('info', UserMe::class, 'one');
-                    Config::post('password', UserMe::class, 'password');
-                    Config::post('edit', UserMe::class, 'update');
-                });
-            });
 
             Config::group(['user'], function () {
                 Config::post('login', UserLogin::class, 'in');
@@ -330,6 +337,10 @@ class Install
                 Config::post('edit', LeagueTask::class, 'update');
                 Config::post('del', LeagueTask::class, 'delete');
                 Config::post('mStatus', LeagueTask::class, 'multiStatus');
+            });
+            Config::group(['league', 'task', 'joiner'], function () {
+                Config::post('add', LeagueTaskJoiner::class, 'insert');
+                Config::post('del', LeagueTaskJoiner::class, 'delete');
             });
         });
     }

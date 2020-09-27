@@ -21,9 +21,15 @@ class LeagueTaskJoiner extends AbstractScope
 
     const TABLE = 'league_task_joiner';
 
+    /**
+     * @return bool|mixed|null
+     * @throws Exception\DatabaseException
+     * @throws Exception\ErrorException
+     * @throws \Throwable
+     */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['task_id'], function ($error) {
+        ArrayValidator::required($this->input(), ['task_id', 'league_id'], function ($error) {
             Exception::throw($error);
         });
         $prism = new LeagueTaskJoinerPrism($this->request());
