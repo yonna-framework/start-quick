@@ -56,7 +56,7 @@ class LeagueMember extends AbstractScope
     public function page(): array
     {
         $prism = new LeagueMemberPrism($this->request());
-        return DB::connect()->table(self::TABLE)
+        $res = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
@@ -65,6 +65,17 @@ class LeagueMember extends AbstractScope
             })
             ->orderBy('league_id', 'desc')
             ->page($prism->getCurrent(), $prism->getPer());
+        $userIds = array_column($res['list'], 'league_member_user_id');
+        if ($userIds) {
+            $userIds = array_unique($userIds);
+            $userIds = array_values($userIds);
+            $users = $this->scope(User::class, 'multi', ['ids' => $userIds]);
+            $users = array_combine($userIds, $users);
+            foreach ($res['list'] as $k => $v) {
+                $res['list'][$k]['league_member_user_info'] = $users[$v['league_member_user_id']];
+            }
+        }
+        return $res;
     }
 
     /**

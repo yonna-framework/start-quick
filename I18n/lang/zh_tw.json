@@ -276,6 +276,7 @@
     "RESIDENTIAL REGION": "住宅區域",
     "RESULTS": "結果",
     "RIGHT-CLICK TO VIEW THE MENU": "按右鍵以查看選單",
+    "ROLE": "角色",
     "SAME_ALREADY_EXISTS": "同一個已經存在",
     "SAVE": "保存",
     "SCOPE_ERROR": "範圍錯誤",
@@ -358,6 +359,7 @@
     "YELLOW": "黃色的",
     "YES": "是的",
     "YOU CAN ONLY UPLOAD": "你只能上傳",
+    "YOU HAVE ALREADY APPLIED, PLEASE WAIT FOR THE REVIEW RESULT.": "您已經申請了,請等待稽核結果。",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "您應該返回一些響應數據，而不是返回空",
     "YOUR": "你的",
     "_THIS2.RENDERWORK IS NOT A FUNCTION": "_這2.RENDERWORK是不是A函數"

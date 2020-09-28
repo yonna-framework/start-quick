@@ -276,6 +276,7 @@
     "RESIDENTIAL REGION": "주택구역",
     "RESULTS": "결과.",
     "RIGHT-CLICK TO VIEW THE MENU": "오른쪽클릭보기메뉴",
+    "ROLE": "배역.",
     "SAME_ALREADY_EXISTS": "하나이미존재함",
     "SAVE": "보존하다.",
     "SCOPE_ERROR": "범위오류",
@@ -358,6 +359,7 @@
     "YELLOW": "황색",
     "YES": "네.",
     "YOU CAN ONLY UPLOAD": "너는올릴수밖에없어.",
+    "YOU HAVE ALREADY APPLIED, PLEASE WAIT FOR THE REVIEW RESULT.": "%2C%2신청하셨습니다.심사결과를기다리세요.",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "비워두지않고일부응답데이터를반환해야합니다.",
     "YOUR": "너의",
     "_THIS2.RENDERWORK IS NOT A FUNCTION": "이2.renderworkisnota함수"

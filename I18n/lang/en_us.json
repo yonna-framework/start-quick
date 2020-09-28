@@ -276,6 +276,7 @@
     "RESIDENTIAL REGION": "residential region",
     "RESULTS": "results",
     "RIGHT-CLICK TO VIEW THE MENU": "right-click to view the menu",
+    "ROLE": "role",
     "SAME_ALREADY_EXISTS": "The same already exists",
     "SAVE": "Save",
     "SCOPE_ERROR": "Scope error",
@@ -358,6 +359,7 @@
     "YELLOW": "yellow",
     "YES": "Yes",
     "YOU CAN ONLY UPLOAD": "you can only upload",
+    "YOU HAVE ALREADY APPLIED, PLEASE WAIT FOR THE REVIEW RESULT.": "you have already applied, please wait for the review result.",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "You should return some response data instead of returning null",
     "YOUR": "your",
     "_THIS2.RENDERWORK IS NOT A FUNCTION": "_this2.renderwork is not a function"
