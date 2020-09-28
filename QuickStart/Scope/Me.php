@@ -47,6 +47,17 @@ class Me extends AbstractScope
         return true;
     }
 
+    /**
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
+    public function update()
+    {
+        $data = $this->input();
+        $data['id'] = $this->request()->getLoggingId();
+        return $this->scope(User::class, 'update', $data);
+    }
+
     public function task()
     {
         return $this->scope(LeagueTask::class, 'multi', [
