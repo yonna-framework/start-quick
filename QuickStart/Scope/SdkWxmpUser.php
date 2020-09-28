@@ -47,14 +47,15 @@ class SdkWxmpUser extends AbstractScope
             ->where(fn(Where $w) => $w->equalTo('openid', $prism->getOpenid()))
             ->one();
         $data = [
-            'unionid' => $prism->getUnionid(),
-            'sex' => $prism->getSex(),
-            'nickname' => $prism->getNickname(),
-            'headimgurl' => $prism->getHeadimgurl(),
-            'language' => $prism->getLanguage(),
-            'city' => $prism->getCity(),
-            'province' => $prism->getProvince(),
-            'country' => $prism->getCountry(),
+            'openid' => $prism->getOpenid(),
+            'unionid' => $prism->getUnionid() ?? '',
+            'sex' => $prism->getSex() ?? '',
+            'nickname' => $prism->getNickname() ?? '',
+            'headimgurl' => $prism->getHeadimgurl() ?? '',
+            'language' => $prism->getLanguage() ?? '',
+            'city' => $prism->getCity() ?? '',
+            'province' => $prism->getProvince() ?? '',
+            'country' => $prism->getCountry() ?? '',
         ];
         if ($one) {
             return DB::connect()->table(self::TABLE)

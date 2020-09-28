@@ -155,6 +155,10 @@ class SdkWxmp extends AbstractScope
     {
         $prism = new SdkWxmpPrism($this->request());
         $tokenAuth = $this->snsOauth2AccessToken($prism->getCode());
+        Log::db()->info([
+            'input' => $this->input(),
+            'tokenAuth' => $tokenAuth,
+        ], 'wx-oauth');
         if (!$tokenAuth) {
             $config = $this->getConfig();
             $url = $this->request()->getHost();
@@ -183,8 +187,10 @@ class SdkWxmp extends AbstractScope
             if ($wxUserInfo) {
                 $wxUserInfo['openid'] = $openid;
                 $this->scope(SdkWxmpUser::class, 'save', $wxUserInfo);
+                $this->scope(SdkWxmpUser::class, 'save', $wxUserInfo);
                 $wxUserInfo['logging_id'] = $this->loginRecord($openid);
             }
+            Log::db()->info($wxUserInfo, 'wx-oauth-wxUserInfo');
             return $wxUserInfo;
         }
 
