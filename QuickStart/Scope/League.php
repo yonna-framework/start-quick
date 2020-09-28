@@ -69,22 +69,26 @@ class League extends AbstractScope
             ->orderBy('sort', 'desc', self::TABLE)
             ->orderBy('id', 'desc', self::TABLE);
         if ($prism->getUserId()) {
-            $db->join(self::TABLE, 'league_member', ['id' => 'league_id'])
+            $db->join(self::TABLE, 'league_member', ['id' => 'league_id'], 'left')
+                ->groupBy('id', 'league')
                 ->where(fn(Where $w) => $w->searchTable('league_member')
                     ->equalTo('user_id', $prism->getUserId()));
         }
         if ($prism->getHobby()) {
-            $db->join(self::TABLE, 'league_associate_hobby', ['id' => 'league_id'])
+            $db->join(self::TABLE, 'league_associate_hobby', ['id' => 'league_id'], 'left')
+                ->groupBy('id', 'league')
                 ->where(fn(Where $w) => $w->searchTable('league_associate_hobby')
                     ->in('data_id', $prism->getHobby()));
         }
         if ($prism->getWork()) {
-            $db->join(self::TABLE, 'league_associate_work', ['id' => 'league_id'])
+            $db->join(self::TABLE, 'league_associate_work', ['id' => 'league_id'], 'left')
+                ->groupBy('id', 'league')
                 ->where(fn(Where $w) => $w->searchTable('league_associate_work')
                     ->in('data_id', $prism->getWork()));
         }
         if ($prism->getSpeciality()) {
-            $db->join(self::TABLE, 'league_associate_speciality', ['id' => 'league_id'])
+            $db->join(self::TABLE, 'league_associate_speciality', ['id' => 'league_id'], 'left')
+                ->groupBy('id', 'league')
                 ->where(fn(Where $w) => $w->searchTable('league_associate_speciality')
                     ->in('data_id', $prism->getSpeciality()));
         }

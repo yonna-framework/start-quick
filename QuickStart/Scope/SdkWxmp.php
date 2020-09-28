@@ -137,10 +137,10 @@ class SdkWxmp extends AbstractScope
         // 设定client_id为登录状态
         $onlineKey = UserLogin::ONLINE_REDIS_KEY . $log['client_id'];
         $onlineId = DB::redis()->get($onlineKey);
-        if ($onlineId !== null) {
+        if (!empty($onlineId)) {
             DB::redis()->expire($onlineKey, UserLogin::ONLINE_KEEP_TIME);
         } else {
-            DB::redis()->set($onlineKey, $log['user_id'], UserLogin::ONLINE_KEEP_TIME);
+            DB::redis()->set($onlineKey, $user_id, UserLogin::ONLINE_KEEP_TIME);
         }
         return $log['user_id'];
     }
@@ -155,10 +155,6 @@ class SdkWxmp extends AbstractScope
     {
         $prism = new SdkWxmpPrism($this->request());
         $tokenAuth = $this->snsOauth2AccessToken($prism->getCode());
-        Log::db()->info([
-            'input' => $this->input(),
-            'tokenAuth' => $tokenAuth,
-        ], 'wx-oauth');
         if (!$tokenAuth) {
             $config = $this->getConfig();
             $url = $this->request()->getHost();
@@ -190,7 +186,6 @@ class SdkWxmp extends AbstractScope
                 $this->scope(SdkWxmpUser::class, 'save', $wxUserInfo);
                 $wxUserInfo['logging_id'] = $this->loginRecord($openid);
             }
-            Log::db()->info($wxUserInfo, 'wx-oauth-wxUserInfo');
             return $wxUserInfo;
         }
 

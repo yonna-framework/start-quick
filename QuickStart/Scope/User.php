@@ -85,10 +85,12 @@ class User extends AbstractScope
             });
         if ($prism->getLicenseId()) {
             $db->join(self::TABLE, 'user_license', ['id' => 'user_id'])
+                ->groupBy('id', 'user')
                 ->where(fn(Where $w) => $w->searchTable('user_license')->equalTo('license_id', $prism->getLicenseId()));
         }
         if ($prism->getAccount()) {
             $db->join(self::TABLE, 'user_account', ['id' => 'user_id'])
+                ->groupBy('id', 'user')
                 ->where(fn(Where $w) => $w->searchTable('user_account')->like('string', "%" . $prism->getAccount() . "%"));
         }
         if ($prism->getOrderBy()) {
