@@ -161,7 +161,7 @@ class LeagueMember extends AbstractScope
             Exception::throw($error);
         });
         $status = $this->input('status');
-        $reason = $this->input('reason') || '';
+        $reason = $this->input('reason');
         $data = ['status' => $status];
         switch ($status) {
             case LeagueStatus::REJECTION:
