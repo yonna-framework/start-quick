@@ -80,10 +80,10 @@ class Me extends AbstractScope
             ->where(fn(Where $w) => $w->in('league_id', $league_ids))
             ->multi();
         if ($assign) {
-            $task_ids = array_column($assign, 'league_task_assign_task_id');
-            $task_ids = array_unique($task_ids);
-            sort($task_ids);
-            $tasks = $this->scope(LeagueTask::class, 'multi', ['ids' => $task_ids, 'attach_joiner' => true]);
+            $taskIds = array_column($assign, 'league_task_assign_task_id');
+            $taskIds = array_unique($taskIds);
+            sort($taskIds);
+            $tasks = $this->scope(LeagueTask::class, 'multi', ['ids' => $taskIds, 'attach_joiner' => true]);
             $tid = array_column($tasks, 'league_task_id');
             $tmap = array_combine($tid, $tasks);
             foreach ($assign as $k => $v) {
@@ -97,11 +97,28 @@ class Me extends AbstractScope
 
     public function taskJoin()
     {
-        $list = DB::connect()->table('league_task_joiner')
+        $join = DB::connect()->table('league_task_joiner')
             ->where(fn(Where $w) => $w
                 ->equalTo('user_id', $this->request()->getLoggingId())
+                ->in('status', [
+                    LeagueTaskJoinerStatus::PENDING,
+                    LeagueTaskJoinerStatus::APPROVED,
+                    LeagueTaskJoinerStatus::COMPLETE,
+                ])
             )
             ->multi();
+        if ($join) {
+            $taskIds = array_column($join, 'league_task_joiner_task_id');
+            $taskIds = array_unique($taskIds);
+            sort($taskIds);
+            $tasks = $this->scope(LeagueTask::class, 'multi', ['ids' => $taskIds, 'attach_joiner' => true]);
+            $tid = array_column($tasks, 'league_task_id');
+            $tmap = array_combine($tid, $tasks);
+            foreach ($join as $k => $v) {
+                $join[$k]['league_task_info'] = $tmap[$v['league_task_joiner_task_id']];
+            }
+            return $join;
+        }
         return [];
     }
 

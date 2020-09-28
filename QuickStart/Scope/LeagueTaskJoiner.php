@@ -7,7 +7,6 @@ use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\Arr;
 use Yonna\QuickStart\Mapping\League\LeagueTaskJoinerStatus;
 use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
-use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Prism\LeagueTaskJoinerPrism;
 use Yonna\Throwable\Exception;
 use Yonna\Validator\ArrayValidator;
@@ -38,7 +37,7 @@ class LeagueTaskJoiner extends AbstractScope
             ->where(fn(Where $w) => $w
                 ->equalTo('task_id', $prism->getTaskId())
                 ->equalTo('user_id', $prism->getUserId())
-                ->in('status', [LeagueTaskJoinerStatus::DOING, LeagueTaskJoinerStatus::COMPLETE])
+                ->in('status', [LeagueTaskJoinerStatus::APPROVED, LeagueTaskJoinerStatus::COMPLETE])
             )->one();
         if ($one) {
             return true;
