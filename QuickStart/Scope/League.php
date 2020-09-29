@@ -173,7 +173,7 @@ class League extends AbstractScope
             )
             ->count();
         if ($c > 0) {
-            Exception::params('Name is exist');
+            Exception::params('Name already exist');
         }
         // 找到社团主
         if (!$prism->getMasterUserId()) {

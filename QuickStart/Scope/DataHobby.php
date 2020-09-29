@@ -75,6 +75,12 @@ class DataHobby extends AbstractScope
         ArrayValidator::required($this->input(), ['name'], function ($error) {
             Exception::throw($error);
         });
+        $one = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('name', $this->input('name')))
+            ->one();
+        if ($one) {
+            Exception::params('Name already exist');
+        }
         $add = [
             'name' => $this->input('name'),
             'status' => $this->input('status') ?? DataStatus::DISABLED,
@@ -92,6 +98,12 @@ class DataHobby extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
+        $one = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('name', $this->input('name')))
+            ->one();
+        if ($one['data_hobby_id'] !== $this->input('id')) {
+            Exception::params('Name already exist');
+        }
         $data = [
             'name' => $this->input('name'),
             'status' => $this->input('status'),
