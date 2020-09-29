@@ -183,7 +183,6 @@ class SdkWxmp extends AbstractScope
             if ($wxUserInfo) {
                 $wxUserInfo['openid'] = $openid;
                 $this->scope(SdkWxmpUser::class, 'save', $wxUserInfo);
-                $this->scope(SdkWxmpUser::class, 'save', $wxUserInfo);
                 $wxUserInfo['logging_id'] = $this->loginRecord($openid);
             }
             return $wxUserInfo;

@@ -26,11 +26,15 @@ class UserMeta extends AbstractScope
      */
     public function one(): array
     {
-        ArrayValidator::required($this->input(), ['id'], function ($error) {
+        ArrayValidator::required($this->input(), ['user_id'], function ($error) {
             Exception::throw($error);
         });
+        $prism = new UserMetaPrism($this->request());
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->where(function (Where $w) use ($prism) {
+                $w->equalTo('user_id', $prism->getUserId());
+                $prism->getKey() && $w->equalTo('key', $prism->getKey());
+            })
             ->one();
     }
 
