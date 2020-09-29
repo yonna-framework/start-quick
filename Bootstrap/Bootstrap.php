@@ -5,14 +5,12 @@
 
 namespace Yonna\Bootstrap;
 
-use ErrorException;
 use Throwable;
 use Yonna\Core;
 use Yonna\IO\RequestBuilder;
-use Yonna\Throwable\Exception;
+use Yonna\Log\Log;
 use Yonna\IO\IO;
 use Yonna\IO\Request;
-use Yonna\Log\FileLog;
 use Yonna\Response\Collector;
 use Yonna\Response\Response;
 
@@ -69,11 +67,11 @@ class Bootstrap
              */
             $io = Core::singleton(IO::class);
             $collector = $io->response($request);
+            Log::file()->info(['msg' => "hello world"], 'test');
 
         } catch (Throwable $e) {
             // log
-            $log = Core::get(FileLog::class);
-            $log->throwable($e);
+            Log::file()->throwable($e);
             $collector = Response::throwable($e);
         }
         return $collector;
