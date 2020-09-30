@@ -66,6 +66,34 @@ class UserLicense extends AbstractScope
     }
 
     /**
+     * @return bool
+     * @throws Exception\DatabaseException
+     */
+    public function insert()
+    {
+        ArrayValidator::required($this->input(), ['user_id', 'license_id'], function ($error) {
+            Exception::throw($error);
+        });
+        $user_id = $this->input('user_id');
+        $license_id = $this->input('license_id');
+        $one = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $user_id)
+                ->equalTo('license_id', $license_id)
+            )
+            ->one();
+        if ($one) {
+            return true;
+        }
+        $add = [
+            'user_id' => $user_id,
+            'license_id' => $license_id,
+        ];
+        DB::connect()->table(self::TABLE)->insert($add);
+        return true;
+    }
+
+    /**
      * @return int
      * @throws Exception\DatabaseException
      */

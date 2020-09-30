@@ -63,21 +63,21 @@ class UserWechat extends AbstractScope
             $user_id = $find['user_account_user_id'] ?? null;
             // 有数据则绑定原有账号，没数据则新建账号
             if ($user_id) {
-                /**
-                 * $avatar = $this->scope(UserMeta::class, 'one', ['user_id' => $user_id, 'key' => 'avatar']);
-                 * if (!empty($avatar['user_meta_value'])) {
-                 * // 头像不换
-                 * if (isset($metas['avatar'])) {
-                 * unset($metas['avatar']);
-                 * }
-                 * }
-                 */
                 // 更新数据
                 $data = [
                     'id' => $user_id,
                     'metas' => $metas,
                 ];
                 $this->scope(User::class, 'update', $data);
+                // 许可判定
+                if ($licenses) {
+                    foreach ($licenses as $l) {
+                        $this->scope(UserLicense::class, 'insert', [
+                            'user_id' => $user_id,
+                            'license_id' => $l,
+                        ]);
+                    }
+                }
             } else {
                 $data = [
                     'password' => Str::randomLetter(10),
