@@ -55,18 +55,20 @@ CREATE TABLE `league`
 
 CREATE TABLE `league_member`
 (
-    `league_id`        bigint unsigned not null comment '社团id',
-    `user_id`          bigint unsigned not null comment '成员user_id',
-    `permission`       tinyint         not null comment '权限[1成员 5管理员 10拥有者]',
-    `status`           tinyint         not null default 1 comment '状态[-2作废,-1申请驳回,1待审核,2审核通过]',
-    `apply_reason`     char(255)       not null default '' comment '申请理由',
-    `rejection_reason` char(255)       not null default '' comment '驳回理由',
-    `pass_reason`      char(255)       not null default '' comment '通过理由',
-    `delete_reason`    char(255)       not null default '' comment '作废理由',
-    `apply_time`       bigint unsigned not null comment '申请日期时间戳',
-    `rejection_time`   bigint unsigned not null comment '驳回日期时间戳',
-    `pass_time`        bigint unsigned not null comment '通过日期时间戳',
-    `delete_time`      bigint unsigned not null comment '作废日期时间戳',
+    `id`               bigint unsigned auto_increment not null comment 'id',
+    `league_id`        bigint unsigned                not null comment '社团id',
+    `user_id`          bigint unsigned                not null comment '成员user_id',
+    `permission`       tinyint                        not null comment '权限[1成员 5管理员 10拥有者]',
+    `status`           tinyint                        not null default 1 comment '状态[-2作废,-1申请驳回,1待审核,2审核通过]',
+    `apply_reason`     char(255)                      not null default '' comment '申请理由',
+    `rejection_reason` char(255)                      not null default '' comment '驳回理由',
+    `pass_reason`      char(255)                      not null default '' comment '通过理由',
+    `delete_reason`    char(255)                      not null default '' comment '作废理由',
+    `apply_time`       bigint unsigned                not null comment '申请日期时间戳',
+    `rejection_time`   bigint unsigned                not null comment '驳回日期时间戳',
+    `pass_time`        bigint unsigned                not null comment '通过日期时间戳',
+    `delete_time`      bigint unsigned                not null comment '作废日期时间戳',
+    PRIMARY KEY (`id`),
     UNIQUE KEY (`league_id`, `user_id`)
 ) ENGINE = INNODB COMMENT '社团成员';
 
@@ -122,21 +124,25 @@ CREATE TABLE `league_task`
 
 CREATE TABLE `league_task_assign`
 (
-    `task_id`     bigint unsigned not null comment '参与的任务user_id',
-    `league_id`   bigint unsigned not null comment '参加的社团id',
-    `assign_time` bigint unsigned not null comment '参与日期时间戳',
+    `id`          bigint unsigned auto_increment not null comment 'id',
+    `task_id`     bigint unsigned                not null comment '参与的任务user_id',
+    `league_id`   bigint unsigned                not null comment '参加的社团id',
+    `assign_time` bigint unsigned                not null comment '参与日期时间戳',
+    PRIMARY KEY (`id`),
     UNIQUE KEY (`task_id`, `league_id`)
 ) ENGINE = INNODB COMMENT '社团任务分配表(指定社团)';
 
 CREATE TABLE `league_task_joiner`
 (
-    `task_id`           bigint unsigned not null comment '参与的任务user_id',
-    `user_id`           bigint unsigned not null comment '参与人user_id',
-    `league_id`         bigint unsigned not null comment '参与人当时所在社团id',
-    `status`            tinyint         not null default 1 comment '状态[-2中止,-1中途放弃,1待审核,5进行中,10已完成]',
-    `abort_reason`      char(255)       not null default '' comment '中止理由',
-    `give_up_reason`    char(255)       not null default '' comment '中途放弃理由',
-    `self_evaluation`   numeric(3, 1)   not null default 0.0 comment '成员评分',
-    `league_evaluation` numeric(3, 1)   not null default 0.0 comment '社团打分',
+    `id`                bigint unsigned auto_increment not null comment 'id',
+    `task_id`           bigint unsigned                not null comment '参与的任务user_id',
+    `user_id`           bigint unsigned                not null comment '参与人user_id',
+    `league_id`         bigint unsigned                not null comment '参与人当时所在社团id',
+    `status`            tinyint                        not null default 1 comment '状态[-2中止,-1中途放弃,1待审核,5进行中,10已完成]',
+    `abort_reason`      char(255)                      not null default '' comment '中止理由',
+    `give_up_reason`    char(255)                      not null default '' comment '中途放弃理由',
+    `self_evaluation`   numeric(3, 1)                  not null default 0.0 comment '成员评分',
+    `league_evaluation` numeric(3, 1)                  not null default 0.0 comment '社团打分',
+    PRIMARY KEY (`id`),
     INDEX (`task_id`, `user_id`, `status`)
 ) ENGINE = INNODB COMMENT '社团任务参加者';

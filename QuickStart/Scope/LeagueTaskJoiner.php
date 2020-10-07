@@ -70,6 +70,60 @@ class LeagueTaskJoiner extends AbstractScope
     }
 
     /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function status()
+    {
+        ArrayValidator::required($this->input(), ['id', 'status'], function ($error) {
+            Exception::throw($error);
+        });
+        $status = $this->input('status');
+        $reason = $this->input('reason');
+        $data = ['status' => $status];
+        switch ($status) {
+            case LeagueTaskJoinerStatus::ABORT:
+                $data['abort_time'] = time();
+                $data['abort_reason'] = $reason;
+                break;
+            case LeagueTaskJoinerStatus::GIVE_UP:
+                $data['give_up_time'] = time();
+                $data['give_up_reason'] = $reason;
+                break;
+        }
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update($data);
+    }
+
+    /**
+     * @return false|int
+     * @throws Exception\DatabaseException
+     */
+    public function multiStatus()
+    {
+        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
+            Exception::throw($error);
+        });
+        $status = $this->input('status');
+        $reason = $this->input('reason');
+        $data = ['status' => $status];
+        switch ($status) {
+            case LeagueTaskJoinerStatus::ABORT:
+                $data['abort_time'] = time();
+                $data['abort_reason'] = $reason;
+                break;
+            case LeagueTaskJoinerStatus::GIVE_UP:
+                $data['give_up_time'] = time();
+                $data['give_up_reason'] = $reason;
+                break;
+        }
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
+            ->update($data);
+    }
+
+    /**
      * @return array
      * @throws Exception\DatabaseException
      */

@@ -349,7 +349,7 @@ class Install
             });
             Config::group(['league', 'task', 'joiner'], function () {
                 Config::post('add', LeagueTaskJoiner::class, 'insert');
-                Config::post('del', LeagueTaskJoiner::class, 'delete');
+                Config::post('mStatus', LeagueTaskJoiner::class, 'multiStatus');
             });
         });
     }
@@ -364,6 +364,7 @@ class Install
                 Config::post('edit', LeagueMember::class, 'update');
                 Config::post('del', LeagueMember::class, 'delete');
                 Config::post('status', LeagueMember::class, 'status');
+                Config::post('mStatus', LeagueMember::class, 'multiStatus');
             });
         });
     }
@@ -377,8 +378,8 @@ class Install
                 Config::post('add', Feedback::class, 'insert');
                 Config::post('edit', Feedback::class, 'update');
                 Config::post('del', Feedback::class, 'delete');
-                Config::post('mdel', Feedback::class, 'multiDelete');
-                Config::post('manswer', Feedback::class, 'multiAnswer');
+                Config::post('mDel', Feedback::class, 'multiDelete');
+                Config::post('mAnswer', Feedback::class, 'multiAnswer');
             });
         });
     }

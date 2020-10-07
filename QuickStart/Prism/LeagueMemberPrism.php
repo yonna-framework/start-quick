@@ -11,6 +11,8 @@ class LeagueMemberPrism extends Prism
     protected int $current = 1;
     protected int $per = 10;
     protected ?string $order_by = null;
+    protected ?int $id = null;
+    protected ?array $ids = null;
     protected ?int $league_id = null;
     protected ?int $user_id = null;
     protected ?int $permission = null;
@@ -27,6 +29,8 @@ class LeagueMemberPrism extends Prism
     protected ?string $reason = null;
 
     protected ?array $attach = null;
+
+    protected ?string $user_account = null;
 
     /**
      * @return int
@@ -74,6 +78,38 @@ class LeagueMemberPrism extends Prism
     public function setOrderBy(?string $order_by): void
     {
         $this->order_by = $order_by;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getIds(): ?array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * @param array|null $ids
+     */
+    public function setIds(?array $ids): void
+    {
+        $this->ids = $ids;
     }
 
     /**
@@ -298,6 +334,22 @@ class LeagueMemberPrism extends Prism
     public function setAttach(?array $attach): void
     {
         $this->attach = $attach;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserAccount(): ?string
+    {
+        return $this->user_account;
+    }
+
+    /**
+     * @param string|null $user_account
+     */
+    public function setUserAccount(?string $user_account): void
+    {
+        $this->user_account = $user_account;
     }
 
 }

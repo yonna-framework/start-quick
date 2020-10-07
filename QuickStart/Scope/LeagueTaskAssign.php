@@ -42,14 +42,11 @@ class LeagueTaskAssign extends AbstractScope
      */
     public function delete()
     {
-        ArrayValidator::required($this->input(), ['task_id', 'league_id'], function ($error) {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w
-                ->equalTo('task_id', $this->input('task_id'))
-                ->equalTo('league_id', $this->input('league_id'))
-            )
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->delete();
     }
 

@@ -31,6 +31,8 @@ class LeagueMember extends AbstractScope
         $prism = new LeagueMemberPrism($this->request());
         $res = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getIds() && $w->in('id', $prism->getIds());
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getPermission() && $w->equalTo('permission', $prism->getPermission());
@@ -58,6 +60,8 @@ class LeagueMember extends AbstractScope
         $prism = new LeagueMemberPrism($this->request());
         $res = DB::connect()->table(self::TABLE)
             ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getIds() && $w->in('id', $prism->getIds());
                 $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getPermission() && $w->equalTo('permission', $prism->getPermission());
@@ -85,15 +89,25 @@ class LeagueMember extends AbstractScope
      */
     public function insert()
     {
-        ArrayValidator::required($this->input(), ['league_id', 'user_id', 'permission'], function ($error) {
+        ArrayValidator::required($this->input(), ['league_id', 'permission'], function ($error) {
+            Exception::throw($error);
+        });
+        ArrayValidator::anyone($this->input(), ['user_account', 'user_id'], function ($error) {
             Exception::throw($error);
         });
         $prism = new LeagueMemberPrism($this->request());
+        if ($prism->getUserAccount()) {
+            $one = $this->scope(UserAccount::class, 'one', ['string' => $prism->getUserAccount()]);
+            if (!$one) {
+                Exception::params('Account is not exist');
+            }
+            $prism->setUserId($one['user_account_user_id']);
+        }
         $one = DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('league_id', $prism->getLeagueId())->equalTo('user_id', $prism->getUserId()))
             ->one();
         if ($one) {
-            return true;
+            Exception::params('User already holds a position in the organization');
         }
         $add = [
             'league_id' => $prism->getLeagueId(),
@@ -115,12 +129,12 @@ class LeagueMember extends AbstractScope
      */
     public function update()
     {
-        ArrayValidator::required($this->input(), ['league_id', 'user_id'], function ($error) {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
         $prism = new LeagueMemberPrism($this->request());
         $one = DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('league_id', $prism->getLeagueId())->equalTo('user_id', $prism->getUserId()))
+            ->where(fn(Where $w) => $w->equalTo('id', $prism->getId()))
             ->one();
         if (!$one) {
             return 0;
@@ -144,10 +158,7 @@ class LeagueMember extends AbstractScope
                 break;
         }
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w
-                ->equalTo('league_id', $prism->getLeagueId())
-                ->equalTo('user_id', $prism->getUserId())
-            )
+            ->where(fn(Where $w) => $w->equalTo('id', $prism->getId()))
             ->update($data);
     }
 
@@ -157,7 +168,7 @@ class LeagueMember extends AbstractScope
      */
     public function status()
     {
-        ArrayValidator::required($this->input(), ['league_id', 'user_id', 'status'], function ($error) {
+        ArrayValidator::required($this->input(), ['id', 'status'], function ($error) {
             Exception::throw($error);
         });
         $status = $this->input('status');
@@ -178,10 +189,38 @@ class LeagueMember extends AbstractScope
                 break;
         }
         return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w
-                ->equalTo('league_id', $this->input('league_id'))
-                ->equalTo('user_id', $this->input('user_id'))
-            )
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update($data);
+    }
+
+    /**
+     * @return false|int
+     * @throws Exception\DatabaseException
+     */
+    public function multiStatus()
+    {
+        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
+            Exception::throw($error);
+        });
+        $status = $this->input('status');
+        $reason = $this->input('reason');
+        $data = ['status' => $status];
+        switch ($status) {
+            case LeagueStatus::REJECTION:
+                $data['rejection_time'] = time();
+                $data['rejection_reason'] = $reason;
+                break;
+            case LeagueStatus::APPROVED:
+                $data['pass_time'] = time();
+                $data['pass_reason'] = $reason;
+                break;
+            case LeagueStatus::DELETE:
+                $data['delete_time'] = time();
+                $data['delete_reason'] = $reason;
+                break;
+        }
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
             ->update($data);
     }
 
@@ -190,12 +229,11 @@ class LeagueMember extends AbstractScope
      */
     public function delete()
     {
-        ArrayValidator::required($this->input(), ['league_id', 'user_id'], function ($error) {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
         return $this->scope(self::class, 'status', [
-            'league_id' => $this->input('league_id'),
-            'user_id' => $this->input('user_id'),
+            'id' => $this->input('id'),
             'status' => LeagueMemberStatus::DELETE,
         ]);
     }
