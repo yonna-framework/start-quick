@@ -68,6 +68,10 @@ class League extends AbstractScope
             })
             ->orderBy('sort', 'desc', self::TABLE)
             ->orderBy('id', 'desc', self::TABLE);
+        if ($prism->getUserAccount()) {
+            $one = $this->scope(UserAccount::class, 'one', ['string' => $prism->getUserAccount()]);
+            $prism->setUserId($one ? $one['user_account_user_id'] : -1);
+        }
         if ($prism->getUserId()) {
             $db->join(self::TABLE, 'league_member', ['id' => 'league_id'], 'left')
                 ->groupBy('id', 'league')

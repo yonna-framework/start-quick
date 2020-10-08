@@ -120,6 +120,7 @@ class LeagueTask extends AbstractScope
             'league_id' => $prism->getLeagueId(),
             'points' => round($prism->getPoints(), 1),
             'introduction' => $prism->getIntroduction(),
+            'current_number' => 0,
             'people_number' => $prism->getPeopleNumber(),
             'start_time' => $prism->getStartTime(),
             'end_time' => $prism->getEndTime(),

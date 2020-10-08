@@ -22,6 +22,24 @@ class LeagueMember extends AbstractScope
     const TABLE = 'league_member';
 
     /**
+     * 获取详情
+     * @return array
+     * @throws Exception\DatabaseException
+     */
+    public function one(): array
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        $prism = new LeagueMemberPrism($this->request());
+        return DB::connect()->table(self::TABLE)
+            ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
+            })
+            ->one();
+    }
+
+    /**
      * @return array
      * @throws Exception\DatabaseException
      * @throws Exception\ThrowException

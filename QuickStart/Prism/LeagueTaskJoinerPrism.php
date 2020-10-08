@@ -17,12 +17,10 @@ class LeagueTaskJoinerPrism extends Prism
     protected ?int $task_id = null;
     protected ?int $user_id = null;
     protected ?int $league_id = null;
-    protected ?int $status = null;
-    protected ?string $abort_reason = null;
-    protected ?string $give_up_reason = null;
     protected ?float $self_evaluation = null;
     protected ?float $league_evaluation = null;
 
+    protected ?string $user_account = null;
     protected ?array $attach = null;
 
     /**
@@ -154,54 +152,6 @@ class LeagueTaskJoinerPrism extends Prism
     }
 
     /**
-     * @return int|null
-     */
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param int|null $status
-     */
-    public function setStatus(?int $status): void
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAbortReason(): ?string
-    {
-        return $this->abort_reason;
-    }
-
-    /**
-     * @param string|null $abort_reason
-     */
-    public function setAbortReason(?string $abort_reason): void
-    {
-        $this->abort_reason = $abort_reason;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getGiveUpReason(): ?string
-    {
-        return $this->give_up_reason;
-    }
-
-    /**
-     * @param string|null $give_up_reason
-     */
-    public function setGiveUpReason(?string $give_up_reason): void
-    {
-        $this->give_up_reason = $give_up_reason;
-    }
-
-    /**
      * @return float|null
      */
     public function getSelfEvaluation(): ?float
@@ -247,6 +197,22 @@ class LeagueTaskJoinerPrism extends Prism
     public function setAttach(?array $attach): void
     {
         $this->attach = $attach;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserAccount(): ?string
+    {
+        return $this->user_account;
+    }
+
+    /**
+     * @param string|null $user_account
+     */
+    public function setUserAccount(?string $user_account): void
+    {
+        $this->user_account = $user_account;
     }
 
 }

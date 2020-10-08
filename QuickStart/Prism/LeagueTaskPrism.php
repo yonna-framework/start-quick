@@ -19,6 +19,7 @@ class LeagueTaskPrism extends Prism
     protected ?int $user_id = null;
     protected ?string $name = null;
     protected ?string $introduction = null;
+    protected ?int $current_number = null;
     protected ?int $people_number = null;
     protected ?int $start_time = null;
     protected ?int $end_time = null;
@@ -237,6 +238,22 @@ class LeagueTaskPrism extends Prism
     public function setIntroduction(?string $introduction): void
     {
         $this->introduction = $introduction;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCurrentNumber(): ?int
+    {
+        return $this->current_number;
+    }
+
+    /**
+     * @param int|null $current_number
+     */
+    public function setCurrentNumber(?int $current_number): void
+    {
+        $this->current_number = $current_number;
     }
 
     /**

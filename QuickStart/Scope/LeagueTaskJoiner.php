@@ -5,7 +5,7 @@ namespace Yonna\QuickStart\Scope;
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
 use Yonna\Foundation\Arr;
-use Yonna\QuickStart\Mapping\League\LeagueTaskJoinerStatus;
+use Yonna\QuickStart\Mapping\League\LeagueMemberStatus;
 use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
 use Yonna\QuickStart\Prism\LeagueTaskJoinerPrism;
 use Yonna\Throwable\Exception;
@@ -21,6 +21,68 @@ class LeagueTaskJoiner extends AbstractScope
     const TABLE = 'league_task_joiner';
 
     /**
+     * @param int $taskId
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    private function getCurrentNumber(int $taskId)
+    {
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('task_id', $taskId))
+            ->count('id');
+    }
+
+    /**
+     * @param int $taskId
+     * @return false|int
+     */
+    private function refreshCurrentNumber(int $taskId)
+    {
+        $cur = $this->getCurrentNumber($taskId);
+        $one = DB::connect()->table('league_task')->field('people_number')
+            ->where(fn(Where $w) => $w->equalTo('id', $taskId))
+            ->one();
+        if (!$one) {
+            Exception::error('task is not exist');
+        }
+        if ($cur > $one['league_task_people_number']) {
+            Exception::error('Exceed the maximum number of people');
+        }
+        return DB::connect()->table('league_task')
+            ->where(fn(Where $w) => $w->equalTo('id', $taskId))
+            ->update(['current_number' => $cur]);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception\DatabaseException
+     */
+    public function page(): array
+    {
+        $prism = new LeagueTaskJoinerPrism($this->request());
+        $res = DB::connect()->table(self::TABLE)
+            ->where(function (Where $w) use ($prism) {
+                $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getIds() && $w->in('id', $prism->getIds());
+                $prism->getLeagueId() && $w->equalTo('league_id', $prism->getLeagueId());
+                $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
+            })
+            ->orderBy('league_id', 'desc')
+            ->page($prism->getCurrent(), $prism->getPer());
+        $userIds = array_column($res['list'], 'league_task_joiner_user_id');
+        if ($userIds) {
+            $userIds = array_unique($userIds);
+            $userIds = array_values($userIds);
+            $users = $this->scope(User::class, 'multi', ['ids' => $userIds]);
+            $users = array_combine($userIds, $users);
+            foreach ($res['list'] as $k => $v) {
+                $res['list'][$k]['league_task_joiner_user_info'] = $users[$v['league_task_joiner_user_id']];
+            }
+        }
+        return $res;
+    }
+
+    /**
      * @return bool|mixed|null
      * @throws Exception\DatabaseException
      * @throws Exception\ErrorException
@@ -31,21 +93,44 @@ class LeagueTaskJoiner extends AbstractScope
         ArrayValidator::required($this->input(), ['task_id', 'league_id'], function ($error) {
             Exception::throw($error);
         });
+        ArrayValidator::anyone($this->input(), ['user_account', 'user_id'], function ($error) {
+            Exception::throw($error);
+        });
         $prism = new LeagueTaskJoinerPrism($this->request());
-        $prism->setUserId($this->request()->getLoggingId());
+        if (!$prism->getUserId()) {
+            $userAccount = $prism->getUserAccount();
+            $one = $this->scope(UserAccount::class, 'one', ['string' => $userAccount]);
+            if (!$one) {
+                Exception::params('Account is not exist');
+            }
+            $prism->setUserId($one['user_account_user_id']);
+        }
+        // 检测社团是否有参加资格
+        $one = DB::connect()->table('league_task_assign')
+            ->where(fn(Where $w) => $w
+                ->equalTo('task_id', $prism->getTaskId())
+                ->equalTo('league_id', $prism->getLeagueId())
+            )
+            ->one();
+        if (!$one) {
+            Exception::error('The league does not accept this task');
+        }
+        // 检测是否已加入
         $one = DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w
                 ->equalTo('task_id', $prism->getTaskId())
                 ->equalTo('user_id', $prism->getUserId())
-                ->in('status', [LeagueTaskJoinerStatus::APPROVED, LeagueTaskJoinerStatus::COMPLETE])
             )->one();
         if ($one) {
+            Exception::error('The league does not accept this task');
             return true;
         }
+        // 检测用户是否有加入该社团
         $one = DB::connect()->table('league_member')
             ->where(fn(Where $w) => $w
                 ->equalTo('user_id', $prism->getUserId())
-                ->equalTo('status', LeagueTaskStatus::APPROVED)
+                ->equalTo('league_id', $prism->getLeagueId())
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
             )
             ->one();
         if (!$one) {
@@ -58,13 +143,7 @@ class LeagueTaskJoiner extends AbstractScope
         ];
         return DB::transTrace(function () use ($add, $prism) {
             $id = DB::connect()->table(self::TABLE)->insert($add);
-            if ($prism->getLeagueId()) {
-                // 发起人的社团自动参与
-                $this->scope(LeagueTaskAssign::class, 'insert', [
-                    'task_id' => $id,
-                    'league_id' => $prism->getLeagueId(),
-                ]);
-            }
+            $this->refreshCurrentNumber($add['task_id']);
             return $id;
         });
     }
@@ -73,54 +152,14 @@ class LeagueTaskJoiner extends AbstractScope
      * @return int
      * @throws Exception\DatabaseException
      */
-    public function status()
+    public function delete()
     {
-        ArrayValidator::required($this->input(), ['id', 'status'], function ($error) {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        $status = $this->input('status');
-        $reason = $this->input('reason');
-        $data = ['status' => $status];
-        switch ($status) {
-            case LeagueTaskJoinerStatus::ABORT:
-                $data['abort_time'] = time();
-                $data['abort_reason'] = $reason;
-                break;
-            case LeagueTaskJoinerStatus::GIVE_UP:
-                $data['give_up_time'] = time();
-                $data['give_up_reason'] = $reason;
-                break;
-        }
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->update($data);
-    }
-
-    /**
-     * @return false|int
-     * @throws Exception\DatabaseException
-     */
-    public function multiStatus()
-    {
-        ArrayValidator::required($this->input(), ['ids', 'status'], function ($error) {
-            Exception::throw($error);
-        });
-        $status = $this->input('status');
-        $reason = $this->input('reason');
-        $data = ['status' => $status];
-        switch ($status) {
-            case LeagueTaskJoinerStatus::ABORT:
-                $data['abort_time'] = time();
-                $data['abort_reason'] = $reason;
-                break;
-            case LeagueTaskJoinerStatus::GIVE_UP:
-                $data['give_up_time'] = time();
-                $data['give_up_reason'] = $reason;
-                break;
-        }
-        return DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
-            ->update($data);
+            ->delete();
     }
 
     /**

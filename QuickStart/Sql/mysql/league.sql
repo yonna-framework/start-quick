@@ -100,6 +100,7 @@ CREATE TABLE `league_task`
     `user_id`             bigint unsigned                not null comment '发起人user_id',
     `name`                char(255)                      not null comment '任务名称',
     `introduction`        varchar(1024)                  not null comment '任务介绍',
+    `current_number`      int unsigned                   not null default 0 comment '当前人数',
     `people_number`       int unsigned                   not null default 0 comment '最大人数',
     `start_time`          bigint unsigned                not null comment '开始日期时间戳',
     `end_time`            bigint unsigned                not null comment '结束日期时间戳',
@@ -138,11 +139,8 @@ CREATE TABLE `league_task_joiner`
     `task_id`           bigint unsigned                not null comment '参与的任务user_id',
     `user_id`           bigint unsigned                not null comment '参与人user_id',
     `league_id`         bigint unsigned                not null comment '参与人当时所在社团id',
-    `status`            tinyint                        not null default 1 comment '状态[-2中止,-1中途放弃,1待审核,5进行中,10已完成]',
-    `abort_reason`      char(255)                      not null default '' comment '中止理由',
-    `give_up_reason`    char(255)                      not null default '' comment '中途放弃理由',
     `self_evaluation`   numeric(3, 1)                  not null default 0.0 comment '成员评分',
     `league_evaluation` numeric(3, 1)                  not null default 0.0 comment '社团打分',
     PRIMARY KEY (`id`),
-    INDEX (`task_id`, `user_id`, `status`)
+    INDEX (`task_id`, `user_id`)
 ) ENGINE = INNODB COMMENT '社团任务参加者';

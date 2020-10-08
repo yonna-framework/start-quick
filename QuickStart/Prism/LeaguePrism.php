@@ -44,6 +44,8 @@ class LeaguePrism extends Prism
     protected bool $attach_speciality = true;
     protected bool $attach_member = false;
 
+    protected ?string $user_account = null;
+
     /**
      * @return int
      */
@@ -554,6 +556,22 @@ class LeaguePrism extends Prism
     public function setAttachMember(bool $attach_member): void
     {
         $this->attach_member = $attach_member;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserAccount(): ?string
+    {
+        return $this->user_account;
+    }
+
+    /**
+     * @param string|null $user_account
+     */
+    public function setUserAccount(?string $user_account): void
+    {
+        $this->user_account = $user_account;
     }
 
 }

@@ -14,6 +14,7 @@ use Yonna\QuickStart\Scope\Feedback;
 use Yonna\QuickStart\Scope\League;
 use Yonna\QuickStart\Scope\LeagueMember;
 use Yonna\QuickStart\Scope\LeagueTask;
+use Yonna\QuickStart\Scope\LeagueTaskAssign;
 use Yonna\QuickStart\Scope\LeagueTaskJoiner;
 use Yonna\QuickStart\Scope\License;
 use Yonna\QuickStart\Scope\DataSpeciality;
@@ -347,9 +348,15 @@ class Install
                 Config::post('del', LeagueTask::class, 'delete');
                 Config::post('mStatus', LeagueTask::class, 'multiStatus');
             });
+            Config::group(['league', 'task', 'assign'], function () {
+                Config::post('list', LeagueTaskAssign::class, 'multi');
+                Config::post('add', LeagueTaskAssign::class, 'insert');
+                Config::post('del', LeagueTaskAssign::class, 'delete');
+            });
             Config::group(['league', 'task', 'joiner'], function () {
+                Config::post('page', LeagueTaskJoiner::class, 'page');
                 Config::post('add', LeagueTaskJoiner::class, 'insert');
-                Config::post('mStatus', LeagueTaskJoiner::class, 'multiStatus');
+                Config::post('del', LeagueTaskJoiner::class, 'delete');
             });
         });
     }
@@ -358,6 +365,7 @@ class Install
     {
         Config::middleware([Limiter::class, Logging::class], function () {
             Config::group(['league', 'member'], function () {
+                Config::post('info', LeagueMember::class, 'one');
                 Config::post('list', LeagueMember::class, 'multi');
                 Config::post('page', LeagueMember::class, 'page');
                 Config::post('add', LeagueMember::class, 'insert');
