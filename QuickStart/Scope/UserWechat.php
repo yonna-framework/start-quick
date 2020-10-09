@@ -54,9 +54,12 @@ class UserWechat extends AbstractScope
             if ($src) {
                 $res = (new Xoss($this->request()))->saveFile($src);
                 if ($res) {
-                    $metas['avatar'] = [$res['xoss_key']];
+                    $metas['avatar'] = $res['xoss_key'];
                 }
             }
+        }
+        if (!is_array($metas['avatar'])) {
+            $metas['avatar'] = [$metas['avatar']];
         }
         $user_id = DB::transTrace(function () use ($phone, $openid, $metas, $licenses) {
             $find = $this->scope(UserAccount::class, 'one', ['string' => $phone]);
