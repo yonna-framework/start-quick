@@ -74,11 +74,18 @@ class League extends AbstractScope
             $one = $this->scope(UserAccount::class, 'one', ['string' => $prism->getUserAccount()]);
             $prism->setUserId($one ? $one['user_account_user_id'] : -1);
         }
+        $lids = [];
         if ($prism->getUserId()) {
-            $db->join(self::TABLE, 'league_member', ['id' => 'league_id'], 'left')
-                ->groupBy('id', 'league')
-                ->where(fn(Where $w) => $w->searchTable('league_member')
-                    ->equalTo('user_id', $prism->getUserId()));
+            $res = DB::connect()->table('league_member')->field('league_id')
+                ->where(function (Where $w) use ($prism) {
+                    $w->equalTo('user_id', $prism->getUserId());
+                    if ($prism->getStatus() === LeagueStatus::APPROVED) {
+                        $w->equalTo('status', LeagueMemberStatus::APPROVED);
+                    }
+                })
+                ->multi();
+            $res = array_column($res, 'league_member_league_id');
+            $lids = array_merge($lids, $res);
         }
         if ($prism->getHobby()) {
             $db->join(self::TABLE, 'league_associate_hobby', ['id' => 'league_id'], 'left')
@@ -97,6 +104,11 @@ class League extends AbstractScope
                 ->groupBy('id', 'league')
                 ->where(fn(Where $w) => $w->searchTable('league_associate_speciality')
                     ->in('data_id', $prism->getSpeciality()));
+        }
+        if ($lids) {
+            $lids = array_unique($lids);
+            $lids = array_values($lids);
+            $db->where(fn(Where $w) => $w->in('id', $lids));
         }
         $result = $db->multi();
         if ($prism->isAttachHobby()) {

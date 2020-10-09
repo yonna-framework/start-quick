@@ -61,6 +61,8 @@ class LeagueMember extends AbstractScope
             ->multi();
         $userIds = array_column($res, 'league_member_user_id');
         if ($userIds) {
+            $userIds = array_unique($userIds);
+            $userIds = array_values($userIds);
             $users = $this->scope(User::class, 'multi', ['ids' => $userIds]);
             $users = array_combine($userIds, $users);
             foreach ($res as $k => $v) {
