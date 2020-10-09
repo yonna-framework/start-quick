@@ -130,7 +130,7 @@ class Install
                     Config::post('league', Stat::class, 'league');
                     Config::post('leagueMember', Stat::class, 'leagueMember');
                     Config::post('task', Stat::class, 'task');
-                    Config::post('taskJoin', Stat::class, 'taskJoin');
+                    Config::post('leagueData', Stat::class, 'leagueData');
                     Config::post('essay', Stat::class, 'essay');
                     Config::post('essayCategory', Stat::class, 'essayCategory');
                     Config::post('userGrow', Stat::class, 'userGrow');

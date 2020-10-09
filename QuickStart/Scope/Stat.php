@@ -4,16 +4,14 @@ namespace Yonna\QuickStart\Scope;
 
 use Yonna\Database\DB;
 use Yonna\Database\Driver\Pdo\Where;
+use Yonna\QuickStart\Mapping\Data\DataStatus;
 use Yonna\QuickStart\Mapping\Essay\EssayCategoryStatus;
 use Yonna\QuickStart\Mapping\Essay\EssayStatus;
 use Yonna\QuickStart\Mapping\League\LeagueMemberPermission;
-use Yonna\QuickStart\Mapping\League\LeagueMemberStatus;
 use Yonna\QuickStart\Mapping\League\LeagueStatus;
-use Yonna\QuickStart\Mapping\League\LeagueTaskJoinerStatus;
 use Yonna\QuickStart\Mapping\League\LeagueTaskStatus;
 use Yonna\QuickStart\Mapping\User\AccountType;
 use Yonna\QuickStart\Mapping\User\UserStatus;
-use Yonna\QuickStart\Prism\LeagueTaskJoinerPrism;
 use Yonna\QuickStart\Prism\LeagueTaskPrism;
 use Yonna\Throwable\Exception\DatabaseException;
 
@@ -160,25 +158,17 @@ class Stat extends AbstractScope
      * @return array
      * @throws DatabaseException
      */
-    public function taskJoin(): array
+    public function leagueData(): array
     {
-        $stat = [];
-        foreach (LeagueTaskJoinerStatus::toKv('label') as $k => $v) {
-            $stat[$k] = [
-                'key' => $k,
-                'label' => $v,
-                'value' => 0,
-            ];
-        }
-        $userCount = DB::connect()
-            ->table('league_task_joiner')
-            ->field('count(`user_id`) as qty,status')
-            ->groupBy('status')
-            ->multi();
-        foreach ($userCount as $u) {
-            $stat[$u['league_task_joiner_status']]['value'] = $u['qty'];
-        }
-        return array_values($stat);
+        $h = DB::connect()->table('data_hobby')->where(fn(Where $w) => $w->equalTo('status', DataStatus::ENABLED))->count('id');
+        $w = DB::connect()->table('data_work')->where(fn(Where $w) => $w->equalTo('status', DataStatus::ENABLED))->count('id');
+        $s = DB::connect()->table('data_speciality')->where(fn(Where $w) => $w->equalTo('status', DataStatus::ENABLED))->count('id');
+        $stat = [
+            ['label' => '爱好', 'value' => $h],
+            ['label' => '职业', 'value' => $w],
+            ['label' => '特长', 'value' => $s],
+        ];
+        return $stat;
     }
 
     /**
