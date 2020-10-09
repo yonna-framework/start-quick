@@ -17,6 +17,7 @@ class LeagueMemberPrism extends Prism
     protected ?int $user_id = null;
     protected ?int $permission = null;
     protected ?int $status = null;
+    protected ?array $statuss = null;
     protected ?string $apply_reason = null;
     protected ?string $rejection_reason = null;
     protected ?string $passed_reason = null;
@@ -174,6 +175,22 @@ class LeagueMemberPrism extends Prism
     public function setStatus(?int $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getStatuss(): ?array
+    {
+        return $this->statuss;
+    }
+
+    /**
+     * @param array|null $statuss
+     */
+    public function setStatuss(?array $statuss): void
+    {
+        $this->statuss = $statuss;
     }
 
     /**

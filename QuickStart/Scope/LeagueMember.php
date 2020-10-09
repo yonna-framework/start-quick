@@ -55,6 +55,7 @@ class LeagueMember extends AbstractScope
                 $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getPermission() && $w->equalTo('permission', $prism->getPermission());
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
+                $prism->getStatuss() && $w->in('status', $prism->getStatuss());
             })
             ->orderBy('league_id', 'desc')
             ->multi();
@@ -122,7 +123,11 @@ class LeagueMember extends AbstractScope
             $prism->setUserId($one['user_account_user_id']);
         }
         $one = DB::connect()->table(self::TABLE)
-            ->where(fn(Where $w) => $w->equalTo('league_id', $prism->getLeagueId())->equalTo('user_id', $prism->getUserId()))
+            ->where(fn(Where $w) => $w
+                ->equalTo('league_id', $prism->getLeagueId())
+                ->equalTo('user_id', $prism->getUserId())
+                ->notEqualTo('status', LeagueMemberStatus::DELETE)
+            )
             ->one();
         if ($one) {
             Exception::params('User already holds a position in the organization');

@@ -13,6 +13,7 @@ class LeaguePrism extends Prism
     protected ?string $order_by = null;
     protected ?int $id = null;
     protected ?array $ids = null;
+    protected ?array $not_ids = null;
     protected ?string $master_user_account = null;
     protected ?int $master_user_id = null;
     protected ?string $name = null;
@@ -124,6 +125,22 @@ class LeaguePrism extends Prism
     public function setIds(?array $ids): void
     {
         $this->ids = $ids;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getNotIds(): ?array
+    {
+        return $this->not_ids;
+    }
+
+    /**
+     * @param array|null $not_ids
+     */
+    public function setNotIds(?array $not_ids): void
+    {
+        $this->not_ids = $not_ids;
     }
 
     /**

@@ -68,8 +68,7 @@ CREATE TABLE `league_member`
     `rejection_time`   bigint unsigned                not null comment '驳回日期时间戳',
     `pass_time`        bigint unsigned                not null comment '通过日期时间戳',
     `delete_time`      bigint unsigned                not null comment '作废日期时间戳',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY (`league_id`, `user_id`)
+    PRIMARY KEY (`id`)
 ) ENGINE = INNODB COMMENT '社团成员';
 
 CREATE TABLE `league_associate_hobby`

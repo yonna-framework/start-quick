@@ -62,6 +62,8 @@ class League extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $w->searchTable(self::TABLE);
                 $prism->getId() && $w->equalTo('id', $prism->getId());
+                $prism->getIds() && $w->in('id', $prism->getIds());
+                $prism->getNotIds() && $w->notIn('id', $prism->getNotIds());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getStatuss() && $w->in('status', $prism->getStatuss());

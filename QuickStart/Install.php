@@ -222,6 +222,10 @@ class Install
                 Config::post('info', Me::class, 'one');
                 Config::post('password', Me::class, 'password');
                 Config::post('edit', Me::class, 'update');
+                Config::post('leagueCanJoin', Me::class, 'leagueCanJoin');
+                Config::post('leagueApply', Me::class, 'leagueApply');
+                Config::post('leagueGiveUpApply', Me::class, 'leagueGiveUpApply');
+                Config::post('leagueLeave', Me::class, 'leagueLeave');
                 Config::post('task', Me::class, 'task');
                 Config::post('taskAssign', Me::class, 'taskAssign');
                 Config::post('taskJoin', Me::class, 'taskJoin');
