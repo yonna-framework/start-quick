@@ -177,7 +177,6 @@ class Me extends AbstractScope
                 ->where(fn(Where $w) => $w
                     ->equalTo('user_id', $this->request()->getLoggingId())
                     ->equalTo('status', LeagueMemberStatus::APPROVED)
-                    ->equalTo('permission', LeagueMemberPermission::JOINER)
                     ->equalTo('league_id', $this->input('league_id'))
                 )
                 ->count('id');
@@ -218,6 +217,7 @@ class Me extends AbstractScope
         $return = [
             'task' => [],
             'league' => [],
+            'expect' => null,
         ];
         // 获取我管理的社团
         $my = DB::connect()->table('league_member')
@@ -239,12 +239,18 @@ class Me extends AbstractScope
         $assignedTask = DB::connect()->table('league_task_assign')
             ->where(fn(Where $w) => $w->in('league_id', $leagueIds))
             ->multi();
-        $assignedTaskIds = array_column($assignedTask, 'league_task_assign_task_id');
-        $assignedTaskIds = array_unique($assignedTaskIds);
-        $assignedTaskIds = array_values($assignedTaskIds);
+        $expect = [];
+        foreach ($assignedTask as $ak => $av) {
+            if (!isset($expect[$av['league_task_assign_task_id']])) {
+                $expect[$av['league_task_assign_task_id']] = [];
+            }
+            if (!in_array($av['league_task_assign_league_id'], $expect[$av['league_task_assign_task_id']])) {
+                $expect[$av['league_task_assign_task_id']][] = $av['league_task_assign_league_id'];
+            }
+        }
+        $return['expect'] = $expect ?: null;
         $return['task'] = $this->scope(LeagueTask::class, 'multi', [
             'status' => LeagueTaskStatus::APPROVED,
-            'not_ids' => $assignedTaskIds,
         ]);
         return $return;
     }
@@ -257,38 +263,67 @@ class Me extends AbstractScope
      */
     public function taskCanJoin()
     {
+        $return = [
+            'task' => [],
+            'league' => [],
+            'expectLeague' => null,
+            'expectUser' => null,
+        ];
         // 查我加入的联盟
-        $member = DB::connect()->table('league_member')
+        $my = DB::connect()->table('league_member')
             ->where(fn(Where $w) => $w
-                ->equalTo('status', LeagueMemberStatus::APPROVED)
                 ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
             )->multi();
-        if ($member) {
-            $league_ids = array_column($member, 'league_member_league_id');
-            $league_ids = array_unique($league_ids);
-            sort($league_ids);
-        } else {
-            return [];
+        if (!$my) {
+            return $return;
         }
-        // 查联盟分到的任务
+        $leagueIds = array_column($my, 'league_member_league_id');
+        $leagueIds = array_unique($leagueIds);
+        $leagueIds = array_values($leagueIds);
+        $return['league'] = $this->scope(League::class, 'multi', ['ids' => $leagueIds, 'status' => LeagueStatus::APPROVED]);
+        // 查出社团有报名的ids
         $assign = DB::connect()->table('league_task_assign')
-            ->where(fn(Where $w) => $w->in('league_id', $league_ids))
+            ->where(fn(Where $w) => $w->in('league_id', $leagueIds))
             ->multi();
-        if ($assign) {
-            $taskIds = array_column($assign, 'league_task_assign_task_id');
-            $taskIds = array_unique($taskIds);
-            sort($taskIds);
-            //TODO 排除已加入的任务
-            $tasks = $this->scope(LeagueTask::class, 'multi', ['ids' => $taskIds, 'attach_joiner' => true]);
-            $tid = array_column($tasks, 'league_task_id');
-            $tmap = array_combine($tid, $tasks);
-            foreach ($assign as $k => $v) {
-                $assign[$k]['league_task_info'] = $tmap[$v['league_task_assign_task_id']];
-            }
-            return $assign;
-        } else {
-            return [];
+        if (!$assign) {
+            return $return;
         }
+        $expectLeague = [];
+        foreach ($assign as $ak => $av) {
+            if (!isset($expectLeague[$av['league_task_assign_task_id']])) {
+                $expectLeague[$av['league_task_assign_task_id']] = [];
+            }
+            if (!in_array($av['league_task_assign_league_id'], $expectLeague[$av['league_task_assign_task_id']])) {
+                $expectLeague[$av['league_task_assign_task_id']][] = $av['league_task_assign_league_id'];
+            }
+        }
+        $return['expectLeague'] = $expectLeague ?: null;
+        $assignTaskIds = array_column($assign, 'league_task_assign_task_id');
+        $assignTaskIds = array_unique($assignTaskIds);
+        $assignTaskIds = array_values($assignTaskIds);
+        // 排除已接任务
+        $joinedTask = DB::connect()->table('league_task_joiner')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->in('league_id', $leagueIds)
+            )
+            ->multi();
+        $expectUser = [];
+        foreach ($joinedTask as $ak => $av) {
+            if (!isset($expectUser[$av['league_task_joiner_task_id']])) {
+                $expectUser[$av['league_task_joiner_task_id']] = [];
+            }
+            if (!in_array($av['league_task_joiner_user_id'], $expectUser[$av['league_task_joiner_task_id']])) {
+                $expectUser[$av['league_task_joiner_task_id']][] = $av['league_task_joiner_user_id'];
+            }
+        }
+        $return['expectUser'] = $expectUser ?: null;
+        $return['task'] = $this->scope(LeagueTask::class, 'multi', [
+            'status' => LeagueTaskStatus::APPROVED,
+            'ids' => $assignTaskIds,
+        ]);
+        return $return;
     }
 
     /**
