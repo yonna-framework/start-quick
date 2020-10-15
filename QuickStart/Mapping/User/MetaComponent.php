@@ -27,7 +27,8 @@ class MetaComponent extends Mapping
     const SELECT = 'select';
     const CHECKBOX = 'checkbox';
     const RADIO = 'radio';
-    const UPLOAD_IMAGE = 'upload_image';
+    const XOSS_UPLOAD_IMAGE = 'xoss_upload_image';
+    const XOSS_UPLOAD_IMAGE_CROP = 'xoss_upload_image_crop';
 
 
     public function __construct()
@@ -52,7 +53,8 @@ class MetaComponent extends Mapping
         self::setLabel(self::SELECT, 'select');
         self::setLabel(self::CHECKBOX, 'checkbox');
         self::setLabel(self::RADIO, 'radio');
-        self::setLabel(self::UPLOAD_IMAGE, 'upload_image');
+        self::setLabel(self::XOSS_UPLOAD_IMAGE, 'xoss_upload_image');
+        self::setLabel(self::XOSS_UPLOAD_IMAGE_CROP, 'xoss_upload_image_crop');
     }
 
 }

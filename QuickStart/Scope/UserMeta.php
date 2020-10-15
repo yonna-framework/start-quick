@@ -66,11 +66,13 @@ class UserMeta extends AbstractScope
         $metas = $this->input('metas');
         $add = [];
         foreach ($metas as $k => $v) {
-            $add[] = [
-                'user_id' => $user_id,
-                'key' => $k,
-                'value' => $v,
-            ];
+            if (!empty($v)) {
+                $add[] = [
+                    'user_id' => $user_id,
+                    'key' => $k,
+                    'value' => $v,
+                ];
+            }
         }
         DB::transTrace(function () use ($user_id, $add) {
             DB::connect()->table(self::TABLE)->where(fn(Where $w) => $w->equalTo('user_id', $user_id))->delete();
