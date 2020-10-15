@@ -102,7 +102,7 @@ class LeagueTask extends AbstractScope
     {
         ArrayValidator::required($this->input(), [
             'name', 'introduction',
-            'people_number', 'points',
+            'people_number',
             'start_time', 'end_time'
         ], function ($error) {
             Exception::throw($error);
@@ -119,7 +119,7 @@ class LeagueTask extends AbstractScope
             'name' => $prism->getName(),
             'user_id' => $this->request()->getLoggingId(),
             'league_id' => $prism->getLeagueId(),
-            'points' => round($prism->getPoints(), 1),
+            'points' => round($prism->getPoints() || 0, 1),
             'introduction' => $prism->getIntroduction(),
             'current_number' => 0,
             'people_number' => $prism->getPeopleNumber(),
