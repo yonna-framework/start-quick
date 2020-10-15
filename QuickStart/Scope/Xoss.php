@@ -135,7 +135,7 @@ class Xoss extends AbstractScope
             if (!is_file($root . $saveData['uri'])) {
                 $size = @file_put_contents($root . $saveData['uri'], $data);
                 if ($size === false) {
-                    return $this->false('Save failed');
+                    return $this->false('save failed');
                 }
             }
             if ($this->request()->getLoggingId()) {
@@ -168,11 +168,20 @@ class Xoss extends AbstractScope
                     "data" => null,
                 ];
             } else {
-                $results[] = [
-                    "result" => 1,
-                    "msg" => 'success',
-                    "data" => $this->saveFile($fd)
-                ];
+                $data = $this->saveFile($fd);
+                if (!$data) {
+                    $results[] = [
+                        "result" => 0,
+                        "msg" => $this->falseMsg,
+                        "data" => null,
+                    ];
+                } else {
+                    $results[] = [
+                        "result" => 1,
+                        "msg" => 'success',
+                        "data" => $data,
+                    ];
+                }
             }
         }
         return $results;
