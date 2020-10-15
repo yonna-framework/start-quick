@@ -101,7 +101,7 @@ class DataHobby extends AbstractScope
         $one = DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('name', $this->input('name')))
             ->one();
-        if ($one['data_hobby_id'] !== $this->input('id')) {
+        if ($one && $one['data_hobby_id'] !== $this->input('id')) {
             Exception::params('Name already exist');
         }
         $data = [
