@@ -22,7 +22,16 @@ class Me extends AbstractScope
      */
     public function one(): array
     {
-        return $this->scope(User::class, 'one', ['id' => $this->request()->getLoggingId()]);
+        $res = $this->scope(User::class, 'one', ['id' => $this->request()->getLoggingId()]);
+        $one = DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+                ->in('permission', [LeagueMemberPermission::MANAGER, LeagueMemberPermission::OWNER])
+            )
+            ->count('id');
+        $res['user_is_manager'] = $one > 0;
+        return $res;
     }
 
     /**

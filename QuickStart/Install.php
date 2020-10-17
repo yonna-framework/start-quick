@@ -354,7 +354,9 @@ class Install
                 Config::post('add', LeagueTask::class, 'insert');
                 Config::post('edit', LeagueTask::class, 'update');
                 Config::post('del', LeagueTask::class, 'delete');
+                Config::post('status', LeagueTask::class, 'status');
                 Config::post('mStatus', LeagueTask::class, 'multiStatus');
+                Config::post('complete', LeagueTask::class, 'complete');
             });
             Config::group(['league', 'task', 'assign'], function () {
                 Config::post('list', LeagueTaskAssign::class, 'multi');

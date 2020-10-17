@@ -118,6 +118,7 @@ class LeagueTask extends AbstractScope
         $add = [
             'name' => $prism->getName(),
             'user_id' => $this->request()->getLoggingId(),
+            'complete_user_id' => 0,
             'league_id' => $prism->getLeagueId(),
             'points' => round($prism->getPoints() || 0, 1),
             'introduction' => $prism->getIntroduction(),
@@ -131,6 +132,7 @@ class LeagueTask extends AbstractScope
             'rejection_time' => 0,
             'pass_time' => 0,
             'delete_time' => 0,
+            'complete_time' => 0,
             'event_photos' => [],
             'self_evaluation' => 0,
             'platform_evaluation' => 0,
@@ -227,12 +229,63 @@ class LeagueTask extends AbstractScope
      * @return mixed
      * @throws Exception\ThrowException
      */
-    public function delete()
+    public function status()
     {
+        ArrayValidator::required($this->input(), ['id', 'status'], function ($error) {
+            Exception::throw($error);
+        });
         return $this->scope(LeagueTask::class, 'multiStatus', [
             'ids' => [$this->input('id')],
+            'status' => $this->input('status'),
+        ]);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
+    public function delete()
+    {
+        return $this->scope(LeagueTask::class, 'status', [
+            'id' => $this->input('id'),
             'status' => LeagueTaskStatus::DELETE,
         ]);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
+    public function complete()
+    {
+        ArrayValidator::required($this->input(), ['id', 'platform_evaluation'], function ($error) {
+            Exception::throw($error);
+        });
+        $one = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->one();
+        if (!$one) {
+            Exception::error('task is not exist');
+        }
+        if ($one['league_task_status'] !== LeagueTaskStatus::APPROVED) {
+            Exception::error('task status error');
+        }
+        $platform_evaluation = $this->input('platform_evaluation');
+        $platform_evaluation = round($platform_evaluation, 1);
+        if ($platform_evaluation < 0) {
+            $platform_evaluation = 0;
+        }
+        if ($platform_evaluation > 5) {
+            $platform_evaluation = 5;
+        }
+        $data = [
+            'status' => LeagueTaskStatus::COMPLETE,
+            'platform_evaluation' => $platform_evaluation,
+            'complete_time' => time(),
+        ];
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('id')))
+            ->update($data);
     }
 
 }
