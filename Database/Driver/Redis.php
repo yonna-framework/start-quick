@@ -188,6 +188,19 @@ class Redis extends AbstractRDO
     }
 
     /**
+     * 哈希删除kEY
+     * @param $key
+     * @param $hashKey
+     * @throws Exception\DatabaseException
+     */
+    public function hDelete($key, $hashKey)
+    {
+        if ($this->rdo() !== null && $key && $hashKey) {
+            $this->query('hdelete', $key, $hashKey);
+        }
+    }
+
+    /**
      * 以秒为单位,返回给定key的剩余生存时间(TTL, time to live)
      * @param $key
      * @return int

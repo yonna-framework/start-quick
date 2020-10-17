@@ -288,4 +288,41 @@ class LeagueTask extends AbstractScope
             ->update($data);
     }
 
+    /**
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
+    public function eventPhoto()
+    {
+        ArrayValidator::required($this->input(), ['id', 'user_id', 'event_photos'], function ($error) {
+            Exception::throw($error);
+        });
+        $one = DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->one();
+        if (!$one) {
+            Exception::error('task is not exist');
+        }
+        if ($one['league_task_status'] !== LeagueTaskStatus::APPROVED) {
+            Exception::error('task status error');
+        }
+        $join = DB::connect()->table('league_task_joiner')
+            ->where(fn(Where $w) => $w
+                ->equalTo('task_id', $this->input('id'))
+                ->equalTo('user_id', $this->input('user_id'))
+            )
+            ->one();
+        if (!$join) {
+            Exception::error('account not licensed');
+        }
+        $prevPhotos = $one['league_task_event_photos'];
+        $prevPhotos = array_merge($prevPhotos, $this->input('event_photos'));
+        $prevPhotos = array_unique($prevPhotos);
+        $prevPhotos = array_values($prevPhotos);
+        $data = ['event_photos' => $prevPhotos];
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->in('id', $this->input('id')))
+            ->update($data);
+    }
+
 }

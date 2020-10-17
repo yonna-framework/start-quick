@@ -76,6 +76,7 @@
     "CLOSE": "폐쇄하다.",
     "CODE": "코드",
     "COMMON": "흔하다",
+    "COMPLETE": "완성하다.",
     "COMPONENT": "성분.",
     "CONDITION": "조건.",
     "CONFIRM": "확인",
@@ -106,6 +107,7 @@
     "ERROR": "착오.",
     "ESSAY": "산문.",
     "EVALUATION": "평가하다.",
+    "EXCEED THE MAXIMUM NUMBER OF PEOPLE": "초과최대인원수인",
     "EXCEL_DOWNLOAD_GUIDE_BOOK": "책다운로드안내",
     "EXCEL_DOWNLOAD_GUIDE_TPL": "제3자물류",
     "EXCEL_EXPORT": "출구",
@@ -385,6 +387,5 @@
     "YOU CAN ONLY UPLOAD": "너는올릴수밖에없어.",
     "YOU HAVE ALREADY APPLIED, PLEASE WAIT FOR THE REVIEW RESULT.": "%2C%2신청하셨습니다.심사결과를기다리세요.",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "비워두지않고일부응답데이터를반환해야합니다.",
-    "YOUR": "너의",
-    "_THIS2.RENDERWORK IS NOT A FUNCTION": "이2.renderworkisnota함수"
+    "YOUR": "너의"
 }

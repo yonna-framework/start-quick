@@ -234,7 +234,8 @@ class Install
                 Config::post('taskJoin', Me::class, 'taskJoin');
                 Config::post('taskUnJoin', Me::class, 'taskUnJoin');
                 Config::post('taskPublishList', Me::class, 'taskPublishList');
-                Config::post('taskJoinLIst', Me::class, 'taskJoinLIst');
+                Config::post('taskJoinList', Me::class, 'taskJoinList');
+                Config::post('taskEventPhoto', Me::class, 'taskEventPhoto');
             });
         });
     }

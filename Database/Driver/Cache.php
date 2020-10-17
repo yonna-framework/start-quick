@@ -43,17 +43,17 @@ class Cache
         DB::redis('cache')->set($key, $value, self::timeout($timeout));
     }
 
-    public static function uGet($uniqueCode, $key)
+    public static function hGet($uniqueCode, $key)
     {
         return DB::redis('cache')->hGet($uniqueCode, $key);
     }
 
-    public static function uSet($uniqueCode, $key, $value)
+    public static function hSet($uniqueCode, $key, $value)
     {
         DB::redis('cache')->hSet($uniqueCode, $key, $value);
     }
 
-    public static function clear($uniqueCode)
+    public static function delete($uniqueCode)
     {
         DB::redis('cache')->delete($uniqueCode);
     }

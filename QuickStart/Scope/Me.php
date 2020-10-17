@@ -275,7 +275,7 @@ class Me extends AbstractScope
         $return = [
             'task' => [],
             'league' => [],
-            'expectLeague' => null,
+            'innerLeague' => null,
             'expectUser' => null,
         ];
         // 查我加入的联盟
@@ -298,16 +298,16 @@ class Me extends AbstractScope
         if (!$assign) {
             return $return;
         }
-        $expectLeague = [];
+        $innerLeague = [];
         foreach ($assign as $ak => $av) {
-            if (!isset($expectLeague[$av['league_task_assign_task_id']])) {
-                $expectLeague[$av['league_task_assign_task_id']] = [];
+            if (!isset($innerLeague[$av['league_task_assign_task_id']])) {
+                $innerLeague[$av['league_task_assign_task_id']] = [];
             }
-            if (!in_array($av['league_task_assign_league_id'], $expectLeague[$av['league_task_assign_task_id']])) {
-                $expectLeague[$av['league_task_assign_task_id']][] = $av['league_task_assign_league_id'];
+            if (!in_array($av['league_task_assign_league_id'], $innerLeague[$av['league_task_assign_task_id']])) {
+                $innerLeague[$av['league_task_assign_task_id']][] = $av['league_task_assign_league_id'];
             }
         }
-        $return['expectLeague'] = $expectLeague ?: null;
+        $return['innerLeague'] = $innerLeague ?: null;
         $assignTaskIds = array_column($assign, 'league_task_assign_task_id');
         $assignTaskIds = array_unique($assignTaskIds);
         $assignTaskIds = array_values($assignTaskIds);
@@ -400,7 +400,22 @@ class Me extends AbstractScope
      */
     public function taskJoin()
     {
-        ArrayValidator::required($this->input(), ['task_id', 'league_id'], function ($error) {
+        return $this->scope(LeagueTaskJoiner::class, 'insert', [
+            'task_id' => $this->input('task_id'),
+            'league_id' => $this->input('league_id'),
+            'user_id' => $this->request()->getLoggingId(),
+        ]);
+    }
+
+    /**
+     * 退出任务
+     * @return bool|mixed
+     * @throws Exception\DatabaseException
+     * @throws Exception\ThrowException
+     */
+    public function taskUnJoin()
+    {
+        ArrayValidator::required($this->input(), ['task_id'], function ($error) {
             Exception::throw($error);
         });
         $one = DB::connect()->table('league_task_joiner')
@@ -410,32 +425,11 @@ class Me extends AbstractScope
             )
             ->one();
         if ($one) {
-            Exception::params('You have already applied, please wait for the review result . ');
+            return $this->scope(LeagueTaskJoiner::class, 'delete', [
+                'id' => $one['league_task_joiner_id'],
+            ]);
         }
-        $data = [
-            'user_id' => $this->request()->getLoggingId(),
-            'task_id' => $this->input('task_id'),
-            'league_id' => $this->input('league_id'),
-        ];
-        return DB::connect()->table('league_task_joiner')->insert($data);
-    }
-
-    /**
-     * 退出任务
-     * @return false|int
-     * @throws Exception\DatabaseException
-     */
-    public function taskUnJoin()
-    {
-        ArrayValidator::required($this->input(), ['task_id'], function ($error) {
-            Exception::throw($error);
-        });
-        return DB::connect()->table('league_task_joiner')
-            ->where(fn(Where $e) => $e
-                ->equalTo('user_id', $this->request()->getLoggingId())
-                ->equalTo('task_id', $this->input('task_id'))
-            )
-            ->delete();
+        return true;
     }
 
     /**
@@ -462,7 +456,7 @@ class Me extends AbstractScope
      * @throws Exception\DatabaseException
      * @throws Exception\ThrowException
      */
-    public function taskJoinLIst()
+    public function taskJoinList()
     {
         $join = DB::connect()->table('league_task_joiner')
             ->where(fn(Where $w) => $w->equalTo('user_id', $this->request()->getLoggingId()))
@@ -480,6 +474,15 @@ class Me extends AbstractScope
             return $join;
         }
         return [];
+    }
+
+    public function taskEventPhoto()
+    {
+        return $this->scope(LeagueTask::class, 'eventPhoto', [
+            'id' => $this->input('id'),
+            'event_photos' => $this->input('event_photos'),
+            'user_id' => $this->request()->getLoggingId(),
+        ]);
     }
 
 }

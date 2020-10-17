@@ -93,11 +93,23 @@ abstract class AbstractDB
         $this->name = $this->options['name'] ?? null;
         $this->replica = $this->options['replica'] ?? null;
         $this->charset = $this->options['charset'] ?? 'utf8';
-        $this->auto_cache = $this->options['auto_cache'] ?? false;
+        if ($this->auto_cache === null) {
+            $this->auto_cache = $this->options['auto_cache'] ?? false;
+        }
         $this->analysis();
         return $this;
     }
 
+    /**
+     * 关闭缓存
+     * @return $this
+     */
+    public function disableCache()
+    {
+        $this->auto_cache = false;
+        return $this;
+    }
+    
     /**
      * 分析 DSN，设定 master-slave
      * @throws Exception\DatabaseException

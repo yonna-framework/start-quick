@@ -76,6 +76,7 @@
     "CLOSE": "close",
     "CODE": "code",
     "COMMON": "common",
+    "COMPLETE": "complete",
     "COMPONENT": "component",
     "CONDITION": "condition",
     "CONFIRM": "confirm",
@@ -106,6 +107,7 @@
     "ERROR": "error",
     "ESSAY": "essay",
     "EVALUATION": "evaluation",
+    "EXCEED THE MAXIMUM NUMBER OF PEOPLE": "exceed the maximum number of people",
     "EXCEL_DOWNLOAD_GUIDE_BOOK": "Download the Guide Book",
     "EXCEL_DOWNLOAD_GUIDE_TPL": "Download the Guide Tpl",
     "EXCEL_EXPORT": "Export",
@@ -385,6 +387,5 @@
     "YOU CAN ONLY UPLOAD": "you can only upload",
     "YOU HAVE ALREADY APPLIED, PLEASE WAIT FOR THE REVIEW RESULT.": "you have already applied, please wait for the review result.",
     "YOU SHOULD RETURN SOME RESPONSE BUT NOT NULL": "You should return some response data instead of returning null",
-    "YOUR": "your",
-    "_THIS2.RENDERWORK IS NOT A FUNCTION": "_this2.renderwork is not a function"
+    "YOUR": "your"
 }

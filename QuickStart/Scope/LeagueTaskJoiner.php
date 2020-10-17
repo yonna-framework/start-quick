@@ -28,6 +28,7 @@ class LeagueTaskJoiner extends AbstractScope
     private function getCurrentNumber(int $taskId)
     {
         return DB::connect()->table(self::TABLE)
+            ->disableCache()
             ->where(fn(Where $w) => $w->equalTo('task_id', $taskId))
             ->count('id');
     }
@@ -40,6 +41,7 @@ class LeagueTaskJoiner extends AbstractScope
     {
         $cur = $this->getCurrentNumber($taskId);
         $one = DB::connect()->table('league_task')->field('people_number')
+            ->disableCache()
             ->where(fn(Where $w) => $w->equalTo('id', $taskId))
             ->one();
         if (!$one) {
@@ -122,8 +124,7 @@ class LeagueTaskJoiner extends AbstractScope
                 ->equalTo('user_id', $prism->getUserId())
             )->one();
         if ($one) {
-            Exception::error('The league does not accept this task');
-            return true;
+            Exception::error('You have already applied, please wait for the review result.');
         }
         // 检测用户是否有加入该社团
         $one = DB::connect()->table('league_member')
@@ -157,9 +158,16 @@ class LeagueTaskJoiner extends AbstractScope
         ArrayValidator::required($this->input(), ['id'], function ($error) {
             Exception::throw($error);
         });
-        return DB::connect()->table(self::TABLE)
+        $one = DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
-            ->delete();
+            ->one();
+        if ($one) {
+            DB::connect()->table(self::TABLE)
+                ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+                ->delete();
+            $this->refreshCurrentNumber($one['league_task_joiner_task_id']);
+        }
+        return true;
     }
 
     /**

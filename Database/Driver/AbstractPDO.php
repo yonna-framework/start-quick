@@ -1146,7 +1146,7 @@ abstract class AbstractPDO extends AbstractDB
         //read model,check cache
         if ($this->statement === 'select' || $this->statement === 'show') {
             if ($this->auto_cache === Cache::FOREVER) {
-                $result = Cache::uGet($table, $query);
+                $result = Cache::hGet($table, $query);
             } elseif (is_numeric($this->auto_cache)) {
                 $result = Cache::get($table . '::' . $query);
             }
@@ -1160,13 +1160,13 @@ abstract class AbstractPDO extends AbstractDB
                 $result = $this->PDOStatement->fetchAll($fetchMode);
                 $result = $this->fetchFormat($result);
                 if ($this->auto_cache === Cache::FOREVER) {
-                    Cache::uSet($table, $query, $result);
+                    Cache::hSet($table, $query, $result);
                 } elseif (is_numeric($this->auto_cache)) {
                     Cache::set($table . '::' . $query, $result, (int)$this->auto_cache);
                 }
             } elseif ($this->statetype === 'write') {
                 if ($this->auto_cache === Cache::FOREVER) {
-                    Cache::clear($table);
+                    Cache::delete($table);
                 }
                 $rowCount = $this->PDOStatement->rowCount();
                 if ($rowCount === 1 && $this->statement === 'insert') {
