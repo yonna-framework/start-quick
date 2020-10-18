@@ -185,11 +185,12 @@ class Me extends AbstractScope
             ->where(fn(Where $w) => $w
                 ->equalTo('user_id', $this->input('user_id'))
                 ->equalTo('league_id', $this->input('league_id'))
-                ->equalTo('status', LeagueMemberStatus::PENDING)
-            )->one();
+                ->in('status', [LeagueMemberStatus::REJECTION, LeagueMemberStatus::PENDING])
+            )->multi();
         if ($who) {
+            $whoIds = array_column($who, 'league_member_id');
             DB::connect()->table('league_member')
-                ->where(fn(Where $w) => $w->equalTo('id', $who['league_member_id']))
+                ->where(fn(Where $w) => $w->in('id', $whoIds))
                 ->update([
                     'status' => LeagueMemberStatus::APPROVED,
                 ]);
@@ -273,7 +274,7 @@ class Me extends AbstractScope
             Exception::error('account not licensed');
         }
         DB::connect()->table('league_member')
-            ->where(fn(Where $w) => $w->equalTo('id', $who['league_member_id']))
+            ->where(fn(Where $w) => $w->in('id', $who['league_member_id']))
             ->update([
                 'status' => LeagueMemberStatus::DELETE,
             ]);
