@@ -161,6 +161,202 @@ class Me extends AbstractScope
     }
 
     /**
+     * [审核]同意加入社团
+     * @return mixed
+     */
+    public function leagueMemberPass()
+    {
+        ArrayValidator::required($this->input(), ['user_id', 'league_id'], function ($error) {
+            Exception::throw($error);
+        });
+        $check = DB::connect()->table('league_member')
+            ->field('id')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+                ->in('permission', [LeagueMemberPermission::OWNER, LeagueMemberPermission::MANAGER])
+            )->one();
+        if (!$check) {
+            Exception::error('account not licensed');
+        }
+        $who = DB::connect()->table('league_member')
+            ->field('id')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->input('user_id'))
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('status', LeagueMemberStatus::PENDING)
+            )->one();
+        if ($who) {
+            DB::connect()->table('league_member')
+                ->where(fn(Where $w) => $w->equalTo('id', $who['league_member_id']))
+                ->update([
+                    'status' => LeagueMemberStatus::APPROVED,
+                ]);
+        }
+        return true;
+    }
+
+    /**
+     * [审核]驳回加入社团
+     * @return mixed
+     * @throws Exception\DatabaseException
+     */
+    public function leagueMemberReject()
+    {
+        ArrayValidator::required($this->input(), ['league_id'], function ($error) {
+            Exception::throw($error);
+        });
+        $check = DB::connect()->table('league_member')
+            ->field('id')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+                ->in('permission', [LeagueMemberPermission::OWNER, LeagueMemberPermission::MANAGER])
+            )->one();
+        if (!$check) {
+            Exception::error('account not licensed');
+        }
+        $who = DB::connect()->table('league_member')
+            ->field('id')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->input('user_id'))
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('status', LeagueMemberStatus::PENDING)
+            )->one();
+        if ($who) {
+            DB::connect()->table('league_member')
+                ->where(fn(Where $w) => $w->equalTo('id', $who['league_member_id']))
+                ->update([
+                    'status' => LeagueMemberStatus::REJECTION,
+                ]);
+        }
+        return true;
+    }
+
+    /**
+     * [审核]踢出社团
+     * @return mixed
+     */
+    public function leagueMemberDelete()
+    {
+        ArrayValidator::required($this->input(), ['league_id'], function ($error) {
+            Exception::throw($error);
+        });
+        $who = DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->input('user_id'))
+                ->equalTo('league_id', $this->input('league_id'))
+                ->in('status', [LeagueMemberStatus::REJECTION, LeagueMemberStatus::APPROVED])
+            )->one();
+        if (!$who) {
+            return true;
+        }
+        $permission = [];
+        if ($who['league_member_permission'] === LeagueMemberPermission::OWNER) {
+            Exception::error('account not licensed');
+        } elseif ($who['league_member_permission'] === LeagueMemberPermission::MANAGER) {
+            $permission = [LeagueMemberPermission::OWNER];
+        } elseif ($who['league_member_permission'] === LeagueMemberPermission::JOINER) {
+            $permission = [LeagueMemberPermission::OWNER, LeagueMemberPermission::MANAGER];
+        }
+        $check = DB::connect()->table('league_member')
+            ->field('id')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+                ->in('permission', $permission)
+            )->one();
+        if (!$check) {
+            Exception::error('account not licensed');
+        }
+        DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w->equalTo('id', $who['league_member_id']))
+            ->update([
+                'status' => LeagueMemberStatus::DELETE,
+            ]);
+        return true;
+    }
+
+    /**
+     * [审核]升为管理员
+     * @return mixed
+     */
+    public function leagueMemberUp()
+    {
+        ArrayValidator::required($this->input(), ['league_id'], function ($error) {
+            Exception::throw($error);
+        });
+        $who = DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->input('user_id'))
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('permission', LeagueMemberPermission::JOINER)
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+            )->one();
+        if (!$who) {
+            return true;
+        }
+        $check = DB::connect()->table('league_member')
+            ->field('id')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+                ->equalTo('permission', LeagueMemberPermission::OWNER)
+            )->one();
+        if (!$check) {
+            Exception::error('account not licensed');
+        }
+        DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w->equalTo('id', $who['league_member_id']))
+            ->update([
+                'permission' => LeagueMemberPermission::MANAGER,
+            ]);
+        return true;
+    }
+
+    /**
+     * [审核]降为参与者
+     * @return mixed
+     */
+    public function leagueMemberDown()
+    {
+        ArrayValidator::required($this->input(), ['league_id'], function ($error) {
+            Exception::throw($error);
+        });
+        $who = DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->input('user_id'))
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('permission', LeagueMemberPermission::MANAGER)
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+            )->one();
+        if (!$who) {
+            return true;
+        }
+        $check = DB::connect()->table('league_member')
+            ->field('id')
+            ->where(fn(Where $w) => $w
+                ->equalTo('user_id', $this->request()->getLoggingId())
+                ->equalTo('league_id', $this->input('league_id'))
+                ->equalTo('status', LeagueMemberStatus::APPROVED)
+                ->equalTo('permission', LeagueMemberPermission::OWNER)
+            )->one();
+        if (!$check) {
+            Exception::error('account not licensed');
+        }
+        DB::connect()->table('league_member')
+            ->where(fn(Where $w) => $w->equalTo('id', $who['league_member_id']))
+            ->update([
+                'permission' => LeagueMemberPermission::JOINER,
+            ]);
+        return true;
+    }
+
+    /**
      * 获取任务详情(包含个人信息)
      * @return mixed
      * @throws Exception\ThrowException
@@ -476,6 +672,11 @@ class Me extends AbstractScope
         return [];
     }
 
+    /**
+     * 上传活动图片
+     * @return mixed
+     * @throws Exception\ThrowException
+     */
     public function taskEventPhoto()
     {
         return $this->scope(LeagueTask::class, 'eventPhoto', [

@@ -64,6 +64,7 @@ class LeagueMember extends AbstractScope
             $userIds = array_unique($userIds);
             $userIds = array_values($userIds);
             $users = $this->scope(User::class, 'multi', ['ids' => $userIds]);
+            $userIds = array_column($users, 'user_id');
             $users = array_combine($userIds, $users);
             foreach ($res as $k => $v) {
                 $res[$k]['league_member_user_info'] = $users[$v['league_member_user_id']];
@@ -95,6 +96,7 @@ class LeagueMember extends AbstractScope
             $userIds = array_unique($userIds);
             $userIds = array_values($userIds);
             $users = $this->scope(User::class, 'multi', ['ids' => $userIds]);
+            $userIds = array_column($users, 'user_id');
             $users = array_combine($userIds, $users);
             foreach ($res['list'] as $k => $v) {
                 $res['list'][$k]['league_member_user_info'] = $users[$v['league_member_user_id']];

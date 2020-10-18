@@ -226,6 +226,11 @@ class Install
                 Config::post('leagueApply', Me::class, 'leagueApply');
                 Config::post('leagueGiveUpApply', Me::class, 'leagueGiveUpApply');
                 Config::post('leagueLeave', Me::class, 'leagueLeave');
+                Config::post('leagueMemberPass', Me::class, 'leagueMemberPass');
+                Config::post('leagueMemberReject', Me::class, 'leagueMemberReject');
+                Config::post('leagueMemberDelete', Me::class, 'leagueMemberDelete');
+                Config::post('leagueMemberUp', Me::class, 'leagueMemberUp');
+                Config::post('leagueMemberDown', Me::class, 'leagueMemberDown');
                 Config::post('taskInfo', Me::class, 'taskInfo');
                 Config::post('taskCanAssign', Me::class, 'taskCanAssign');
                 Config::post('taskCanJoin', Me::class, 'taskCanJoin');
