@@ -119,28 +119,6 @@ class Install
         );
     }
 
-    public static function stat(): void
-    {
-        Config::middleware([Limiter::class],
-            function () {
-                Config::group(['stat'], function () {
-                    Config::post('user', Stat::class, 'user');
-                    Config::post('userAccount', Stat::class, 'account');
-                    Config::post('league', Stat::class, 'league');
-                    Config::post('leagueMember', Stat::class, 'leagueMember');
-                    Config::post('task', Stat::class, 'task');
-                    Config::post('leagueData', Stat::class, 'leagueData');
-                    Config::post('essay', Stat::class, 'essay');
-                    Config::post('essayCategory', Stat::class, 'essayCategory');
-                    Config::post('userGrow', Stat::class, 'userGrow');
-                    Config::post('leagueGrow', Stat::class, 'leagueGrow');
-                    Config::post('taskGrow', Stat::class, 'taskGrow');
-                    Config::post('essayGrow', Stat::class, 'essayGrow');
-                });
-            }
-        );
-    }
-
     public static function essay(): void
     {
         Config::middleware([Limiter::class],
