@@ -3,7 +3,7 @@ CREATE TABLE `data_hobby`
     `id`     bigint unsigned auto_increment not null comment 'id',
     `name`   char(255)                      not null comment '名称',
     `status` tinyint                        not null default 1 comment '状态[-1无效,1生效]',
-    `sort`   int                            not null default 0 comment '排序[降序]',
+    `sort`   bigint                         not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
     UNIQUE KEY (`name`),
     INDEX (`status`)
@@ -14,7 +14,7 @@ CREATE TABLE `data_work`
     `id`     bigint unsigned auto_increment not null comment 'id',
     `name`   char(255)                      not null comment '名称',
     `status` tinyint                        not null default 1 comment '状态[-1无效,1生效]',
-    `sort`   int                            not null default 0 comment '排序[降序]',
+    `sort`   bigint                         not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
     UNIQUE KEY (`name`),
     INDEX (`status`)
@@ -25,7 +25,7 @@ CREATE TABLE `data_speciality`
     `id`     bigint unsigned auto_increment not null comment 'id',
     `name`   char(255)                      not null comment '名称',
     `status` tinyint                        not null default 1 comment '状态[-1无效,1生效]',
-    `sort`   int                            not null default 0 comment '排序[降序]',
+    `sort`   bigint                         not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
     UNIQUE KEY (`name`),
     INDEX (`status`)
@@ -48,7 +48,7 @@ CREATE TABLE `league`
     `rejection_time`       bigint unsigned                not null comment '驳回日期时间戳',
     `pass_time`            bigint unsigned                not null comment '通过日期时间戳',
     `delete_time`          bigint unsigned                not null comment '作废日期时间戳',
-    `sort`                 int                            not null default 0 comment '排序[降序]',
+    `sort`                 bigint                         not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
     INDEX (`name`)
 ) ENGINE = INNODB COMMENT '社团';
@@ -118,7 +118,7 @@ CREATE TABLE `league_task`
     `event_photos`        varchar(1024)                  not null comment '活动图片',
     `self_evaluation`     numeric(3, 1)                  not null default 0.0 comment '社团自评',
     `platform_evaluation` numeric(3, 1)                  not null default 0.0 comment '平台打分',
-    `sort`                int                            not null default 0 comment '排序[降序]',
+    `sort`                bigint                         not null default 0 comment '排序[降序]',
     PRIMARY KEY (`id`),
     INDEX (`user_id`),
     INDEX (`name`)

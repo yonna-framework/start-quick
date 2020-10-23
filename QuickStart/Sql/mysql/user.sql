@@ -29,7 +29,7 @@ create table `user_meta_category`
     `component`      char(255) not null default '' comment '前端组件',
     `component_data` char(255) not null default '' comment '前端组件数据源',
     `status`         tinyint   not null default -1 comment '状态[-1无效,1有效]',
-    `sort`           int       not null default 0 comment '排序[降序]',
+    `sort`           bigint    not null default 0 comment '排序[降序]',
     primary key (`key`),
     unique key `uk_key` (`key`),
     index (`value_format`),
