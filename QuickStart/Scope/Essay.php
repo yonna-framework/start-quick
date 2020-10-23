@@ -45,6 +45,9 @@ class Essay extends AbstractScope
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
+                if ($prism->getIsExcellent() !== null) {
+                    $w->equalTo('is_excellent', $prism->getIsExcellent() ? 1 : 0);
+                }
             })
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
@@ -67,13 +70,6 @@ class Essay extends AbstractScope
             preg_match_all('/<img(.*?)src="(.*?)"(.*?)>/', $essay_content, $imgs);
             if ($imgs[2]) {
                 foreach ($imgs[2] as $img) {
-                    //TODO 跳过一些不好看的图片，后续删除
-                    if (in_array($img, [
-                        Xoss::ASSET . '1ebc6cdeaffea83a142d7d790db9a201ad564d729d98c0f63e6ff85ac7301c576f255776',
-                        Xoss::ASSET . '2da5d23cc0205c3af8d7713623f26a4bb00f9e848f01e7c5a6967e7411638727755453bb',
-                    ])) {
-                        continue;
-                    }
                     $pic[$v['essay_category_id']][] = $img;
                 }
             }
@@ -98,6 +94,9 @@ class Essay extends AbstractScope
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
+                if ($prism->getIsExcellent() !== null) {
+                    $w->equalTo('is_excellent', $prism->getIsExcellent() ? 1 : 0);
+                }
             })
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
@@ -119,6 +118,7 @@ class Essay extends AbstractScope
             'title' => $this->input('title'),
             'category_id' => $this->input('category_id') ?? 0,
             'status' => $this->input('status') ?? EssayStatus::DISABLED,
+            'is_excellent' => $this->input('is_excellent') ? 1 : 0,
             'likes' => $this->input('likes') ?? 0,
             'views' => $this->input('views') ?? 0,
             'content' => $content,
@@ -143,6 +143,7 @@ class Essay extends AbstractScope
             'title' => $this->input('title'),
             'category_id' => $this->input('category_id'),
             'status' => $this->input('status'),
+            'is_excellent' => $this->input('is_excellent'),
             'likes' => $this->input('likes'),
             'views' => $this->input('views'),
             'content' => $content,

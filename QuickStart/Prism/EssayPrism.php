@@ -15,6 +15,7 @@ class EssayPrism extends Prism
     protected ?int $category_id = null;
     protected ?string $title = null;
     protected ?int $status = null;
+    protected ?bool $is_excellent = null;
 
     /**
      * @return int
@@ -126,6 +127,22 @@ class EssayPrism extends Prism
     public function setStatus(?int $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsExcellent(): ?bool
+    {
+        return $this->is_excellent;
+    }
+
+    /**
+     * @param bool|null $is_excellent
+     */
+    public function setIsExcellent(?bool $is_excellent): void
+    {
+        $this->is_excellent = $is_excellent;
     }
 
 }
