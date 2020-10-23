@@ -25,7 +25,6 @@ use Yonna\QuickStart\Scope\Sdk;
 use Yonna\QuickStart\Scope\SdkWxmp;
 use Yonna\QuickStart\Scope\User;
 use Yonna\QuickStart\Scope\UserAccount;
-use Yonna\QuickStart\Scope\Me;
 use Yonna\QuickStart\Scope\UserLogin;
 use Yonna\QuickStart\Scope\UserMetaCategory;
 use Yonna\QuickStart\Scope\Stat;
@@ -66,7 +65,7 @@ class Install
         Config::middleware([Debug::class],
             function () {
                 Config::group(['i18n'], function () {
-                    Config::post('init', function (Request $request) {
+                    Config::post('init', function () {
                         return (new I18n())->init();
                     });
                     Config::post('set', function (Request $request) {
@@ -213,36 +212,6 @@ class Install
                 });
             }
         );
-    }
-
-    public static function me(): void
-    {
-        Config::middleware([Limiter::class, Logging::class], function () {
-            Config::group(['me'], function () {
-                Config::post('info', Me::class, 'one');
-                Config::post('password', Me::class, 'password');
-                Config::post('edit', Me::class, 'update');
-                Config::post('leagueCanJoin', Me::class, 'leagueCanJoin');
-                Config::post('leagueApply', Me::class, 'leagueApply');
-                Config::post('leagueGiveUpApply', Me::class, 'leagueGiveUpApply');
-                Config::post('leagueLeave', Me::class, 'leagueLeave');
-                Config::post('leagueMemberPass', Me::class, 'leagueMemberPass');
-                Config::post('leagueMemberReject', Me::class, 'leagueMemberReject');
-                Config::post('leagueMemberDelete', Me::class, 'leagueMemberDelete');
-                Config::post('leagueMemberUp', Me::class, 'leagueMemberUp');
-                Config::post('leagueMemberDown', Me::class, 'leagueMemberDown');
-                Config::post('taskInfo', Me::class, 'taskInfo');
-                Config::post('taskCanAssign', Me::class, 'taskCanAssign');
-                Config::post('taskCanJoin', Me::class, 'taskCanJoin');
-                Config::post('taskAssign', Me::class, 'taskAssign');
-                Config::post('taskUnAssign', Me::class, 'taskUnAssign');
-                Config::post('taskJoin', Me::class, 'taskJoin');
-                Config::post('taskUnJoin', Me::class, 'taskUnJoin');
-                Config::post('taskPublishList', Me::class, 'taskPublishList');
-                Config::post('taskJoinList', Me::class, 'taskJoinList');
-                Config::post('taskEventPhoto', Me::class, 'taskEventPhoto');
-            });
-        });
     }
 
     public static function user(): void
