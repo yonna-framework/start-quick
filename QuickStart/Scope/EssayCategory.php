@@ -151,4 +151,20 @@ class EssayCategory extends AbstractScope
             ->update(["status" => $this->input('status')]);
     }
 
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function top()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update([
+                'sort' => time()
+            ]);
+    }
+
 }

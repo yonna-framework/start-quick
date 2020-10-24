@@ -2,6 +2,7 @@
 
 namespace Yonna\QuickStart\Scope;
 
+use Yonna\QuickStart\Mapping\Common\Boolean;
 use Yonna\QuickStart\Mapping\Essay\EssayStatus;
 use Yonna\QuickStart\Prism\EssayPrism;
 use Yonna\Database\DB;
@@ -226,6 +227,38 @@ class Essay extends AbstractScope
             ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
             ->update([
                 'likes' => ['exp', '`likes`+1']
+            ]);
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function excellent()
+    {
+        ArrayValidator::required($this->input(), ['id', 'is_excellent'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update([
+                'is_excellent' => $this->input('is_excellent') === 1 ? Boolean::true : Boolean::false
+            ]);
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function top()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update([
+                'sort' => time()
             ]);
     }
 
