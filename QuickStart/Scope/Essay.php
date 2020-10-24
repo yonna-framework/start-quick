@@ -45,9 +45,7 @@ class Essay extends AbstractScope
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
-                if ($prism->getIsExcellent() !== null) {
-                    $w->equalTo('is_excellent', $prism->getIsExcellent() ? 1 : 0);
-                }
+                $prism->getIsExcellent() && $w->equalTo('is_excellent', $prism->getIsExcellent());
             })
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')
@@ -94,9 +92,7 @@ class Essay extends AbstractScope
                 $prism->getTitle() && $w->like('title', '%' . $prism->getTitle() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
                 $prism->getCategoryId() && $w->equalTo('category_id', $prism->getCategoryId());
-                if ($prism->getIsExcellent() !== null) {
-                    $w->equalTo('is_excellent', $prism->getIsExcellent() ? 1 : 0);
-                }
+                $prism->getIsExcellent() && $w->equalTo('is_excellent', $prism->getIsExcellent());
             })
             ->orderBy('sort', 'desc')
             ->orderBy('id', 'desc')

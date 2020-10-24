@@ -15,7 +15,7 @@ class EssayPrism extends Prism
     protected ?int $category_id = null;
     protected ?string $title = null;
     protected ?int $status = null;
-    protected ?bool $is_excellent = null;
+    protected ?int $is_excellent = null;
 
     /**
      * @return int
@@ -130,17 +130,17 @@ class EssayPrism extends Prism
     }
 
     /**
-     * @return bool|null
+     * @return int|null
      */
-    public function getIsExcellent(): ?bool
+    public function getIsExcellent(): ?int
     {
         return $this->is_excellent;
     }
 
     /**
-     * @param bool|null $is_excellent
+     * @param int|null $is_excellent
      */
-    public function setIsExcellent(?bool $is_excellent): void
+    public function setIsExcellent(?int $is_excellent): void
     {
         $this->is_excellent = $is_excellent;
     }
