@@ -3,6 +3,7 @@ create table `essay_category`
     `id`       bigint unsigned auto_increment not null comment 'id',
     `upper_id` bigint unsigned                not null default 0 comment 'essay_category_id',
     `name`     char(255)                      not null default '' comment '分类名称',
+    `icon`     varchar(1024)                  not null default '' comment 'logo图片',
     `status`   tinyint                        not null default 1 comment '状态[-1审核驳回,1待审核,2审核通过]',
     `sort`     bigint                         not null default 0 comment '排序[降序]',
     primary key (`id`),
