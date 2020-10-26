@@ -30,7 +30,11 @@ class Redis extends AbstractRDO
                 $value = json_decode($value, true);
                 break;
             case self::TYPE_NUM:
-                $value = round($value, 9, PHP_ROUND_HALF_UP);
+                if (intval($value) == $value) {
+                    $value = intval($value);
+                } else {
+                    $value = round($value, 9, PHP_ROUND_HALF_UP);
+                }
                 break;
             case self::TYPE_STR:
             default:
