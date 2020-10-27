@@ -79,6 +79,7 @@ class EssayCategory extends AbstractScope
         });
         $add = [
             'name' => $this->input('name'),
+            'logo' => $this->input('logo') ?? [],
             'upper_id' => $this->input('upper_id') ?? 0,
             'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
             'sort' => $this->input('sort') ?? 0,
@@ -97,6 +98,7 @@ class EssayCategory extends AbstractScope
         });
         $data = [
             'name' => $this->input('name'),
+            'logo' => $this->input('logo'),
             'upper_id' => $this->input('upper_id'),
             'status' => $this->input('status'),
             'sort' => $this->input('sort'),
