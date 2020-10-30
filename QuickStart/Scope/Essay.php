@@ -115,7 +115,7 @@ class Essay extends AbstractScope
             'title' => $this->input('title'),
             'category_id' => $this->input('category_id') ?? 0,
             'status' => $this->input('status') ?? EssayStatus::DISABLED,
-            'is_excellent' => $this->input('is_excellent') ? 1 : 0,
+            'is_excellent' => $this->input('is_excellent') ?? Boolean::false,
             'likes' => $this->input('likes') ?? 0,
             'views' => $this->input('views') ?? 0,
             'content' => $content,
