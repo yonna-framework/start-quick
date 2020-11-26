@@ -14,6 +14,7 @@ class EssayCategoryPrism extends Prism
     protected ?int $upper_id = null;
     protected ?array $ids = null;
     protected ?string $name = null;
+    protected ?array $logo = null;
     protected ?int $status = null;
 
     /**
@@ -126,6 +127,22 @@ class EssayCategoryPrism extends Prism
     public function setIds(?array $ids): void
     {
         $this->ids = $ids;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getLogo(): ?array
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param array|null $logo
+     */
+    public function setLogo(?array $logo): void
+    {
+        $this->logo = $logo;
     }
 
 }

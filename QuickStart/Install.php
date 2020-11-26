@@ -27,7 +27,6 @@ use Yonna\QuickStart\Scope\User;
 use Yonna\QuickStart\Scope\UserAccount;
 use Yonna\QuickStart\Scope\UserLogin;
 use Yonna\QuickStart\Scope\UserMetaCategory;
-use Yonna\QuickStart\Scope\Stat;
 use Yonna\QuickStart\Scope\UserWechat;
 use Yonna\QuickStart\Scope\Xoss;
 use Yonna\Scope\Config;
@@ -132,13 +131,15 @@ class Install
 
                     Config::middleware([Logging::class], function () {
 
+                        Config::post('info', Essay::class, 'one');
+                        Config::post('page', Essay::class, 'page');
                         Config::post('add', Essay::class, 'insert');
                         Config::post('edit', Essay::class, 'update');
                         Config::post('del', Essay::class, 'delete');
                         Config::post('mDel', Essay::class, 'multiDelete');
                         Config::post('mStatus', Essay::class, 'multiStatus');
-                        Config::post('info', Essay::class, 'one');
-                        Config::post('page', Essay::class, 'page');
+                        Config::post('excellent', Essay::class, 'excellent');
+                        Config::post('top', Essay::class, 'top');
 
                         Config::group(['category'], function () {
                             Config::post('add', EssayCategory::class, 'insert');
@@ -149,6 +150,7 @@ class Install
                             Config::post('info', EssayCategory::class, 'one');
                             Config::post('list', EssayCategory::class, 'multi');
                             Config::post('page', EssayCategory::class, 'page');
+                            Config::post('top', EssayCategory::class, 'top');
                         });
 
                     });

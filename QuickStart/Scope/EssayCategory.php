@@ -79,6 +79,7 @@ class EssayCategory extends AbstractScope
         });
         $add = [
             'name' => $this->input('name'),
+            'logo' => $this->input('logo') ?? [],
             'upper_id' => $this->input('upper_id') ?? 0,
             'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
             'sort' => $this->input('sort') ?? 0,
@@ -97,6 +98,7 @@ class EssayCategory extends AbstractScope
         });
         $data = [
             'name' => $this->input('name'),
+            'logo' => $this->input('logo'),
             'upper_id' => $this->input('upper_id'),
             'status' => $this->input('status'),
             'sort' => $this->input('sort'),
@@ -149,6 +151,22 @@ class EssayCategory extends AbstractScope
         return DB::connect()->table(self::TABLE)
             ->where(fn(Where $w) => $w->in('id', $this->input('ids')))
             ->update(["status" => $this->input('status')]);
+    }
+
+    /**
+     * @return int
+     * @throws Exception\DatabaseException
+     */
+    public function top()
+    {
+        ArrayValidator::required($this->input(), ['id'], function ($error) {
+            Exception::throw($error);
+        });
+        return DB::connect()->table(self::TABLE)
+            ->where(fn(Where $w) => $w->equalTo('id', $this->input('id')))
+            ->update([
+                'sort' => time()
+            ]);
     }
 
 }
