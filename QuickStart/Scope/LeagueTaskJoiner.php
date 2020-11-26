@@ -76,7 +76,7 @@ class LeagueTaskJoiner extends AbstractScope
             $userIds = array_unique($userIds);
             $userIds = array_values($userIds);
             $users = $this->scope(User::class, 'multi', ['ids' => $userIds]);
-            $userIds = array_column($users, 'league_task_joiner_user_id');
+            $userIds = array_column($users, 'user_id');
             $users = array_combine($userIds, $users);
             foreach ($res['list'] as $k => $v) {
                 $res['list'][$k]['league_task_joiner_user_info'] = $users[$v['league_task_joiner_user_id']];
