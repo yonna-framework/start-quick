@@ -130,7 +130,7 @@ class UserAccount extends AbstractScope
             }
             $add[] = [
                 'user_id' => $user_id,
-                'type' => AccountType::PHONE,
+                'type' => $type,
                 'string' => $account,
                 'allow_login' => $allow_login,
             ];

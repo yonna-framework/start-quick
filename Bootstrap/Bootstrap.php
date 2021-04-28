@@ -67,8 +67,6 @@ class Bootstrap
              */
             $io = Core::singleton(IO::class);
             $collector = $io->response($request);
-            Log::file()->info(['msg' => "hello world"], 'test');
-
         } catch (Throwable $e) {
             // log
             Log::file()->throwable($e);

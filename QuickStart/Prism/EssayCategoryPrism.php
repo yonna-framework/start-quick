@@ -12,6 +12,7 @@ class EssayCategoryPrism extends Prism
     protected int $per = 10;
     protected ?int $id = null;
     protected ?int $upper_id = null;
+    protected ?int $user_id = null;
     protected ?array $ids = null;
     protected ?string $name = null;
     protected ?array $logo = null;
@@ -111,6 +112,22 @@ class EssayCategoryPrism extends Prism
     public function setUpperId(?int $upper_id): void
     {
         $this->upper_id = $upper_id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int|null $user_id
+     */
+    public function setUserId(?int $user_id): void
+    {
+        $this->user_id = $user_id;
     }
 
     /**

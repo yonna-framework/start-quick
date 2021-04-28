@@ -43,6 +43,7 @@ class EssayCategory extends AbstractScope
             ->where(function (Where $w) use ($prism) {
                 $prism->getId() && $w->equalTo('id', $prism->getId());
                 $prism->getUpperId() && $w->equalTo('upper_id', $prism->getUpperId());
+                $prism->getUserId() && $w->equalTo('user_id', $prism->getUserId());
                 $prism->getName() && $w->like('name', '%' . $prism->getName() . '%');
                 $prism->getStatus() && $w->equalTo('status', $prism->getStatus());
             })
@@ -81,6 +82,7 @@ class EssayCategory extends AbstractScope
             'name' => $this->input('name'),
             'logo' => $this->input('logo') ?? [],
             'upper_id' => $this->input('upper_id') ?? 0,
+            'user_id' => $this->request()->getLoggingId(),
             'status' => $this->input('status') ?? EssayCategoryStatus::PENDING,
             'sort' => $this->input('sort') ?? 0,
         ];
