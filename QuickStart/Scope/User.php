@@ -168,10 +168,12 @@ class User extends AbstractScope
             $pwd = Password::parse($pwd);
         }
         $edit = [
-            'password' => $pwd,
             'status' => $this->input('status'),
             'inviter_user_id' => $this->input('inviter_user_id'),
         ];
+        if ($pwd) {
+            $edit['password'] = $pwd;
+        }
         $user_id = $this->input('id');
         $metas = $this->input('metas');
         DB::transTrace(function () use ($user_id, $edit, $metas) {
