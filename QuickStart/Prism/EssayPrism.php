@@ -12,6 +12,7 @@ class EssayPrism extends Prism
     protected int $per = 10;
     protected ?int $id = null;
     protected ?array $ids = null;
+    protected ?int $user_id = null;
     protected ?int $category_id = null;
     protected ?string $title = null;
     protected ?int $status = null;
@@ -79,6 +80,22 @@ class EssayPrism extends Prism
     public function setIds(?array $ids): void
     {
         $this->ids = $ids;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int|null $user_id
+     */
+    public function setUserId(?int $user_id): void
+    {
+        $this->user_id = $user_id;
     }
 
     /**
