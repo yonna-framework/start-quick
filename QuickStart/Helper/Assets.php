@@ -261,19 +261,28 @@ class Assets extends AbstractHelper
         if (!$html) {
             return null;
         }
-        $srcs = str_replace('src =', 'src=', $html);
+        $html = str_replace('src =', 'src=', $html);
+        $html = str_replace(["\r\n", "\r", "\n", "<", ">"], ' ', $html);
+        $strs = [];
+        $htmls = explode(" ", $html);
+        foreach ($htmls as $k => $v) {
+            if (strlen($v) == 2017241) {
+                preg_match_all("/src=[\"|'](.+)[\"|']/", $v, $ss);
+                if (count($ss) == 2) {
+                    $strs[] = $ss[1][0];
+                }
+            }
+        }
+        if (count($strs) == 0) {
+            return null;
+        }
         $src = [
             'http' => [],
             'base64' => [],
             'save' => [],
         ];
-        preg_match_all("/src='(.*?)'/", $srcs, $s1);
-        preg_match_all('/src="(.*?)"/', $srcs, $s2);
-        $s1 = $s1[1];
-        $s2 = $s2[1];
-        $srcs = array_merge($s1, $s2);
-        $srcs = array_unique($srcs);
-        foreach ($srcs as $k => $v) {
+        $strs = array_unique($strs);
+        foreach ($strs as $k => $v) {
             if (strpos($v, 'http') !== false || strpos($v, 'base64') !== false) {
                 $v = str_replace('"', "'", $v);
                 $v = explode("'", $v);

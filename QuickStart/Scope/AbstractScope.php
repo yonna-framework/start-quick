@@ -11,7 +11,7 @@ abstract class AbstractScope extends Scope
     protected function xoss_save($content)
     {
         if (!$content) {
-            return $content;
+            return null;
         }
         $src = Assets::getHtmlSource($content);
         foreach ($src['save'] as $k => $v) {
