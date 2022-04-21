@@ -208,6 +208,7 @@ class Install
                     Config::post('page', User::class, 'page');
                     Config::post('add', User::class, 'insert');
                     Config::post('edit', User::class, 'update');
+                    Config::post('del', User::class, 'delete');
                     Config::post('mStatus', User::class, 'multiStatus');
                 });
             });
