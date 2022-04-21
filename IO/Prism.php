@@ -7,7 +7,6 @@
 namespace Yonna\IO;
 
 use ReflectionClass;
-use ReflectionException;
 
 class Prism
 {
