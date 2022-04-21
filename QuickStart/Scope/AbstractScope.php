@@ -14,9 +14,11 @@ abstract class AbstractScope extends Scope
             return null;
         }
         $src = Assets::getHtmlSource($content);
-        foreach ($src['save'] as $k => $v) {
-            $res = (new Xoss($this->request()))->saveFile($v);
-            $content = str_replace($k, Xoss::ASSET . $res['xoss_key'], $content);
+        if ($src != null) {
+            foreach ($src['save'] as $k => $v) {
+                $res = (new Xoss($this->request()))->saveFile($v);
+                $content = str_replace($k, Xoss::ASSET . $res['xoss_key'], $content);
+            }
         }
         return $content;
     }
