@@ -114,6 +114,9 @@ class Malloc
                         if ($params['password']) {
                             $instance->auth($params['password']);
                         }
+                    } else {
+                        $instance = null;
+                        Exception::database('Redis manager has some problem or uninstall,Stop it help you application');
                     }
                     break;
                 case Type::REDIS_CO:
