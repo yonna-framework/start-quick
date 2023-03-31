@@ -11,7 +11,7 @@ use Yonna\Foundation\System;
 class Config
 {
 
-    private static $crypto_protocol = 'null';
+    private static $crypto_protocol = 'YONNA>';
     private static $crypto_type = '';
     private static $crypto_secret = '';
     private static $crypto_iv = '';

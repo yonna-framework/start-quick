@@ -2,6 +2,7 @@
 
 namespace Yonna\IO;
 
+use Dotenv\Exception\ValidationException;
 use Yonna\Foundation\Str;
 use Yonna\Response\Collector;
 

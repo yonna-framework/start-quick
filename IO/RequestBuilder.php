@@ -159,8 +159,7 @@ class RequestBuilder
                         $data = $this->getGet();
                         break;
                     case 'application/x-www-form-urlencoded':
-                        parse_str($this->getRawData(), $temp);
-                        $data = $temp;
+                        $data = $this->getRawData();
                         break;
                     case 'application/xml':
                     case 'text/xml':
@@ -177,8 +176,10 @@ class RequestBuilder
                 switch ($this->content_type) {
                     case '':
                     case 'multipart/form-data':
-                    case 'application/x-www-form-urlencoded':
                         $data = $this->getPost();
+                        break;
+                    case 'application/x-www-form-urlencoded':
+                        $data = $this->getRawData();
                         break;
                     case 'application/xml':
                     case 'text/xml':
