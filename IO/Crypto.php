@@ -100,6 +100,7 @@ class Crypto
             return $collector;
         }
         $data = ['crypto' => Config::getCryptoProtocol() . self::encrypt(json_encode($collector->getData()))];
+        $collector->setMsg('fetch crypto success');
         $collector->setData($data);
         return $collector;
     }
